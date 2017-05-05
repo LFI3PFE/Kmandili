@@ -14,12 +14,6 @@ namespace Kmandili.Views.UserViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ProductList : ContentPage
 	{
-        private class SortType
-        {
-            public int SortTypeIndex { get; set; }
-            public bool IsAsc { get; set; }
-        }
-
         private RestClient<Product> productRC = new RestClient<Product>();
         private List<Product> products;
         private ObservableCollection<Product> displayedProducts = new ObservableCollection<Product>();

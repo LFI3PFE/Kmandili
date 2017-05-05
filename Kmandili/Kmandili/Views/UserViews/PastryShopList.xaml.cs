@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Models.LocalModels;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,12 +16,6 @@ namespace Kmandili.Views.UserViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PastryShopList : ContentPage
     {
-        private class SortType
-        {
-            public int SortTypeIndex { get; set; }
-            public bool IsAsc { get; set; }
-        }
-        
         private PastryShopRestClient pastryShopRC = new PastryShopRestClient();
 	    private List<PastryShop> pastryShops;
 	    private ObservableCollection<PastryShop> displayedPastryShops = new ObservableCollection<PastryShop>(); 

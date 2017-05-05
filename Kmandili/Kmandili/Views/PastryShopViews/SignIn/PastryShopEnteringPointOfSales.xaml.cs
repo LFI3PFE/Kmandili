@@ -217,7 +217,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             if (pastryShop.PointOfSales.Count != 0)
             {
-                App.Main.SignInAction(pastryShop.Email, pastryShop.Password);
+                (App.Current.MainPage as MainPage).SignInAction(pastryShop.Email, pastryShop.Password);
 
                 var page = Navigation.NavigationStack.First();
 

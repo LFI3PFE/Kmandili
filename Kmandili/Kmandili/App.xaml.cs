@@ -15,13 +15,13 @@ namespace Kmandili
         public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
-        public static MainPage Main;
+        //public static MainPage Main;
         public App ()
 		{
 			InitializeComponent();
 
-            Main = new MainPage();
-			MainPage = new NavigationPage(Main);
+            //Main = new MainPage();
+			MainPage = new MainPage();
 		}
 
         public async static void Logout()
@@ -29,7 +29,8 @@ namespace Kmandili
             Connected = null;
             Cart.Clear();
             galleryIsOpent = false;
-            await Main.Navigation.PopModalAsync();
+            Current.MainPage = new MainPage();
+            //await Main.Navigation.PopModalAsync();
         }
 
         public static bool isValidEmail(string inputEmail)

@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\CartPastry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\CartProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\Connected.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\SortType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Order.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\OrderProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Parking.cs" />
@@ -151,6 +152,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderList.xaml.cs">
       <DependentUpon>UserOrderList.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderListFilterPopupPage.xaml.cs">
+      <DependentUpon>UserOrderListFilterPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserSignUpForm.xaml.cs">
@@ -318,6 +323,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\EditUserProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderListFilterPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
