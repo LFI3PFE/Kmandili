@@ -121,7 +121,8 @@ namespace Kmandili
                     isLoading(false);
                     Email.Text = "";
                     Password.Text = "";
-                    await Navigation.PushModalAsync(new PastryShopMasterDetailPage(p));
+                    App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                    //await Navigation.PushModalAsync(new PastryShopMasterDetailPage(p));
                 }
                 else
                 {

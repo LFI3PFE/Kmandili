@@ -43,9 +43,10 @@ namespace Kmandili.Views.PastryShopViews
         private async void ToOrderList(object sender, EventArgs e)
         {
             pastryShopMasterDetailPage.IsPresented = false;
-            NavigationPage nav = new NavigationPage(new ContentPage());
-            await nav.PushAsync(new PastryShopOrderList());
-            await Navigation.PushModalAsync(nav);
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new PastryShopOrderList());
+            //NavigationPage nav = new NavigationPage(new ContentPage());
+            //await nav.PushAsync(new PastryShopOrderList());
+            //await Navigation.PushModalAsync(nav);
         }
     }
 }

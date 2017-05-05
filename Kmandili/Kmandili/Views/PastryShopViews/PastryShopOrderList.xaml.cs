@@ -13,7 +13,6 @@ namespace Kmandili.Views.PastryShopViews
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PastryShopOrderList : ContentPage
 	{
-	    private bool toDetail = false;
 		public PastryShopOrderList ()
 		{
 			InitializeComponent ();
@@ -40,22 +39,8 @@ namespace Kmandili.Views.PastryShopViews
 
 	    private async void ToOrderDetail(object sender, ItemTappedEventArgs e)
 	    {
-	        toDetail = true;
 	        await Navigation.PushAsync(new PastryShopOrderDetail(this, e.Item as Order));
 	    }
-
-        protected override void OnAppearing()
-        {
-            toDetail = false;
-        }
-
-        protected async override void OnDisappearing()
-        {
-            if (!toDetail)
-            {
-                await Navigation.PopModalAsync();
-            }
-        }
 
     }
 }

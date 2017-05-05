@@ -33,7 +33,7 @@ namespace Kmandili.Views.PastryShopViews
             ProductList.Clicked += ProductListOnClick;
 
             ToolbarItems.Add(ProductList);
-            refreshRating();
+            RefreshRating();
             load();
         }
 
@@ -185,13 +185,7 @@ namespace Kmandili.Views.PastryShopViews
             return null;
         }
 
-        private void SelectedNot(Object sender, ItemTappedEventArgs e)
-        {
-            ListView listView = sender as ListView;
-            listView.SelectedItem = null;
-        }
-
-        public async void refreshRating()
+        public async void RefreshRating()
         {
             PastryShopRestClient rs = new PastryShopRestClient();
             PastryShop pp = await rs.GetAsyncById(pastryShop.ID);
@@ -202,20 +196,21 @@ namespace Kmandili.Views.PastryShopViews
 
         public async void ProductListOnClick(Object sender, EventArgs e)
         {
-            switch (Device.RuntimePlatform)
-            {
-                case Device.WinPhone:
-                    await Navigation.PushModalAsync(new NavigationPage(new PastryShopProductList(pastryShop)));
-                    break;
-                case Device.Windows:
-                    NavigationPage nav = new NavigationPage(new ContentPage());
-                    await nav.PushAsync(new PastryShopProductList(pastryShop));
-                    await Navigation.PushModalAsync(nav);
-                    break;
-                default:
-                    await Navigation.PushAsync(new PastryShopProductList(pastryShop));
-                    break;
-            }
+            await Navigation.PushAsync(new PastryShopProductList(pastryShop));
+            //switch (Device.RuntimePlatform)
+            //{
+            //    case Device.WinPhone:
+            //        await Navigation.PushModalAsync(new NavigationPage(new PastryShopProductList(pastryShop)));
+            //        break;
+            //    case Device.Windows:
+            //        NavigationPage nav = new NavigationPage(new ContentPage());
+            //        await nav.PushAsync(new PastryShopProductList(pastryShop));
+            //        await Navigation.PushModalAsync(nav);
+            //        break;
+            //    default:
+            //        await Navigation.PushAsync(new PastryShopProductList(pastryShop));
+            //        break;
+            //}
         }
 
     }

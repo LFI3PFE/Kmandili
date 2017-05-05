@@ -19,7 +19,7 @@ namespace Kmandili.Views.PastryShopViews
 	{
         private PastryShop pastryShop;
         private ToolbarItem addProduct;
-        private bool toAdd = false;
+        //private bool toAdd = false;
         public PastryShopProductList(PastryShop pastryShop)
         {
             InitializeComponent();
@@ -43,18 +43,18 @@ namespace Kmandili.Views.PastryShopViews
             load(false);
         }
 
-        protected async override void OnDisappearing()
-        {
-            if(Device.RuntimePlatform == Device.Windows && !toAdd)
-            {
-                await Navigation.PopModalAsync();
-            }
-        }
+        //protected async override void OnDisappearing()
+        //{
+        //    if(Device.RuntimePlatform == Device.Windows && !toAdd)
+        //    {
+        //        await Navigation.PopModalAsync();
+        //    }
+        //}
 
-        protected override void OnAppearing()
-        {
-            toAdd = false;
-        }
+        //protected override void OnAppearing()
+        //{
+        //    toAdd = false;
+        //}
 
         private async void RemoveProduct(object sender, EventArgs e)
         {
@@ -76,7 +76,7 @@ namespace Kmandili.Views.PastryShopViews
 
         private async void AddProduct_Clicked(object sender, EventArgs e)
         {
-            toAdd = true;
+            //toAdd = true;
             await Navigation.PushAsync(new PastryShopProductForm(this, pastryShop));
         }
 

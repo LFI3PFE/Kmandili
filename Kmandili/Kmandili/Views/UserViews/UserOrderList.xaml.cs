@@ -110,6 +110,7 @@ namespace Kmandili.Views.UserViews
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
             orders = (await orderRC.GetAsyncByUserID(App.Connected.Id)).OrderBy(o => o.SeenUser).ToList();
+            displayedOrders.Clear();
             orders.ForEach(o => displayedOrders.Add(o));
             selectedSortType.SortTypeIndex = 1;
             selectedSortType.IsAsc = true;

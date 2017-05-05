@@ -73,7 +73,7 @@ namespace Kmandili.Views.UserViews
                     Detail = tab;
                     break;
                 default:
-                    Detail = tab;
+                    Detail = new NavigationPage(tab); ;
                     break;
             }
         }
