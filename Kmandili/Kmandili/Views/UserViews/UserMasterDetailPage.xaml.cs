@@ -25,6 +25,11 @@ namespace Kmandili.Views.UserViews
                 OrderRestClient orderRC = new OrderRestClient();
                 (userMasterDetailPage.Master as UserMasterPage).updateOrderNotificationNumber(await orderRC.GetAsyncByUserID(App.Connected.Id));
             }
+
+            protected override bool OnBackButtonPressed()
+            {
+                return true;
+            }
         }
 
         private PastryShopList pastryShopList;
@@ -33,20 +38,19 @@ namespace Kmandili.Views.UserViews
         public UserMasterDetailPage (User user)
 		{
 			InitializeComponent ();
+#pragma warning disable CS0618 // Type or member is obsolete
+            NavigationPage.SetHasNavigationBar(this, false);
             pastryShopList = new PastryShopList()
             {
-                #pragma warning disable CS0618 // Type or member is obsolete
                 Icon = Device.OnPlatform("shop.png", null, "shop.png"),
-                #pragma warning restore CS0618 // Type or member is obsolete
                 Title = "Liste des pâtisseries"
             };
             productList = new ProductList()
             {
-#pragma warning disable CS0618 // Type or member is obsolete
                 Icon = Device.OnPlatform("products.png", null, "products.png"),
-#pragma warning restore CS0618 // Type or member is obsolete
                 Title = "Liste des Produits"
             };
+#pragma warning restore CS0618 // Type or member is obsolete
             MyTabbedPage tab = new MyTabbedPage(this)
             {
                 Children =
@@ -56,12 +60,22 @@ namespace Kmandili.Views.UserViews
                 }
             };
             Master = new UserMasterPage(this, user);
-            Detail = new NavigationPage(tab);
-		}
-
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
+            switch (Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    Detail = new NavigationPage(tab);
+                    break;
+                case Device.Android:
+                    Detail = new NavigationPage(tab);
+                    break; ;
+                case Device.WinPhone:
+                case Device.Windows:
+                    Detail = tab;
+                    break;
+                default:
+                    Detail = tab;
+                    break;
+            }
         }
-	}
+        }
 }

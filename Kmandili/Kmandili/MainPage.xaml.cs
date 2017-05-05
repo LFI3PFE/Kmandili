@@ -104,7 +104,7 @@ namespace Kmandili
                 isLoading(false);
                 Email.Text = "";
                 Password.Text = "";
-                await Navigation.PushModalAsync(new UserMasterDetailPage(u));
+                App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
             }
             else
             {

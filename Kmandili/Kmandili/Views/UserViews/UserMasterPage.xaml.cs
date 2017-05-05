@@ -38,19 +38,19 @@ namespace Kmandili.Views.UserViews
         private async void ToOrderList(object sender, EventArgs e)
         {
             userMasterDetailPage.IsPresented = false;
-            await (userMasterDetailPage.Detail as NavigationPage).PushAsync(new UserOrderList());
+            await userMasterDetailPage.Detail.Navigation.PushAsync(new UserOrderList());
         }
 
 	    private async void UpdateUser_OnTapped(object sender, EventArgs e)
 	    {
             userMasterDetailPage.IsPresented = false;
-	        await (userMasterDetailPage.Detail as NavigationPage).PushAsync(new EditUserProfile());
+	        await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile());
 	    }
 
-	    private void ToCart(object sender, EventArgs e)
+	    private async void ToCart(object sender, EventArgs e)
 	    {
             userMasterDetailPage.IsPresented = false;
-            (userMasterDetailPage.Detail as NavigationPage).PushAsync(new Cart());
+            await userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
 	    }
 	}
 }
