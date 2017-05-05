@@ -70,6 +70,10 @@
       <DependentUpon>PastryShopProductList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductListFilterPopupPage.xaml.cs">
+      <DependentUpon>PastryShopProductListFilterPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProfile.xaml.cs">
       <DependentUpon>PastryShopProfile.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -329,6 +333,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderListFilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductListFilterPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

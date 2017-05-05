@@ -232,7 +232,7 @@ namespace Kmandili.Views.UserViews
 
         private void SearchToolbarItem_Clicked(object sender, EventArgs e)
         {
-            if (products.Count != 0)
+            if (displayedProducts.Count != 0)
             {
                 this.ToolbarItems.Clear();
                 ToolbarItems.Add(endSearchToolbarItem);
