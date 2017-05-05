@@ -9,7 +9,7 @@ using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class UserOrderDetail : ContentPage

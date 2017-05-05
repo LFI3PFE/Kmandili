@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kmandili.Views.UserViews.ProductList">
-    <ScrollView VerticalOptions="FillAndExpand">
-        <StackLayout BackgroundColor="Transparent" x:Name="BodyLayout" VerticalOptions="FillAndExpand">
+             x:Class="Kmandili.Views.PastryShopViews.ProductListAndFilter.PSProductList">
+    <ScrollView>
+        <StackLayout x:Name="BodyLayout"  BackgroundColor="Transparent" VerticalOptions="FillAndExpand" Padding="0,0,0,0">
             <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                 <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
             </StackLayout>
@@ -12,28 +12,41 @@
                     <Label Text="(Aucun Produit Trouvé)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
                 </StackLayout>
             </StackLayout>
-            <StackLayout x:Name="LoadingLayout" VerticalOptions="Start" Padding="0,20,0,0" IsVisible="False">
+            <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" IsVisible="False">
                 <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
             </StackLayout>
-            <StackLayout Padding="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
-                <ListView x:Name="List" HasUnevenRows="True" ItemTapped="showProductMenu" VerticalOptions="FillAndExpand" ItemSelected="SelectedNot">
+            <StackLayout Padding="0,20,0,0" x:Name="ListLayout">
+                <ListView x:Name="List" HasUnevenRows="True" ItemSelected="SelectedNot">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                                <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
                                     <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
-                                    <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                         <StackLayout Padding="5" VerticalOptions="Center">
                                             <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
                                                 <Image Source="{Binding Pic}" HeightRequest="80"/>
                                             </StackLayout>
                                         </StackLayout>
-                                        <StackLayout Orientation="Vertical" Spacing="1">
-                                            <StackLayout Orientation="Horizontal" Spacing="10">
-                                                <Label Text="{Binding Name}" FontSize="30" TextColor="Black"/>
-                                                <StackLayout Padding="0,10,0,0">
-                                                    <Label Text="{Binding PastryShop.Name}" VerticalOptions="FillAndExpand" FontSize="18" TextColor="Gray"/>
-                                                </StackLayout>
+                                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                                                <Grid HorizontalOptions="FillAndExpand">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="6*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Text="{Binding Name}" FontSize="30" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
+                                                    <StackLayout Grid.Row="0" Grid.Column="1">
+                                                        <Image Source="delete.png" WidthRequest="20">
+                                                            <Image.GestureRecognizers>
+                                                                <TapGestureRecognizer Tapped="RemoveProduct"/>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </StackLayout>
+                                                </Grid>
                                             </StackLayout>
                                             <StackLayout Padding="20,0,0,0">
                                                 <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>

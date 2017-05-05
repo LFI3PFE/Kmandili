@@ -11,15 +11,15 @@ using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.UserViews.PastryShopListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopListFilterPopupPage : PopupPage
+	public partial class FilterPopupPage : PopupPage
 	{
 	    private List<Category> selectedCategories;
 	    private List<Category> categories;
 	    private PastryShopList pastryShopList;
-		public PastryShopListFilterPopupPage (PastryShopList pastryShopList, List<Category> selectedCategories)
+		public FilterPopupPage(PastryShopList pastryShopList, List<Category> selectedCategories)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
 		    this.CloseWhenBackgroundIsClicked = false;

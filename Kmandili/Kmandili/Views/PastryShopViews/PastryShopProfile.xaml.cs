@@ -5,6 +5,7 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
+using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 
 namespace Kmandili.Views.PastryShopViews
 {
@@ -196,7 +197,7 @@ namespace Kmandili.Views.PastryShopViews
 
         public async void ProductListOnClick(Object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PastryShopProductList(pastryShop));
+            await Navigation.PushAsync(new PSProductList(pastryShop));
             //switch (Device.RuntimePlatform)
             //{
             //    case Device.WinPhone:

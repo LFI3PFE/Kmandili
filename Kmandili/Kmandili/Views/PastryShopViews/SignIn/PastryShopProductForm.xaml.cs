@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -22,7 +23,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         private MediaFile _mediaFileProfil;
         private bool toGallery = false;
         private PastryShopEnteringMenu productsPage;
-        private PastryShopProductList ProductsList;
+        private PSProductList ProductsList;
 
         public PastryShopProductForm(PastryShopEnteringMenu ProductsPage, PastryShop pastryShop)
         {
@@ -32,7 +33,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Load();
         }
 
-        public PastryShopProductForm(PastryShopProductList ProductsList, PastryShop pastryShop)
+        public PastryShopProductForm(PSProductList ProductsList, PastryShop pastryShop)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;

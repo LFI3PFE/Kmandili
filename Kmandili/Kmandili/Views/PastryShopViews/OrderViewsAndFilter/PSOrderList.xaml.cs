@@ -1,35 +1,35 @@
-﻿using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Models;
 using Kmandili.Models.LocalModels;
+using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UserOrderList : ContentPage
+	public partial class PSOrderList : ContentPage
 	{
-	    private List<Order> orders; 
-        private ObservableCollection<Order> displayedOrders = new ObservableCollection<Order>(); 
-	    private List<Status> selectedStatuses = new List<Status>();
+        private List<Order> orders;
+        private ObservableCollection<Order> displayedOrders = new ObservableCollection<Order>();
+        private List<Status> selectedStatuses = new List<Status>();
         private SortType selectedSortType = new SortType();
 
-	    private ToolbarItem filterToolbarItem;
-	    private ToolbarItem sortToolbarItem;
-	    private ToolbarItem searchToolbarItem;
-	    private ToolbarItem endSearchToolbarItem;
+        private ToolbarItem filterToolbarItem;
+        private ToolbarItem sortToolbarItem;
+        private ToolbarItem searchToolbarItem;
+        private ToolbarItem endSearchToolbarItem;
 
-		public UserOrderList ()
+        public PSOrderList()
 		{
 			InitializeComponent ();
-		    BodyLayout.TranslateTo(0, -50);
+            BodyLayout.TranslateTo(0, -50);
 
 #pragma warning disable 618
             filterToolbarItem = new ToolbarItem()
@@ -69,7 +69,7 @@ namespace Kmandili.Views.UserViews
             ToolbarItems.Add(sortToolbarItem);
             ToolbarItems.Add(filterToolbarItem);
 
-		    displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
+            displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
             OrderList.ItemsSource = displayedOrders;
             load();
 		}
@@ -89,12 +89,12 @@ namespace Kmandili.Views.UserViews
         }
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
-	    {
-	        await PopupNavigation.PushAsync(new UserOrderListFilterPopupPage(this, selectedStatuses));
-	    }
+        {
+            await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedStatuses));
+        }
 
-	    private async void SortToolbarItem_Clicked(object sender, EventArgs e)
-	    {
+        private async void SortToolbarItem_Clicked(object sender, EventArgs e)
+        {
             string Date = "";
             string Seen = "";
             if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
@@ -147,7 +147,7 @@ namespace Kmandili.Views.UserViews
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = (await orderRC.GetAsyncByUserID(App.Connected.Id)).OrderBy(o => o.SeenUser).ToList();
+            orders = (await orderRC.GetAsyncByPastryShopID(App.Connected.Id)).OrderBy(p => p.SeenPastryShop).ToList();
             displayedOrders.Clear();
             orders.ForEach(o => displayedOrders.Add(o));
             selectedSortType.SortTypeIndex = 1;
@@ -158,20 +158,25 @@ namespace Kmandili.Views.UserViews
         }
 
         private void SelectedNot(object sender, EventArgs e)
-        {
-            (sender as ListView).SelectedItem = null;
-        }
-
-        private async void ToOrderDetail(object sender, ItemTappedEventArgs e)
-        {
-            await Navigation.PushAsync(new UserOrderDetail(this, e.Item as Order));
-        }
-
-	    public void AplyFilters()
 	    {
+	        (sender as ListView).SelectedItem = null;
+	    }
+
+	    private async void ToOrderDetail(object sender, ItemTappedEventArgs e)
+	    {
+	        await Navigation.PushAsync(new PSOrderDetail(this, e.Item as Order));
+	    }
+
+        public void AplyFilters()
+        {
             if (orders == null || displayedOrders == null) return;
-	        var res =
-	            orders.Where(o => (string.IsNullOrEmpty(SearchBar.Text) || o.PastryShop.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) && (selectedStatuses.Count == 0 || selectedStatuses.Any(s => s.ID == o.Status_FK))).ToList();
+            var res =
+                orders.Where(
+                    o =>
+                        (string.IsNullOrEmpty(SearchBar.Text) ||
+                         o.User.Name.ToLower().StartsWith(SearchBar.Text.ToLower()) ||
+                         o.User.LastName.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
+                        (selectedStatuses.Count == 0 || selectedStatuses.Any(s => s.ID == o.Status_FK))).ToList();
             if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
             {
                 res = res.OrderBy(o => o.Date).ToList();
@@ -182,11 +187,11 @@ namespace Kmandili.Views.UserViews
             }
             else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
             {
-                res = res.OrderBy(o => o.SeenUser).ToList();
+                res = res.OrderBy(o => o.SeenPastryShop).ToList();
             }
             else
             {
-                res = res.OrderByDescending(o => o.SeenUser).ToList();
+                res = res.OrderByDescending(o => o.SeenPastryShop).ToList();
             }
             displayedOrders.Clear();
             res.ForEach(p => displayedOrders.Add(p));
@@ -224,9 +229,9 @@ namespace Kmandili.Views.UserViews
             AplyFilters();
         }
 
-	    protected override void OnDisappearing()
-	    {
-	        ResetSearch();
-	    }
-	}
+        protected override void OnDisappearing()
+        {
+            ResetSearch();
+        }
+    }
 }

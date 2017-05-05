@@ -1,6 +1,6 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.UserViews;
+using Kmandili.Views.UserViews.PSProductListAndFilter;
 using System;
 using System.Collections.Generic;
 using System.Linq;

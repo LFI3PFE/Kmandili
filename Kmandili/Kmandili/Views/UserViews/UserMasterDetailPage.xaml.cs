@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.UserViews.PastryShopListAndFilter;
+using Kmandili.Views.UserViews.ProductListAndFilter;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

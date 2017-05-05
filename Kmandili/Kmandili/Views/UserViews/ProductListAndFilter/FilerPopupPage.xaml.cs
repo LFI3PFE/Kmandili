@@ -12,17 +12,17 @@ using Xamarin.Forms.Xaml;
 using Xamarin.RangeSlider.Common;
 using Xamarin.RangeSlider.Forms;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.UserViews.ProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProductListFilerPopupPage : PopupPage
+	public partial class FilerPopupPage : PopupPage
 	{
         private List<Category> selectedCategories;
         private List<Category> categories;
         private ProductList productList;
 	    private PriceRange selectedpriceRange;
 	    private PriceRange maxPriceRange;
-        public ProductListFilerPopupPage(ProductList productList, List<Category> selectedCategories, PriceRange maxPriceRange, PriceRange selectedPriceRange)
+        public FilerPopupPage(ProductList productList, List<Category> selectedCategories, PriceRange maxPriceRange, PriceRange selectedPriceRange)
         {
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;

@@ -54,28 +54,20 @@
       <DependentUpon>LoadingPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\PSOrderDetail.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PSOrderDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\PSOrderList.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PSOrderList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\FilterPopupPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopMasterPage.xaml.cs">
       <DependentUpon>PastryShopMasterPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderDetail.xaml.cs">
-      <DependentUpon>PastryShopOrderDetail.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderList.xaml.cs">
-      <DependentUpon>PastryShopOrderList.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderListFilterPopupPage.xaml.cs">
-      <DependentUpon>PastryShopOrderListFilterPopupPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductList.xaml.cs">
-      <DependentUpon>PastryShopProductList.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductListFilterPopupPage.xaml.cs">
-      <DependentUpon>PastryShopProductListFilterPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProfile.xaml.cs">
@@ -85,6 +77,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopMasterDetailPage.xaml.cs">
       <DependentUpon>PastryShopMasterDetailPage.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\PSProductList.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PSProductList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\FilterPopupPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\PastryShopEnteringMenu.xaml.cs">
       <DependentUpon>PastryShopEnteringMenu.xaml</DependentUpon>
@@ -122,33 +122,45 @@
       <DependentUpon>EditUserProfile.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopList.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\UserOrderDetail.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>UserOrderDetail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\UserOrderList.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>UserOrderList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\FilterPopupPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListAndFilter\PastryShopList.xaml.cs">
+      <SubType>Code</SubType>
       <DependentUpon>PastryShopList.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListFilterPopupPage.xaml.cs">
-      <DependentUpon>PastryShopListFilterPopupPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListAndFilter\FilterPopupPage.xaml.cs">
       <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProductList.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PSProductListAndFilter\PastryShopProductList.xaml.cs">
+      <SubType>Code</SubType>
       <DependentUpon>PastryShopProductList.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProductListFilterPopupPage.xaml.cs">
-      <DependentUpon>PastryShopProductListFilterPopupPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PSProductListAndFilter\FilterPopupPage.xaml.cs">
       <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProfile.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>PastryShopProfile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductList.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListAndFilter\ProductList.xaml.cs">
+      <SubType>Code</SubType>
       <DependentUpon>ProductList.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListFilerPopupPage.xaml.cs">
-      <DependentUpon>ProductListFilerPopupPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListAndFilter\FilerPopupPage.xaml.cs">
       <SubType>Code</SubType>
+      <DependentUpon>FilerPopupPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserMasterDetailPage.xaml.cs">
       <DependentUpon>UserMasterDetailPage.xaml</DependentUpon>
@@ -156,18 +168,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserMasterPage.xaml.cs">
       <DependentUpon>UserMasterPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderDetail.xaml.cs">
-      <DependentUpon>UserOrderDetail.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderList.xaml.cs">
-      <DependentUpon>UserOrderList.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderListFilterPopupPage.xaml.cs">
-      <DependentUpon>UserOrderListFilterPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserSignUpForm.xaml.cs">
@@ -184,7 +184,63 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\PSOrderDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\PSOrderList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\OrderViewsAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\PSProductList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\UserOrderDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\UserOrderList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\OrderViewsAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListAndFilter\PastryShopList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PSProductListAndFilter\PastryShopProductList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PSProductListAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListAndFilter\ProductList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListAndFilter\FilerPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -202,25 +258,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\Cart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProductList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -268,12 +306,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopMasterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -286,31 +318,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\LoadingPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -322,43 +330,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopListFilterPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\ProductListFilerPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\EditUserProfile.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\UserOrderListFilterPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopProductListFilterPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\UserViews\PastryShopProductListFilterPopupPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PastryShopOrderListFilterPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

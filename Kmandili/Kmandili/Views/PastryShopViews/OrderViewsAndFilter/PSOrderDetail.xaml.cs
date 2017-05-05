@@ -9,17 +9,17 @@ using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews
+namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopOrderDetail : ContentPage
+	public partial class PSOrderDetail : ContentPage
 	{
-	    private PastryShopOrderList pastryShopOrderList;
+	    private PSOrderList pastryShopOrderList;
 	    private Order order;
 	    private bool updateParent = false;
 	    private List<Status> status;
 	    private ToolbarItem confirmToolbarItem;
-		public PastryShopOrderDetail (PastryShopOrderList pastryShopOrderList, Order order)
+		public PSOrderDetail(PSOrderList pastryShopOrderList, Order order)
 		{
             InitializeComponent ();
             load();

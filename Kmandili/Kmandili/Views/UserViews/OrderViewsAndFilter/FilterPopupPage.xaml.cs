@@ -5,41 +5,40 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.UserViews;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews
+namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PastryShopOrderListFilterPopupPage : PopupPage
-    {
-        private PastryShopOrderList pastryShopOrderList;
-        private List<Status> selectedStatuses;
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class FilterPopupPage : PopupPage
+	{
+	    private UserOrderList userOrderList;
+	    private List<Status> selectedStatuses;
 
-        private List<Status> statuses;
+	    private List<Status> statuses; 
 
-        public PastryShopOrderListFilterPopupPage(PastryShopOrderList pastryShopOrderList, List<Status> selectedStatuses)
-        {
+		public FilterPopupPage (UserOrderList userOrderList, List<Status> selectedStatuses )
+		{
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
-            this.pastryShopOrderList = pastryShopOrderList;
-            this.selectedStatuses = selectedStatuses;
-            InitializeComponent();
-            Load();
-        }
+            this.userOrderList = userOrderList;
+		    this.selectedStatuses = selectedStatuses;
+			InitializeComponent ();
+		    Load();
+		}
 
-        private async void Load()
-        {
-            RestClient<Status> statusRC = new RestClient<Status>();
-            statuses = await statusRC.GetAsync();
-            this.Content = MakeContent();
-        }
+	    private async void Load()
+	    {
+	        RestClient<Status> statusRC = new RestClient<Status>();
+	        statuses = await statusRC.GetAsync();
+	        this.Content = MakeContent();
+	    }
 
-        private StackLayout MakeContent()
-        {
+	    private StackLayout MakeContent()
+	    {
             StackLayout mainLayout = new StackLayout()
             {
                 BackgroundColor = Color.White,
@@ -55,23 +54,12 @@ namespace Kmandili.Views.PastryShopViews
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20
             };
-            innerLayout.Children.Add(new Label()
-            {
-                Text = "Les status:",
-                FontSize = 20,
-                TextColor = Color.Black,
-                FontAttributes = FontAttributes.Bold
-            });
+            innerLayout.Children.Add(new Label() { Text = "Les status:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
 
-            StackLayout statusesLayout = new StackLayout() {Spacing = 5};
+            StackLayout statusesLayout = new StackLayout() { Spacing = 5 };
             foreach (var status in statuses)
             {
-                StackLayout statusLayout = new StackLayout()
-                {
-                    Orientation = StackOrientation.Horizontal,
-                    Spacing = 20,
-                    Padding = new Thickness(20, 0, 0, 0)
-                };
+                StackLayout statusLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 20, Padding = new Thickness(20, 0, 0, 0) };
                 Switch statusSwitch = new Switch()
                 {
                     ClassId = status.ID.ToString(),
@@ -79,24 +67,12 @@ namespace Kmandili.Views.PastryShopViews
                 statusSwitch.IsToggled = selectedStatuses.Any(s => s.StatusName == status.StatusName);
                 statusSwitch.Toggled += StatusSwitch_Toggled;
                 statusLayout.Children.Add(statusSwitch);
-                statusLayout.Children.Add(new Label()
-                {
-                    Text = status.StatusName,
-                    FontSize = 18,
-                    TextColor = Color.Black,
-                    VerticalTextAlignment = TextAlignment.Center
-                });
+                statusLayout.Children.Add(new Label() { Text = status.StatusName, FontSize = 18, TextColor = Color.Black, VerticalTextAlignment = TextAlignment.Center });
 
                 statusesLayout.Children.Add(statusLayout);
             }
             innerLayout.Children.Add(statusesLayout);
-            Label aplyLabel = new Label()
-            {
-                Text = "Appliquer",
-                TextColor = Color.DodgerBlue,
-                FontSize = 20,
-                HorizontalOptions = LayoutOptions.End
-            };
+            Label aplyLabel = new Label() { Text = "Appliquer", TextColor = Color.DodgerBlue, FontSize = 20, HorizontalOptions = LayoutOptions.End };
             TapGestureRecognizer aplyGestureRecognizer = new TapGestureRecognizer();
             aplyGestureRecognizer.Tapped += AplyGestureRecognizer_Tapped;
             aplyLabel.GestureRecognizers.Add(aplyGestureRecognizer);
@@ -106,8 +82,8 @@ namespace Kmandili.Views.PastryShopViews
             return mainLayout;
         }
 
-        private void StatusSwitch_Toggled(object sender, EventArgs e)
-        {
+	    private void StatusSwitch_Toggled(object sender, EventArgs e)
+	    {
             var statusSwitch = sender as Switch;
             if (statusSwitch.IsToggled)
             {
@@ -125,9 +101,9 @@ namespace Kmandili.Views.PastryShopViews
             await PopupNavigation.PopAsync();
         }
 
-        protected override void OnDisappearing()
-        {
-            pastryShopOrderList.AplyFilters();
-        }
-    }
+	    protected override void OnDisappearing()
+	    {
+            userOrderList.AplyFilters();
+	    }
+	}
 }

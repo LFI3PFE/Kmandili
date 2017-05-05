@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kmandili.Views.UserViews.UserOrderDetail">
+             x:Class="Kmandili.Views.PastryShopViews.OrderViewsAndFilter.PSOrderDetail">
     <ScrollView>
         <StackLayout>
             <StackLayout Padding="10,10,10,20" Spacing="10">
@@ -11,7 +11,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label Text="Pâtisserie:" FontSize="20" FontAttributes="Bold" TextColor="Black" />
-                    <Label x:Name="PastryShopName" FontSize="20" TextColor="Black" />
+                    <Label x:Name="ClientName" FontSize="20" TextColor="Black" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <Label Text="Date:" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
@@ -26,8 +26,8 @@
                     <Label x:Name="Payment" FontSize="20" TextColor="Black"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Label Text="Status:" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                    <Label x:Name="Status" FontSize="20" TextColor="Black"/>
+                    <Label Text="Status:" VerticalTextAlignment="Center" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Picker x:Name="Status" HorizontalOptions="FillAndExpand" TextColor="Black"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="30">
                     <Label Text="Total:" FontSize="25" TextColor="Black" FontAttributes="Bold"/>

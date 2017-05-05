@@ -13,10 +13,10 @@ using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews
+namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopProductList : ContentPage
+	public partial class PSProductList : ContentPage
 	{
         private PastryShop pastryShop;
 	    private ObservableCollection<Product> displayedProducts = new ObservableCollection<Product>(); 
@@ -31,7 +31,7 @@ namespace Kmandili.Views.PastryShopViews
 	    private ToolbarItem searchToolbarItem;
 	    private ToolbarItem endSearchToolbarItem;
 
-        public PastryShopProductList(PastryShop pastryShop)
+        public PSProductList(PastryShop pastryShop)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;
@@ -107,7 +107,7 @@ namespace Kmandili.Views.PastryShopViews
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
 	    {
-            await PopupNavigation.PushAsync(new PastryShopProductListFilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
         }
 
 	    private void SearchToolbarItem_Clicked(object sender, EventArgs e)

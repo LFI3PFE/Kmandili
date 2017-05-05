@@ -12,10 +12,10 @@ using Xamarin.Forms.Xaml;
 using Xamarin.RangeSlider.Common;
 using Xamarin.RangeSlider.Forms;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.UserViews.PSProductListAndFilter
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PastryShopProductListFilterPopupPage : PopupPage
+    public partial class FilterPopupPage : PopupPage
     {
         private List<Category> selectedCategories;
         private List<Category> categories;
@@ -23,7 +23,7 @@ namespace Kmandili.Views.UserViews
         private PriceRange selectedpriceRange;
         private PriceRange maxPriceRange;
 
-        public PastryShopProductListFilterPopupPage(PastryShopProductList productList, List<Category> selectedCategories,
+        public FilterPopupPage(PastryShopProductList productList, List<Category> selectedCategories,
             PriceRange maxPriceRange, PriceRange selectedPriceRange)
         {
             BackgroundColor = Color.FromHex("#CC000000");

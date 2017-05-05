@@ -10,7 +10,7 @@ using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.UserViews
+namespace Kmandili.Views.UserViews.PSProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PastryShopProductList : ContentPage
@@ -97,7 +97,7 @@ namespace Kmandili.Views.UserViews
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new PastryShopProductListFilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
         }
 
         private void SearchToolbarItem_Clicked(object sender, EventArgs e)
