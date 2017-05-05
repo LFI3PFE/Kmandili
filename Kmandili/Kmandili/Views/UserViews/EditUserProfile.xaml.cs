@@ -268,14 +268,13 @@ namespace Kmandili.Views.UserViews
 
         public async void UpdateBt_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (await valid())
             {
+                await PopupNavigation.PushAsync(new LoadingPopupPage());
                 UserRestClient userRC = new UserRestClient();
                 RestClient<Address> addressRC = new RestClient<Address>();
                 //RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
-                var u = await userRC.GetAsyncByEmail(Email.Text.ToLower());
-                if (this.user.Email != Email.Text.ToLower() && u != null)
+                if (this.user.Email != Email.Text.ToLower() && await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
                 {
                     await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
                     Email.Text = "";

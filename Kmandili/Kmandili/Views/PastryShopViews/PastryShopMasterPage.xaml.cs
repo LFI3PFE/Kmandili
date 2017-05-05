@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.EditProfile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Kmandili.Views.PastryShopViews.OrderViewsAndFilter;
@@ -47,6 +48,12 @@ namespace Kmandili.Views.PastryShopViews
             //NavigationPage nav = new NavigationPage(new ContentPage());
             //await nav.PushAsync(new PastryShopOrderList());
             //await Navigation.PushModalAsync(nav);
+        }
+
+	    private async void ToEditProfile(object sender, EventArgs e)
+	    {
+            pastryShopMasterDetailPage.IsPresented = false;
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo());
         }
     }
 }

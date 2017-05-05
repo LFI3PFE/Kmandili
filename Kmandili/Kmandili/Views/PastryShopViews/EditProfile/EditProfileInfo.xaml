@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.EditProfile.EditProfileInfo">
+    <ScrollView>
+        <StackLayout VerticalOptions="Center">
+            <StackLayout>
+                <StackLayout HorizontalOptions="Center" Padding="0,20,0,0">
+                    <Label Text="Profile" FontSize="30" TextColor="Black" HorizontalTextAlignment="Center"/>
+                </StackLayout>
+                <StackLayout Spacing="20" Padding="30">
+                    <Entry x:Name="Name" PlaceholderColor="Gray" Placeholder="Nom" TextColor="Black" WidthRequest="150" FontSize="25" />
+                    <Entry x:Name="Email" PlaceholderColor="Gray" TextColor="Black" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
+                    <Entry x:Name="Password" PlaceholderColor="Gray" TextColor="Black" Placeholder="Mot de passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
+                    <Entry x:Name="ShortDesc" TextChanged="ShortDesc_TextChanged" PlaceholderColor="Gray" TextColor="Black" Placeholder="Courte Description..." WidthRequest="150" FontSize="25"/>
+                    <Editor x:Name="LongDesc" TextChanged="LongDesc_TextChanged" HeightRequest="100" Text="Longue Description..." TextColor="Gray" FontSize="25" Focused="editorFocused" Unfocused="editorUnFocused"/>
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Label Text="Gamme de prix :" FontSize="20" TextColor="Black"/>
+                        <Picker x:Name="PriceRange" WidthRequest="150"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Adresse:" x:Name="Address" FontSize="25" TextColor="Black"/>
+                        <StackLayout Padding="10,0,0,0">
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Entry x:Name="Number" Placeholder="Num. Bât." PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="100" Keyboard="Numeric"/>
+                                <Entry x:Name="Street" Placeholder="Rue" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="200"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Entry x:Name="City" Placeholder="Ville" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="170"/>
+                                <Entry x:Name="ZipCode" Placeholder="Co. Postal" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="110" Keyboard="Numeric"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Entry x:Name="State" Placeholder="Gouvernorat" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="140"/>
+                                <Entry x:Name="Country" Placeholder="Pays" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="100"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Numéros de téléphone:" TextColor="Black" FontSize="25"/>
+                        <StackLayout x:Name="PhoneNumbersLayout" Padding="20,0,0,0"></StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout HorizontalOptions="End" Padding="0,20,30,20">
+                    <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="25" FontAttributes="Bold"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
