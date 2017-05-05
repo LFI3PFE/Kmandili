@@ -9,7 +9,15 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <StackLayout Padding="0,10,0,0">
+        <StackLayout x:Name="BodyLayout" Padding="0,10,0,0">
+            <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+            </StackLayout>
+            <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
+                <StackLayout>
+                    <Label Text="(Pas Commandes Trouvées)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
             <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" IsVisible="False">
                 <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
             </StackLayout>

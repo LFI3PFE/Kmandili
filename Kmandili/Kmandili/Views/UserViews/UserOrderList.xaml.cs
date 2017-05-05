@@ -223,5 +223,10 @@ namespace Kmandili.Views.UserViews
         {
             AplyFilters();
         }
-    }
+
+	    protected override void OnDisappearing()
+	    {
+	        ResetSearch();
+	    }
+	}
 }
