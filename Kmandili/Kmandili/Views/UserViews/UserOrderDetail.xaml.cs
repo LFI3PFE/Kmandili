@@ -1,0 +1,137 @@
+﻿using Kmandili.Models;
+using Kmandili.Models.RestClient;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Rg.Plugins.Popup.Services;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Kmandili.Views.UserViews
+{
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class UserOrderDetail : ContentPage
+	{
+        private Order order;
+	    private UserOrderList userOrderList;
+	    private bool updateParent = false;
+
+        public UserOrderDetail (UserOrderList userOrderList, Order order)
+		{
+			InitializeComponent ();
+            if (order.Status.StatusName == "En Attente")
+            {
+                ToolbarItem canceToolbarItem = new ToolbarItem()
+                {
+                    Icon = Device.OnPlatform(null, null, "cancel.png"),
+                    Text = "Annuler"
+                };
+                canceToolbarItem.Clicked += CanceToolbarItem_Clicked;
+                ToolbarItems.Add(canceToolbarItem);
+            }else if (order.Status.StatusName == "Livrée")
+            {
+                ToolbarItem confirmToolbarItem = new ToolbarItem()
+                {
+                    Icon = Device.OnPlatform(null, null, "confirm.png"),
+                    Text = "Reçus"
+                };
+                confirmToolbarItem.Clicked += ConfirmToolbarItem_Clicked;
+                ToolbarItems.Add(confirmToolbarItem);
+            }
+            this.order = order;
+		    this.userOrderList = userOrderList;
+            updateView();
+		    Task.Run(() => MarkAsSeen());
+		}
+
+	    private void updateView()
+	    {
+            ProductsList.ItemsSource = order.OrderProducts;
+            OrderID.Text = order.ID.ToString();
+            PastryShopName.Text = order.PastryShop.Name;
+            Date.Text = order.Date.ToString("d");
+            Delevery.Text = order.DeleveryMethod.DeleveryType;
+            Payment.Text = order.Payment.PaymentMethod;
+            Status.Text = order.Status.StatusName;
+            Total.Text = order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString();
+        }
+
+	    protected async override void OnAppearing()
+	    {
+	        if (order.Status.StatusName == "Livrée" && !order.SeenUser)
+	        {
+	            await DisplayAlert("Remarque", "Votre commande a été marqué comme \"Livrée\", merci de la marquer comme \"Reçue\" dés que vous la recevrez!", "Ok");
+	        }
+	    }
+
+	    private async void MarkAsSeen()
+	    {
+	        if (!order.SeenUser)
+	        {
+                OrderRestClient orderRC = new OrderRestClient();
+	            await orderRC.MarkAsSeenUser(order.ID);
+	            updateParent = true;
+	        }
+	    }
+
+	    protected override void OnDisappearing()
+	    {
+	        base.OnDisappearing();
+	        if (updateParent)
+	        {
+	            userOrderList.load();
+	        }
+	    }
+
+	    private async void ConfirmToolbarItem_Clicked(object sender, EventArgs e)
+	    {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            Order newOrder = new Order()
+            {
+                ID = order.ID,
+                PastryShop_FK = order.PastryShop_FK,
+                User_FK = order.User_FK,
+                Status_FK = 5,
+                DeleveryMethod_FK = order.DeleveryMethod_FK,
+                PaymentMethod_FK = order.PaymentMethod_FK,
+                Date = order.Date,
+                SeenUser = true,
+                SeenPastryShop = false,
+            };
+            OrderRestClient orderRC = new OrderRestClient();
+            if (await orderRC.PutAsync(newOrder.ID, newOrder))
+            {
+                order = await orderRC.GetAsyncById(order.ID);
+                EmailRestClient emailRC = new EmailRestClient();
+                await emailRC.SendOrderEmail(order.ID);
+                updateParent = true;
+                ToolbarItems.Clear();
+                updateView();
+                await PopupNavigation.PopAsync();
+            }
+        }
+
+
+        private async void CanceToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            OrderRestClient orderRC = new OrderRestClient();
+            EmailRestClient emailRC = new EmailRestClient();
+            await emailRC.SendCancelOrderEmail(order.ID);
+            if (await orderRC.DeleteAsync(order.ID))
+            {
+                userOrderList.load();
+                await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
+                await PopupNavigation.PopAsync();
+                await Navigation.PopAsync();
+            }
+        }
+
+        private void SelectedNot(object sender, EventArgs e)
+        {
+            (sender as ListView).SelectedItem = null;
+        }
+    }
+}

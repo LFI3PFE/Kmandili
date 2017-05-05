@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.PastryShopProfile">
+    <ScrollView>
+        <StackLayout>
+            <StackLayout HeightRequest="250">
+                <RelativeLayout>
+                    <RelativeLayout HeightRequest="370" x:Name="headerRelativeLayout" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=0}">
+                        <Button BackgroundColor="#3b4552" HeightRequest="155" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"/>
+                        <Image x:Name="Cover" HeightRequest="150" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"/>
+                        <Button x:Name="imageCircleBack"
+                        BackgroundColor="#3b4552" HeightRequest="90" WidthRequest="137" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = -160}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=130}" />
+                        <Image x:Name="ProfilImage" HeightRequest="80" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=imageCircleBack, Property=X, Factor=1,Constant=5}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=135}" />
+                        <StackLayout Spacing="0" Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=0, Constant=155}" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = 0}">
+                            <Label x:Name="PastryName" TextColor="#3b4552" FontAttributes="Bold" FontSize="36" HorizontalTextAlignment="Center"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="like.png" HeightRequest="20"/>
+                                <Label x:Name="Rating" FontSize="25" TextColor="Black"/>
+                                <Label x:Name="NumberOfReviews" FontSize="15" TextColor="Black"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </RelativeLayout>
+
+                    <!--<StackLayout BackgroundColor="#ededef" x:Name="RatingLayout" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}" Orientation="Horizontal" HorizontalOptions="Center" HeightRequest="50" IsVisible="True" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=-50}">
+                        <StackLayout BackgroundColor="Transparent" x:Name="RatingStack" Orientation="Horizontal" HorizontalOptions="Center" WidthRequest="200" Padding="30,0,0,0">
+                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="1">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="2">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="3">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="4">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="5">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                        <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" WidthRequest="150" HorizontalOptions="Center">
+                            <Label BackgroundColor="Transparent" x:Name="ReactionLabel" FontSize="25" TextColor="Black" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                        </StackLayout>
+                    </StackLayout>-->
+                </RelativeLayout>
+            </StackLayout>
+            <StackLayout Padding="0,0,0,0">
+                <StackLayout HorizontalOptions="FillAndExpand" Padding="10,0,0,20" Spacing="5">
+                    <Label x:Name="Desc" FontSize="18" TextColor="Black" LineBreakMode="WordWrap" XAlign="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Padding="10,0,0,0" Spacing="5">
+                    <Label Text="Numéro de téléphone:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                    <StackLayout x:Name="PhoneNumbersLayout"></StackLayout>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Padding="10,0,0,0" Spacing="5">
+                    <Label Text="Email:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="Email" FontSize="18" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Padding="10,0,0,0" Spacing="5">
+                    <Label Text="Adresse:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="Address" FontSize="18" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout>
+                    <StackLayout Padding="10,0,0,0">
+                        <Label Text="Points de vente:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                    </StackLayout>
+                    <StackLayout x:Name="CoreStackLayout"></StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

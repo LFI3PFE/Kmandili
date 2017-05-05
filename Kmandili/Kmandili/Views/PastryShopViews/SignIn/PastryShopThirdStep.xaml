@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopThirdStep"
+             xmlns:local="clr-namespace:Kmandili.Converters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:BoolToNotConverter x:Key="BoolToNotConverter"></local:BoolToNotConverter>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <StackLayout>
+            <StackLayout>
+                <StackLayout Padding="10,30,0,10">
+                    <Label Text="Les Catégories:" FontSize="23" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Padding="30,0,0,0">
+                    <ListView x:Name="CategoriesListView" ItemSelected="selectedNot" RowHeight="30" HeightRequest="30" >
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                        <Grid  Padding="0,0,20,0" HorizontalOptions="FillAndExpand">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{Binding CategoryName}" FontSize="18" TextColor="Black" VerticalTextAlignment="Center" Grid.Column="0" Grid.Row="0"/>
+                                            <Switch Toggled="CategorySwitch_Toggled" ClassId="{Binding ID}" Grid.Column="1" Grid.Row="0"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Padding="10,0,0,0">
+                <StackLayout>
+                    <Label Text="Methodes de Livraison:" FontSize="23" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Padding="20,0,0,0">
+                    <ListView x:Name="DeleveryMethodsListView" ItemSelected="selectedNot" HasUnevenRows="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Picker x:Name="DeleverMethodPicker" StyleClass="first" WidthRequest="160" ClassId="{Binding Index}" SelectedIndexChanged="DeleverMethodPicker_SelectedIndexChanged" PropertyChanged="DeleverMethodPicker_PropertyChanged" ItemsSource="{Binding DeleveryMethods}"/>
+                                            <Picker x:Name="DelayPicker" WidthRequest="120" PropertyChanged="DelayPicker_PropertyChanged" SelectedIndexChanged="DelayPicker_SelectedIndexChanged" ItemsSource="{Binding DeleveryDelays}"/>
+                                            <Image Source="add_Icon.png" HeightRequest="20" IsVisible="{Binding IsLast}">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="Add_Tapped" NumberOfTapsRequired="1"/>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                            <Image Source="delete.png" HeightRequest="20" ClassId="{Binding Index}" IsVisible="{Binding IsLast, Converter={StaticResource BoolToNotConverter}}">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="Remove_Tapped" NumberOfTapsRequired="1"/>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                        </StackLayout>
+                                        <StackLayout Padding="20,0,0,0">
+                                            <Label Text="Methodes de Payment:" FontSize="15" TextColor="Black"/>
+                                        </StackLayout>
+                                        <StackLayout Padding="40,0,0,0"></StackLayout>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout HorizontalOptions="End" Padding="0,60,0,0">
+                <Button x:Name="NextBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="30" FontAttributes="Bold" Clicked="NextBt_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

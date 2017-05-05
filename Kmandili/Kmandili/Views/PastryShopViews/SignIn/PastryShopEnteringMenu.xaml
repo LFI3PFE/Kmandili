@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopEnteringMenu">
+    <ScrollView>
+        <ListView x:Name="Liste" HasUnevenRows="True" ItemSelected="selected" VerticalOptions="FillAndExpand">
+            <ListView.Header>
+                <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Vertical" Padding="10,30,10,40" Spacing="40">
+                    <StackLayout HorizontalOptions="Center">
+                        <Label x:Name="GideText" TextColor="Black" Text="Veuillez entrer votre menu" FontSize="30" HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button x:Name="AddBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Ajouter un produit" FontAttributes="Bold" FontSize="30" Clicked="AddProduct_OnClick"/>
+                        <Button x:Name="ContinueBt" BackgroundColor="#2cc184" TextColor="#3b4552" Text="Suivant" FontAttributes="Bold" FontSize="30" Clicked="Continue"/>
+                    </StackLayout>
+                    <Label x:Name="NoResultsLabel" IsVisible="False" Text="Pas encore de produits" TextColor="#3b4552" FontSize="25" FontAttributes="Bold" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                    <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" IsVisible="False">
+                        <ActivityIndicator x:Name="Loading" Color="Black" IsRunning="False" HeightRequest="40"/>
+                    </StackLayout>
+                </StackLayout>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                            <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
+                            <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                                <StackLayout Padding="5" VerticalOptions="Center">
+                                    <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
+                                        <Image Source="{Binding Pic}" HeightRequest="80"/>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                                        <Grid HorizontalOptions="FillAndExpand">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="6*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{Binding Name}" FontSize="30" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
+                                            <StackLayout Grid.Row="0" Grid.Column="1">
+                                                <Image Source="delete.png" WidthRequest="20">
+                                                    <Image.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="DeleteProduct"/>
+                                                    </Image.GestureRecognizers>
+                                                </Image>
+                                            </StackLayout>
+                                        </Grid>
+                                    </StackLayout>
+                                    <StackLayout Padding="20,0,0,0">
+                                        <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>
+                                        <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                            <StackLayout Orientation="Horizontal" Padding="0,-5,0,0">
+                                                <Label Text="Prix: " FontSize="20" TextColor="Black"/>
+                                                <Label Text="{Binding Price}" FontSize="20" TextColor="Black"/>
+                                                <Label Text="TND" FontSize="18" TextColor="Gray"/>
+                                                <Label Text="/" FontSize="20" TextColor="Black"/>
+                                                <Label Text="{Binding SaleUnit.Unit}" FontSize="20" TextColor="Black"/>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                    <!--<ViewCell>
+                        <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100" IsEnabled="False">
+                            <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                                <StackLayout Padding="5" VerticalOptions="Center">
+                                    <StackLayout BackgroundColor="Gray" HeightRequest="80" WidthRequest="129">
+                                        <Image Source="{Binding Pic}" HeightRequest="80"/>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout Orientation="Vertical" Spacing="1">
+                                    <StackLayout Orientation="Horizontal" Spacing="30">
+                                        <Label x:Name="PatisserieId" Text="{Binding ID}" IsVisible="False"/>
+                                        <Label Text="{Binding Name}" FontSize="30" TextColor="Black" WidthRequest="150"/>
+                                        <Image x:Name="DeleteIcon" Source="delete.png" HeightRequest="30" IsVisible="True">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="DeleteProduct" NumberOfTapsRequired="1"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+                                    <StackLayout Padding="20,0,0,0">
+                                        <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>
+                                        <StackLayout Orientation="Horizontal" Spacing="15" Padding="10,0,0,0">
+                                            <StackLayout Orientation="Horizontal">
+                                                <StackLayout Orientation="Horizontal" Spacing="3">
+                                                    <Label Text="{Binding Price, StringFormat='{0:F} TND'}" FontSize="25" TextColor="Black"/>
+                                                    <Label Text="{Binding SaleUnit.Name, StringFormat='/{0:F0}'}" FontSize="20" TextColor="Black"/>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>-->
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.UserViews.EditUserProfile">
+    <ScrollView>
+        <StackLayout VerticalOptions="Center">
+            <StackLayout>
+                <StackLayout HorizontalOptions="Center">
+                    <Label Text="Profil" FontSize="30" TextColor="Black" HorizontalTextAlignment="Center"/>
+                </StackLayout>
+                <StackLayout Spacing="20" Padding="30">
+                    <!--Padding="30,80,70,0"-->
+                    <Entry x:Name="Name" PlaceholderColor="Gray" Placeholder="Nom" TextColor="Black" WidthRequest="150" FontSize="25" />
+                    <Entry x:Name="LastName" PlaceholderColor="Gray" Placeholder="Prenom" TextColor="Black" WidthRequest="150" FontSize="25" />
+                    <Entry x:Name="Email" PlaceholderColor="Gray" TextColor="Black" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
+                    <Entry x:Name="Password" PlaceholderColor="Gray" TextColor="Black" Placeholder="Mot de passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
+                    <StackLayout>
+                        <Label Text="Adresse:" x:Name="Address" FontSize="25" TextColor="Black"/>
+                        <StackLayout Padding="10,0,0,0">
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Entry x:Name="Number" Placeholder="Num. Bât." PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="80" Keyboard="Numeric"/>
+                                <Entry x:Name="Street" Placeholder="Rue" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="200"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Entry x:Name="City" Placeholder="Ville" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="170"/>
+                                <Entry x:Name="ZipCode" Placeholder="Co. Postal" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="110" Keyboard="Numeric"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Entry x:Name="State" Placeholder="Gouvernorat" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="140"/>
+                                <Entry x:Name="Country" Placeholder="Pays" PlaceholderColor="Gray" TextColor="Black" FontSize="20" WidthRequest="100"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout>
+                        <Label Text="Numéros de téléphone:" TextColor="Black" FontSize="25"/>
+                        <StackLayout x:Name="PhoneNumbersLayout" Padding="20,0,0,0"></StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout HorizontalOptions="End" Padding="0,20,30,20">
+                    <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Metre à jours" WidthRequest="150" FontSize="25" FontAttributes="Bold" Clicked="UpdateBt_Clicked"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

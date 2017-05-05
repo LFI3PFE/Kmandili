@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.UserViews.ProductList">
+    <ScrollView VerticalOptions="FillAndExpand">
+        <StackLayout BackgroundColor="Transparent" x:Name="BodyLayout" VerticalOptions="FillAndExpand">
+            <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+            </StackLayout>
+            <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
+                <StackLayout>
+                    <Label Text="(Aucun Produit Trouvé)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout x:Name="LoadingLayout" VerticalOptions="Start" Padding="0,20,0,0" IsVisible="False">
+                <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
+            </StackLayout>
+            <StackLayout Padding="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
+                <ListView x:Name="List" HasUnevenRows="True" ItemTapped="showProductMenu" VerticalOptions="FillAndExpand" ItemSelected="SelectedNot">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                                    <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
+                                    <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                                        <StackLayout Padding="5" VerticalOptions="Center">
+                                            <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
+                                                <Image Source="{Binding Pic}" HeightRequest="80"/>
+                                            </StackLayout>
+                                        </StackLayout>
+                                        <StackLayout Orientation="Vertical" Spacing="1">
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="{Binding Name}" FontSize="30" TextColor="Black"/>
+                                                <StackLayout Padding="0,10,0,0">
+                                                    <Label Text="{Binding PastryShop.Name}" VerticalOptions="FillAndExpand" FontSize="18" TextColor="Gray"/>
+                                                </StackLayout>
+                                            </StackLayout>
+                                            <StackLayout Padding="20,0,0,0">
+                                                <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>
+                                                <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                                    <StackLayout Orientation="Horizontal" Padding="0,-5,0,0">
+                                                        <Label Text="Prix: " FontSize="20" TextColor="Black"/>
+                                                        <Label Text="{Binding Price}" FontSize="20" TextColor="Black"/>
+                                                        <Label Text="TND" FontSize="18" TextColor="Gray"/>
+                                                        <Label Text="/" FontSize="20" TextColor="Black"/>
+                                                        <Label Text="{Binding SaleUnit.Unit}" FontSize="20" TextColor="Black"/>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

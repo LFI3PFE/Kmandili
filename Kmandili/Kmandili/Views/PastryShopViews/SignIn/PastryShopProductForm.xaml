@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopProductForm">
+    <ScrollView>
+        <StackLayout VerticalOptions="Start" Orientation="Vertical" Padding="40,30,40,40" Spacing="40">
+            <Label TextColor="Black" x:Name="GideLabel" Text="Ajouter un produit" FontSize="30" HorizontalTextAlignment="Center"/>
+            <StackLayout Padding="0,20,0,0" Spacing="30">
+                <Entry TextColor="Black" x:Name="ProductName" PlaceholderColor="Gray" Placeholder="Nom du produit" FontSize="25"/>
+                <StackLayout Orientation="Horizontal" Spacing="50">
+                    <Entry TextColor="Black" x:Name="Price" PlaceholderColor="Gray" Placeholder="Prix" WidthRequest="150" FontSize="25" Keyboard="Numeric"/>
+                    <Picker x:Name="PickerUnit" TextColor="Black" HorizontalOptions="FillAndExpand" WidthRequest="25"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label VerticalTextAlignment="Center" TextColor="Black" Text="Categorie" WidthRequest="150" FontSize="20"/>
+                    <Picker x:Name="CategoryPicker" TextColor="Black" HorizontalOptions="FillAndExpand" WidthRequest="180"/>
+                </StackLayout>
+                <Entry TextColor="Black" x:Name="ProductDescription" PlaceholderColor="Gray" Placeholder="Description" WidthRequest="150" FontSize="25" />
+                <StackLayout Orientation="Horizontal">
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Entry Grid.Row="0" Grid.Column="0" TextColor="Black" x:Name="ProductPhoto" PlaceholderColor="Gray" Placeholder="Photo" FontSize="20" Focused="EntryFocused" IsEnabled="False"/>
+                        <Button Grid.Row="0" Grid.Column="1" x:Name="importBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Selectionner" FontSize="15" FontAttributes="Bold" Clicked="ImportImg_OnClick"/>
+                    </Grid>
+                </StackLayout>
+                <StackLayout HorizontalOptions="End" Padding="0,10,0,0">
+                    <Button x:Name="addBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Ajouter" WidthRequest="150" FontSize="30" FontAttributes="Bold" Clicked="NextButton_OnClick"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

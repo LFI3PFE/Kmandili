@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopUploadPhotos">
+    <StackLayout HorizontalOptions="Center" VerticalOptions="Start" Orientation="Vertical" Spacing="50" Padding="40,60,40,40">
+        <Label x:Name="GideText" TextColor="Black" Text="Selectionner un logo est une photo de couverture" FontSize="25" HorizontalTextAlignment="Center"/>
+        <StackLayout Orientation="Horizontal" Spacing="15">
+            <Grid HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Entry Grid.Row="0" Grid.Column="0" x:Name="Logo" Placeholder="Logo" PlaceholderColor="Gray" TextColor="Gray" FontSize="25" IsEnabled="False"/>
+                <Button Grid.Row="0" Grid.Column="1"  x:Name="LogoBt" BackgroundColor="#2b78c1" HeightRequest="25" TextColor="#3b4552" Text="Selectionner" FontSize="15" FontAttributes="Bold" Clicked="ImportLogo_OnClick"/>
+            </Grid>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="15">
+            <Grid HorizontalOptions="FillAndExpand">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Entry Grid.Row="0" Grid.Column="0"  x:Name="Cover" PlaceholderColor="Gray" TextColor="Gray" Placeholder="Couverture" FontSize="25" IsEnabled="False"/>
+                <Button Grid.Row="0" Grid.Column="1"  x:Name="CoverBt" BackgroundColor="#2b78c1" HeightRequest="25" TextColor="#3b4552" Text="Selectionner" FontSize="15" FontAttributes="Bold" Clicked="ImportCover_OnClick"/>
+            </Grid>
+        </StackLayout>
+        <StackLayout HorizontalOptions="End" Padding="0,60,0,0">
+            <Button x:Name="NextBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="30" FontAttributes="Bold" Clicked="NextButton_OnClick"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

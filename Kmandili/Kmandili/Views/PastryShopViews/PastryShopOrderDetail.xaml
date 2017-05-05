@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.PastryShopOrderDetail">
+    <ScrollView>
+        <StackLayout>
+            <StackLayout Padding="10,10,10,20" Spacing="10">
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Numéro de commande:" FontAttributes="Bold" FontSize="20" TextColor="Black" />
+                    <Label x:Name="OrderID" FontSize="20" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Pâtisserie:" FontSize="20" FontAttributes="Bold" TextColor="Black" />
+                    <Label x:Name="ClientName" FontSize="20" TextColor="Black" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Date:" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="Date" FontSize="20" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Livraison:" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="Delevery" FontSize="20" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Payment:" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Label x:Name="Payment" FontSize="20" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label Text="Status:" VerticalTextAlignment="Center" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                    <Picker x:Name="Status" HorizontalOptions="FillAndExpand" TextColor="Black"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="30">
+                    <Label Text="Total:" FontSize="25" TextColor="Black" FontAttributes="Bold"/>
+                    <Label x:Name="Total" FontSize="25" TextColor="Black" FontAttributes="Bold"/>
+                    <Label Text="TND" FontSize="25" TextColor="Gray"/>
+                </StackLayout>
+            </StackLayout>
+            <ListView x:Name="ProductsList" RowHeight="100" ItemSelected="SelectedNot">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                                <Label x:Name="ProductId" Text="{Binding Product.ID}" IsVisible="False"/>
+                                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                                    <StackLayout Padding="5" VerticalOptions="Center">
+                                        <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
+                                            <Image Source="{Binding Product.Pic}" HeightRequest="80"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                                            <Grid HorizontalOptions="FillAndExpand">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Text="{Binding Product.Name}" FontSize="25" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
+                                            </Grid>
+                                        </StackLayout>
+                                        <StackLayout Padding="20,0,0,0">
+                                            <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="Prix: " FontAttributes="Bold" FontSize="15" TextColor="Black"/>
+                                                    <Label Text="{Binding Product.Price}" FontSize="15" TextColor="Black"/>
+                                                    <Label Text="TND" FontSize="15" TextColor="Gray"/>
+                                                    <Label Text="/" FontSize="15" TextColor="Black"/>
+                                                    <Label Text="{Binding Product.SaleUnit.Unit}" FontSize="15" TextColor="Black"/>
+                                                </StackLayout>
+                                            </StackLayout>
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <StackLayout Orientation="Horizontal" Spacing="5">
+                                                    <Label Text="Quantité:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                                                    <Label Text="{Binding Quantity}" FontSize="18" TextColor="Black"/>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Horizontal" Spacing="5">
+                                                    <Label Text="Total:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                                                    <Label Text="{Binding Total}" FontSize="18" TextColor="Black"/>
+                                                    <Label Text="TND" FontSize="18" TextColor="Gray"/>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
