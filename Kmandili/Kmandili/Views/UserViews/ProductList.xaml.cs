@@ -34,13 +34,12 @@ namespace Kmandili.Views.UserViews
             List.SeparatorVisibility = SeparatorVisibility.None;
             displayedProducts.CollectionChanged += DisplayedProducts_CollectionChanged;
             List.ItemsSource = displayedProducts;
+#pragma warning disable 618
             filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Secondary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "Filter.png"),
-#pragma warning restore 618
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -48,9 +47,7 @@ namespace Kmandili.Views.UserViews
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "Search.png"),
-#pragma warning restore 618
             };
             searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
@@ -58,17 +55,17 @@ namespace Kmandili.Views.UserViews
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "cancel.png"),
-#pragma warning restore 618
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
             sortToolbarItem = new ToolbarItem()
             {
                 Text = "Trier",
-                Order = ToolbarItemOrder.Primary
+                Order = ToolbarItemOrder.Primary,
+                Icon = Icon = Device.OnPlatform("", "", "Sort.png"),
             };
+#pragma warning restore 618
             sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
             ToolbarItems.Add(searchToolbarItem);

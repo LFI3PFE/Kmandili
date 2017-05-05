@@ -157,6 +157,7 @@
     <Content Include="RedNotificationDot.png" />
     <Content Include="Search.png" />
     <Content Include="shop.png" />
+    <Content Include="Sort.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

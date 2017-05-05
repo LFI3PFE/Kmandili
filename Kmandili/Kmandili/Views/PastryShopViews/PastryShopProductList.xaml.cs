@@ -38,11 +38,10 @@ namespace Kmandili.Views.PastryShopViews
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
 
+#pragma warning disable 618
             addProduct = new ToolbarItem
             {
-#pragma warning disable CS0618 // Type or member is obsolete
                 Icon = Device.OnPlatform(null,null,"plus.png"),
-#pragma warning restore CS0618 // Type or member is obsolete
                 Text = "Ajouter",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -53,9 +52,7 @@ namespace Kmandili.Views.PastryShopViews
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Secondary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "Filter.png"),
-#pragma warning restore 618
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -63,9 +60,7 @@ namespace Kmandili.Views.PastryShopViews
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "Search.png"),
-#pragma warning restore 618
             };
             searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
@@ -73,17 +68,17 @@ namespace Kmandili.Views.PastryShopViews
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-#pragma warning disable 618
                 Icon = Device.OnPlatform("", "", "cancel.png"),
-#pragma warning restore 618
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
             sortToolbarItem = new ToolbarItem()
             {
                 Text = "Trier",
-                Order = ToolbarItemOrder.Primary
+                Order = ToolbarItemOrder.Primary,
+                Icon = Device.OnPlatform("", "", "Sort.png"),
             };
+#pragma warning restore 618 // Type or member is obsolete
             sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
             ToolbarItems.Add(addProduct);
@@ -216,7 +211,6 @@ namespace Kmandili.Views.PastryShopViews
 
         private async void AddProduct_Clicked(object sender, EventArgs e)
         {
-            //toAdd = true;
             await Navigation.PushAsync(new PastryShopProductForm(this, pastryShop));
         }
 
