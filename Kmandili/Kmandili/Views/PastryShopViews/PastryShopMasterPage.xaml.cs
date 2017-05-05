@@ -53,7 +53,7 @@ namespace Kmandili.Views.PastryShopViews
 	    private async void ToEditProfile(object sender, EventArgs e)
 	    {
             pastryShopMasterDetailPage.IsPresented = false;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo());
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShopMasterDetailPage));
         }
     }
 }

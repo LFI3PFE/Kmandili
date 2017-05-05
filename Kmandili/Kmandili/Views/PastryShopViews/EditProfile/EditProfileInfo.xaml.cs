@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -22,12 +24,100 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private List<PriceRange> priceRanges;
 	    private PastryShop pastryShop;
         private List<PhoneNumber> removedPhoneNumbers = new List<PhoneNumber>();
+	    private MediaFile _mediaFileCover;
+	    private MediaFile _mediaFileProfile;
 
-        public EditProfileInfo ()
+
+        private ToolbarItem changeProfilePicToolbarItem;
+	    private ToolbarItem changeCoverPicToolbarItem;
+
+        private ToolbarItem cancelChangeProfilePicToolbarItem;
+        private ToolbarItem cancelChangeCoverPicToolbarItem;
+
+        private PastryShopMasterDetailPage pastryShopMasterDetailPage;
+
+        public EditProfileInfo (PastryShopMasterDetailPage pastryShopMasterDetailPage)
 		{
 			InitializeComponent ();
+            this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
+            changeProfilePicToolbarItem = new ToolbarItem()
+            {
+                Text = "Changher la photo de profile",
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            changeProfilePicToolbarItem.Clicked += ChangeProfilePicToolbarItem_Clicked;
+
+            changeCoverPicToolbarItem = new ToolbarItem()
+            {
+                Text = "Changher la photo de couverture",
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 1,
+            };
+            changeCoverPicToolbarItem.Clicked += ChangeCoverPicToolbarItem_Clicked;
+
+            cancelChangeProfilePicToolbarItem = new ToolbarItem()
+            {
+                Text = "Annuler le changement de la photo de profile",
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 0,
+            };
+            cancelChangeProfilePicToolbarItem.Clicked += CancelChangeProfilePicToolbarItem_Clicked;
+
+            cancelChangeCoverPicToolbarItem = new ToolbarItem()
+            {
+                Text = "Annuler le changement de la photo de couverture",
+                Order = ToolbarItemOrder.Secondary,
+                Priority = 1
+            };
+            cancelChangeCoverPicToolbarItem.Clicked += CancelChangeCoverPicToolbarItem_Clicked;
+
+            ToolbarItems.Add(changeProfilePicToolbarItem);
+            ToolbarItems.Add(changeCoverPicToolbarItem);
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
             load();
+        }
+
+        private void CancelChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            _mediaFileCover = null;
+            ToolbarItems.Remove(cancelChangeCoverPicToolbarItem);
+            ToolbarItems.Add(changeCoverPicToolbarItem);
+        }
+
+        private void CancelChangeProfilePicToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            _mediaFileProfile = null;
+            ToolbarItems.Remove(cancelChangeProfilePicToolbarItem);
+            ToolbarItems.Add(changeProfilePicToolbarItem);
+        }
+
+        private async void ChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            App.galleryIsOpent = true;
+            await CrossMedia.Current.Initialize();
+
+            _mediaFileCover = await CrossMedia.Current.PickPhotoAsync();
+
+            if (_mediaFileCover == null)
+                return;
+            ToolbarItems.Remove(changeCoverPicToolbarItem);
+            ToolbarItems.Add(cancelChangeCoverPicToolbarItem);
+            App.galleryIsOpent = false;
+        }
+
+        private async void ChangeProfilePicToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            App.galleryIsOpent = true;
+            await CrossMedia.Current.Initialize();
+
+            _mediaFileProfile = await CrossMedia.Current.PickPhotoAsync();
+
+            if (_mediaFileProfile == null)
+                return;
+            ToolbarItems.Remove(changeProfilePicToolbarItem);
+            ToolbarItems.Add(cancelChangeProfilePicToolbarItem);
+            App.galleryIsOpent = false;
         }
 
         private void PhoneNumberStackLayouts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -340,6 +430,24 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
                 await addressRC.PutAsync(address.ID, address);
+                
+                if (_mediaFileProfile != null)
+                {
+                    string newURL = await Upload(_mediaFileProfile);
+                    if(!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.ProfilePic)))
+                    {
+                        pastryShop.ProfilePic = newURL;
+                    }
+                }
+
+                if (_mediaFileCover != null)
+                {
+                    string newURL = await Upload(_mediaFileProfile);
+                    if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.CoverPic)))
+                    {
+                        pastryShop.CoverPic = newURL;
+                    }
+                }
 
                 PastryShop newPastryShop = new PastryShop()
                 {
@@ -383,25 +491,32 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                             await phoneNumberRC.PostAsync(p);
                         }
                     }
-                    //foreach (StackLayout s in PhoneNumberStackLayouts)
-                    //{
-                    //    if ((s.Children[0] as Entry).Text != "")
-                    //    {
-                    //        PhoneNumber p = new PhoneNumber()
-                    //        {
-                    //            Number = (s.Children[0] as Entry).Text,
-                    //            PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
-                    //        };
-                    //        pastryShop.PhoneNumbers.Add(p);
-                    //    }
-                    //}
                 }
                 await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
                 await PopupNavigation.PopAsync();
+                pastryShopMasterDetailPage.ReloadPastryShop();
                 await Navigation.PopAsync();
             }
-
         }
 
+        private async Task<string> Upload(MediaFile upfile)
+        {
+            string fileName = Guid.NewGuid().ToString();
+            var stream = upfile.GetStream();
+            var res = await new UploadRestClient().Upload(stream, fileName);
+            if (res)
+            {
+                return App.ServerURL + "Uploads/" + fileName + ".jpg";
+            }
+            return null;
+        }
+
+	    private async Task<bool> Delete(string picURL)
+	    {
+            string fileName = picURL.Substring(44, (picURL.Length - 44));
+	        fileName = fileName.Substring(0, (fileName.Length - 4));
+            UploadRestClient uploadRC = new UploadRestClient();
+            return (await uploadRC.Delete(fileName));
+	    }
     }
 }

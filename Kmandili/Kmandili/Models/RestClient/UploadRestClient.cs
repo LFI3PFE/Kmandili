@@ -18,5 +18,15 @@ namespace Kmandili.Models.RestClient
             var response = await client.PostAsync(App.ServerURL + "api/Uploads/" + FileName, multi);
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> Delete(string fileName)
+        {
+            var httpClient = new HttpClient();
+
+            string URL = App.ServerURL + "api/Uploads/" + fileName;
+            var response = await httpClient.DeleteAsync(URL);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }

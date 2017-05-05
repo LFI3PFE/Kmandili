@@ -38,6 +38,13 @@ namespace Kmandili.Views.PastryShopViews
             load();
         }
 
+        public async void Reload()
+        {
+            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            load();
+        }
+
         protected override void OnAppearing()
         {
             pastryShopMasterDetailPage.IsGestureEnabled = true;
