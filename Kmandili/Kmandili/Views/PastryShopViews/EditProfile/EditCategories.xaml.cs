@@ -96,7 +96,26 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    private async void Apply(object sender, EventArgs e)
 	    {
-	        
+	        PastryShop p = new PastryShop()
+	        {
+                ID = pastryShop.ID,
+	            Name = pastryShop.Name,
+                Email = pastryShop.Email,
+                Password = pastryShop.Password,
+                ShortDesc = pastryShop.ShortDesc,
+                LongDesc = pastryShop.LongDesc,
+                CoverPic = pastryShop.CoverPic,
+                ProfilePic = pastryShop.ProfilePic,
+                PriceRange_FK = pastryShop.PriceRange_FK,
+                Address_FK = pastryShop.Address_FK,
+                NumberOfRatings = pastryShop.NumberOfRatings,
+                RatingSum = pastryShop.RatingSum,
+                Categories = pastryShop.Categories
+	        };
+            toRemoveCategories.ForEach(rc => p.Categories.Remove(p.Categories.FirstOrDefault(c => c.ID == rc.ID)));
+            newSelectedCategories.ForEach(sc => p.Categories.Add(sc));
+            var pastryShopRC = new PastryShopRestClient();
+	        await pastryShopRC.PutAsync(p.ID, p);
 	    }
     }
 }
