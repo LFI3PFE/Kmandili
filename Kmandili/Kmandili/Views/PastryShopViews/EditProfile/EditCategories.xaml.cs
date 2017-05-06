@@ -18,14 +18,17 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    private List<Category> categories; 
         private List<Category> newSelectedCategories = new List<Category>();
         private List<Category> toRemoveCategories = new List<Category>();
-        private List<Category> allSelectedCategories = new List<Category>(); 
+        private List<Category> allSelectedCategories = new List<Category>();
+
+	    private EditProfileInfo editProfileInfo;
 
 	    private PastryShop pastryShop;
 
-		public EditCategories (PastryShop pastryShop)
+		public EditCategories (EditProfileInfo editProfileInfo, PastryShop pastryShop)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
             this.pastryShop = pastryShop;
+		    this.editProfileInfo = editProfileInfo;
 			InitializeComponent ();
 		    Load();
 		}
@@ -135,6 +138,8 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	        if (await pastryShopRC.PutAsyncCategories(p.ID, p))
 	        {
 	            await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
+	            editProfileInfo.UpdateParent = true;
+                editProfileInfo.load();
 	            await PopupNavigation.PopAsync();
 	        }
 	    }

@@ -36,6 +36,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private ToolbarItem cancelChangeCoverPicToolbarItem;
 
         private PastryShopMasterDetailPage pastryShopMasterDetailPage;
+	    public bool UpdateParent = false;
 
         public EditProfileInfo (PastryShopMasterDetailPage pastryShopMasterDetailPage)
 		{
@@ -90,7 +91,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private async void CategoriesToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new EditCategories(pastryShop));
+            await PopupNavigation.PushAsync(new EditCategories(this, pastryShop));
         }
 
         private void CancelChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)
@@ -149,7 +150,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             PhoneNumberStackLayouts.Last().Children[3].IsVisible = false;
         }
 
-        private async void load()
+        public async void load()
         {
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
@@ -509,12 +510,20 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 }
                 await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
                 await PopupNavigation.PopAsync();
-                pastryShopMasterDetailPage.ReloadPastryShop();
+                UpdateParent = true;
                 await Navigation.PopAsync();
             }
         }
 
-        private async Task<string> Upload(MediaFile upfile)
+	    protected override void OnDisappearing()
+	    {
+	        if (UpdateParent)
+	        {
+                pastryShopMasterDetailPage.ReloadPastryShop();
+            }
+	    }
+
+	    private async Task<string> Upload(MediaFile upfile)
         {
             string fileName = Guid.NewGuid().ToString();
             var stream = upfile.GetStream();
