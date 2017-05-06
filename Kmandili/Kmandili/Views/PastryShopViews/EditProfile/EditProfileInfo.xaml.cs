@@ -30,6 +30,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private ToolbarItem changeProfilePicToolbarItem;
 	    private ToolbarItem changeCoverPicToolbarItem;
+	    private ToolbarItem categoriesToolbarItem;
 
         private ToolbarItem cancelChangeProfilePicToolbarItem;
         private ToolbarItem cancelChangeCoverPicToolbarItem;
@@ -72,10 +73,24 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             };
             cancelChangeCoverPicToolbarItem.Clicked += CancelChangeCoverPicToolbarItem_Clicked;
 
+            categoriesToolbarItem = new ToolbarItem()
+            {
+                Text = "Categoriess",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 1
+            };
+            categoriesToolbarItem.Clicked += CategoriesToolbarItem_Clicked;
+
             ToolbarItems.Add(changeProfilePicToolbarItem);
             ToolbarItems.Add(changeCoverPicToolbarItem);
+            ToolbarItems.Add(categoriesToolbarItem);
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
             load();
+        }
+
+        private async void CategoriesToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.PushAsync(new EditCategories(pastryShop));
         }
 
         private void CancelChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)

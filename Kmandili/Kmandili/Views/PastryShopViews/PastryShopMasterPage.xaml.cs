@@ -50,7 +50,14 @@ namespace Kmandili.Views.PastryShopViews
             //await Navigation.PushModalAsync(nav);
         }
 
-	    private async void ToEditProfile(object sender, EventArgs e)
+	    private async void ToEditDeleveryMethod(object sender, EventArgs e)
+	    {
+            pastryShopMasterDetailPage.IsPresented = false;
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditDeleveryMethods(pastryShopMasterDetailPage));
+        }
+
+
+        private async void ToEditProfile(object sender, EventArgs e)
 	    {
             pastryShopMasterDetailPage.IsPresented = false;
             await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShopMasterDetailPage));

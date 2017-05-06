@@ -54,6 +54,18 @@
       <DependentUpon>LoadingPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\AddDeleveryMethodForm.xaml.cs">
+      <DependentUpon>AddDeleveryMethodForm.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditCategories.xaml.cs">
+      <DependentUpon>EditCategories.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditDeleveryMethods.xaml.cs">
+      <DependentUpon>EditDeleveryMethods.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditProfileInfo.xaml.cs">
       <DependentUpon>EditProfileInfo.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -341,6 +353,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditProfileInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditDeleveryMethods.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\AddDeleveryMethodForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\EditCategories.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

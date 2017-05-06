@@ -17,6 +17,12 @@
             <StackLayout Grid.Row="1" Grid.Column="0">
                 <StackLayout Orientation="Horizontal" Spacing="10">
                     <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ToEditDeleveryMethod" NumberOfTapsRequired="1"/>
+                    </StackLayout.GestureRecognizers>
+                    <Label VerticalOptions="End"  Text="Edit Delevery Methods" FontSize="20" TextColor="Gray"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="ToEditProfile" NumberOfTapsRequired="1"/>
                     </StackLayout.GestureRecognizers>
                     <Label VerticalOptions="End"  Text="Editer Profile" FontSize="20" TextColor="Gray"/>
