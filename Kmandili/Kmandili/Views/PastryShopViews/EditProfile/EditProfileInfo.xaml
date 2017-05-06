@@ -41,7 +41,7 @@
                     </StackLayout>
                 </StackLayout>
                 <StackLayout HorizontalOptions="End" Padding="0,20,30,20">
-                    <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="25" FontAttributes="Bold"/>
+                    <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Confirmer" WidthRequest="150" FontSize="25" FontAttributes="Bold"/>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

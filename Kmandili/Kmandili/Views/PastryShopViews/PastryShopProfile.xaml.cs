@@ -68,10 +68,12 @@ namespace Kmandili.Views.PastryShopViews
             Address.Text = pastryShop.Address.ToString();
             Desc.Text = pastryShop.LongDesc;
             Email.Text = pastryShop.Email;
+            PhoneNumbersLayout.Children.Clear();
             foreach (PhoneNumber phone in pastryShop.PhoneNumbers)
             {
                 PhoneNumbersLayout.Children.Add(new Label() { Text = phone.Number + " " + phone.PhoneNumberType.Type, TextColor = Color.Black, FontSize = 20 });
             }
+            CoreStackLayout.Children.Clear();
             foreach (PointOfSale pointOfSale in pastryShop.PointOfSales)
             {
                 CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(pointOfSale));

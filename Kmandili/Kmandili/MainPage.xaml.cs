@@ -104,7 +104,23 @@ namespace Kmandili
                 isLoading(false);
                 Email.Text = "";
                 Password.Text = "";
-                App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                //App.Current.MainPage = new UserMasterDetailPage(u);
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.iOS:
+                        App.Current.MainPage = new UserMasterDetailPage(u);
+                        break;
+                    case Device.Android:
+                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                        break;
+                    case Device.WinPhone:
+                    case Device.Windows:
+                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                        break;
+                    default:
+                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                        break;
+                }
             }
             else
             {
@@ -121,7 +137,23 @@ namespace Kmandili
                     isLoading(false);
                     Email.Text = "";
                     Password.Text = "";
-                    App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                    //App.Current.MainPage = new PastryShopMasterDetailPage(p);
+                    switch (Device.RuntimePlatform)
+                    {
+                        case Device.iOS:
+                            App.Current.MainPage = new PastryShopMasterDetailPage(p);
+                            break;
+                        case Device.Android:
+                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                            break;
+                        case Device.WinPhone:
+                        case Device.Windows:
+                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                            break;
+                        default:
+                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                            break;
+                    }
                     //await Navigation.PushModalAsync(new PastryShopMasterDetailPage(p));
                 }
                 else

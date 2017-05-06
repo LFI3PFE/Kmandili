@@ -69,7 +69,7 @@ namespace Kmandili.Views.UserViews
                     break;
                 case Device.Android:
                     Detail = new NavigationPage(tab);
-                    break; ;
+                    break;
                 case Device.WinPhone:
                 case Device.Windows:
                     Detail = tab;
