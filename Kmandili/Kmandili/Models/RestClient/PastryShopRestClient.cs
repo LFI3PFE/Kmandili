@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,21 @@ namespace Kmandili.Models.RestClient
             {
                 return null;
             }
+        }
+
+        public async Task<bool> PutAsyncCategories(int id, PastryShop pastryShop)
+        {
+            var httpClient = new HttpClient();
+
+            var json = JsonConvert.SerializeObject(pastryShop);
+
+            HttpContent httpContent = new StringContent(json);
+
+            httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
+
+            return result.IsSuccessStatusCode;
         }
     }
 }

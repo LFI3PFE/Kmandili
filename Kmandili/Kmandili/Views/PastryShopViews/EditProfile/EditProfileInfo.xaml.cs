@@ -75,7 +75,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
             categoriesToolbarItem = new ToolbarItem()
             {
-                Text = "Categoriess",
+                Text = "Categories",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 1
             };

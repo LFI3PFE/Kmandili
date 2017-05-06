@@ -17,18 +17,20 @@
       HasBackgroundAnimation="True"/>
     </pages:PopupPage.Animation>
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" BackgroundColor="White">
-        <StackLayout Padding="30" x:Name="CategoriesLayout"></StackLayout>
-        <StackLayout VerticalOptions="End" HorizontalOptions="End" Orientation="Horizontal" Padding="0,20,0,0" Spacing="30">
-            <Label Text="Annuler" FontSize="18" TextColor="DodgerBlue">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Dismiss"></TapGestureRecognizer>
-                </Label.GestureRecognizers>
-            </Label>
-            <Label Text="Ajouter" FontSize="18" TextColor="DodgerBlue">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Apply"></TapGestureRecognizer>
-                </Label.GestureRecognizers>
-            </Label>
+        <StackLayout Padding="30">
+            <StackLayout x:Name="CategoriesLayout"></StackLayout>
+            <StackLayout VerticalOptions="End" HorizontalOptions="End" Orientation="Horizontal" Padding="0,20,0,0" Spacing="30">
+                <Label Text="Annuler" FontSize="18" TextColor="DodgerBlue">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Dismiss"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Text="Ajouter" FontSize="18" TextColor="DodgerBlue">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Apply"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
         </StackLayout>
     </StackLayout>
 </pages:PopupPage>

@@ -18,6 +18,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    private List<Category> categories; 
         private List<Category> newSelectedCategories = new List<Category>();
         private List<Category> toRemoveCategories = new List<Category>();
+        private List<Category> allSelectedCategories = new List<Category>(); 
 
 	    private PastryShop pastryShop;
 
@@ -31,6 +32,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    private async void Load()
 	    {
+            pastryShop.Categories.ToList().ForEach(c => allSelectedCategories.Add(c));
 	        var categoryRC = new RestClient<Category>();
 	        categories = await categoryRC.GetAsync();
             CategoriesLayout.Children.Clear();
@@ -67,6 +69,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             if (senderSwitch == null) return;
             if (senderSwitch.IsToggled)
             {
+                allSelectedCategories.Add(categories.FirstOrDefault(c => c.ID == Int32.Parse(senderSwitch.ClassId)));
                 if (pastryShop.Categories.Any(c => c.ID == Int32.Parse(senderSwitch.ClassId)))
                 {
                     toRemoveCategories.Remove(toRemoveCategories.FirstOrDefault(c => c.ID == Int32.Parse(senderSwitch.ClassId)));
@@ -78,6 +81,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             }
             else
             {
+                allSelectedCategories.Remove(allSelectedCategories.FirstOrDefault(c => c.ID == Int32.Parse(senderSwitch.ClassId)));
                 if (pastryShop.Categories.Any(c => c.ID == Int32.Parse(senderSwitch.ClassId)))
                 {
                     toRemoveCategories.Add(pastryShop.Categories.FirstOrDefault(c => c.ID == Int32.Parse(senderSwitch.ClassId)));
@@ -96,7 +100,20 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    private async void Apply(object sender, EventArgs e)
 	    {
-	        PastryShop p = new PastryShop()
+	        if (!newSelectedCategories.Any() && !toRemoveCategories.Any())
+	        {
+	            await PopupNavigation.PopAsync();
+                return;
+	        }
+	        if (!allSelectedCategories.Any())
+	        {
+	            await DisplayAlert("Erreur", "Au moins une catégorie doit être selectionné!", "Ok");
+                return;
+	        }
+	        await PopupNavigation.PushAsync(new LoadingPopupPage());
+            pastryShop.Categories.ToList().ForEach(c => c.PastryShops.Clear());
+            newSelectedCategories.ForEach(c => c.PastryShops.Clear());
+            PastryShop p = new PastryShop()
 	        {
                 ID = pastryShop.ID,
 	            Name = pastryShop.Name,
@@ -115,7 +132,11 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             toRemoveCategories.ForEach(rc => p.Categories.Remove(p.Categories.FirstOrDefault(c => c.ID == rc.ID)));
             newSelectedCategories.ForEach(sc => p.Categories.Add(sc));
             var pastryShopRC = new PastryShopRestClient();
-	        await pastryShopRC.PutAsync(p.ID, p);
+	        if (await pastryShopRC.PutAsyncCategories(p.ID, p))
+	        {
+	            await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
+	            await PopupNavigation.PopAsync();
+	        }
 	    }
     }
 }
