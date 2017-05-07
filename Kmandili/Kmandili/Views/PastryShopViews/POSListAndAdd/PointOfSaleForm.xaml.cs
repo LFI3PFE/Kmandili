@@ -1,30 +1,30 @@
-﻿using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Models;
+using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.SignIn;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews.SignIn
+namespace Kmandili.Views.PastryShopViews.POSListAndAdd
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopSignUpForm : ContentPage
+	public partial class PointOfSaleForm : ContentPage
 	{
+        private PastryShop pastryShop;
+        private List<Parking> parkings = new List<Parking>();
         private ObservableCollection<StackLayout> PhoneNumberStackLayouts = new ObservableCollection<StackLayout>();
-        private RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-        private RestClient<PriceRange> priceRangeTypeRC = new RestClient<PriceRange>();
-        private List<PhoneNumberType> phoneNumberTypes;
-        private List<PriceRange> priceRanges;
-        private bool toUpload = false;
-
-        public PastryShopSignUpForm()
+        private List<PhoneNumberType> phoneNumberTypes = new List<PhoneNumberType>();
+        private PointOfSalesList pointOfSalesList;
+        public PointOfSaleForm(PointOfSalesList pointOfSalesList, PastryShop pastryShop)
         {
             InitializeComponent();
+            this.pastryShop = pastryShop;
+            this.pointOfSalesList = pointOfSalesList;
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
             load();
         }
@@ -41,10 +41,13 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void load()
         {
+            CreationDate.MaximumDate = DateTime.Now.Date;
+            RestClient<Parking> parkingRC = new RestClient<Parking>();
+            ParkingPicker.ItemsSource = parkings = await parkingRC.GetAsync();
+            ParkingPicker.SelectedIndex = 0;
+
+            RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-            priceRanges = await priceRangeTypeRC.GetAsync();
-            PriceRange.ItemsSource = priceRanges;
-            PriceRange.SelectedIndex = 0;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
@@ -113,13 +116,28 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             PhoneNumberStackLayouts.RemoveAt(index);
         }
 
-        private void editorUnFocused(object sender, EventArgs e)
+        private void RemoveDay(object sender, EventArgs e)
         {
-            if (LongDesc.Text == "")
-            {
-                LongDesc.Text = "Longue Description...";
-                LongDesc.TextColor = Color.Gray;
-            }
+            (((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId = "0";
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[0] as StackLayout).Children[1] as TimePicker).IsEnabled = false;
+            ((((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[1] as StackLayout).Children[1] as StackLayout).Children[0] as TimePicker).IsEnabled = false;
+            ((((sender as Image).Parent as StackLayout).Parent as StackLayout).Children[1] as Label).TextColor = Color.Gray;
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[0] as StackLayout).Children[0] as Label).TextColor = Color.Gray;
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[1] as StackLayout).Children[0] as Label).TextColor = Color.Gray;
+            (sender as Image).IsVisible = false;
+            (((sender as Image).Parent as StackLayout).Children[1] as Image).IsVisible = true;
+        }
+
+        private void AddDay(object sender, EventArgs e)
+        {
+            (((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId = "1";
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[0] as StackLayout).Children[1] as TimePicker).IsEnabled = true;
+            ((((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[1] as StackLayout).Children[1] as StackLayout).Children[0] as TimePicker).IsEnabled = true;
+            ((((sender as Image).Parent as StackLayout).Parent as StackLayout).Children[1] as Label).TextColor = Color.Black;
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[0] as StackLayout).Children[0] as Label).TextColor = Color.Black;
+            (((((((sender as Image).Parent as StackLayout).Parent as StackLayout).Parent as Grid).Children[1] as StackLayout).Children[1] as StackLayout).Children[0] as Label).TextColor = Color.Black;
+            (sender as Image).IsVisible = false;
+            (((sender as Image).Parent as StackLayout).Children[0] as Image).IsVisible = true;
         }
 
         private async Task<bool> validAddress()
@@ -127,7 +145,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             int x;
             if (Number.Text == null || Number.Text == "")
             {
-                await DisplayAlert("Erreur", "Le champ Numero est obligateur!", "Ok");
+                await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment est obligateur!", "Ok");
                 return false;
             }
             else if (!int.TryParse(Number.Text, out x))
@@ -209,55 +227,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return exist;
         }
 
-        private async Task<bool> valid()
+        private async void AddButton_Clicked(object sender, EventArgs e)
         {
-            if (Name.Text == null || Name.Text == "")
+            if (await validAddress() && await validPhoneNumber())
             {
-                await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
-                return false;
-            }
-            else if (Email.Text == null || Email.Text == "")
-            {
-                await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
-                return false;
-            }
-            else if (!App.isValidEmail(Email.Text))
-            {
-                await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
-                Email.Text = "";
-                return false;
-            }
-            else if (Password.Text == null || Password.Text == "")
-            {
-                await DisplayAlert("Erreur", "Le champ Password est obligateur!", "Ok");
-                return false;
-            }
-            else if (!(await validAddress()))
-            {
-                return false;
-            }
-            else if (!(await validPhoneNumber()))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public async void ConfirmBt_Clicked(object sender, EventArgs e)
-        {
-            if (await valid())
-            {
-                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+                RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
                 RestClient<Address> addressRC = new RestClient<Address>();
-                RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
-
-                if (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
-                {
-                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                    Email.Text = "";
-                    return;
-                }
-
                 Address address = new Address()
                 {
                     Number = Int32.Parse(Number.Text),
@@ -267,62 +242,73 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     Country = Country.Text,
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
-
-                PastryShop pastryShop = new PastryShop()
+                address = await addressRC.PostAsync(address);
+                if (address != null)
                 {
-                    Name = Name.Text,
-                    Email = Email.Text.ToLower(),
-                    Password = Password.Text,
-                    Address = address,
-                    LongDesc = LongDesc.Text,
-                    ShortDesc = ShortDesc.Text,
-                    PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID
-                };
-                foreach (StackLayout s in PhoneNumberStackLayouts)
-                {
-                    if ((s.Children[0] as Entry).Text != "")
+                    PointOfSale pointOfSale = new PointOfSale()
                     {
-                        PhoneNumber p = new PhoneNumber()
+                        CreationDate = CreationDate.Date,
+                        ParkingType_FK = parkings.ElementAt(ParkingPicker.SelectedIndex).ID,
+                        PastryShop_FK = pastryShop.ID,
+                        Address_FK = address.ID,
+                    };
+                    foreach (StackLayout s in PhoneNumberStackLayouts)
+                    {
+                        if ((s.Children[0] as Entry).Text != "")
                         {
-                            Number = (s.Children[0] as Entry).Text,
-                            PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
-                        };
-                        pastryShop.PhoneNumbers.Add(p);
+                            PhoneNumber p = new PhoneNumber()
+                            {
+                                Number = (s.Children[0] as Entry).Text,
+                                PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
+                            };
+                            pointOfSale.PhoneNumbers.Add(p);
+                        }
+                    }
+                    if (((((LOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 1, OpenTime = LOpenTime.Time, CloseTime = LCloseTime.Time });
+                    }
+                    if (((((MeOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 2, OpenTime = MaOpenTime.Time, CloseTime = MeCloseTime.Time });
+                    }
+                    if (((((MaOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 3, OpenTime = MeOpenTime.Time, CloseTime = MaCloseTime.Time });
+                    }
+                    if (((((JOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 4, OpenTime = JOpenTime.Time, CloseTime = JCloseTime.Time });
+                    }
+                    if (((((VOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 5, OpenTime = VOpenTime.Time, CloseTime = VCloseTime.Time });
+                    }
+                    if (((((SOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 6, OpenTime = SOpenTime.Time, CloseTime = SCloseTime.Time });
+                    }
+                    if (((((DOpenTime.Parent as StackLayout).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId == "1")
+                    {
+                        pointOfSale.WorkDays.Add(new WorkDay() { Day = 7, OpenTime = DOpenTime.Time, CloseTime = DCloseTime.Time });
+                    }
+
+                    pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
+                    if (pointOfSale == null)
+                    {
+                        await DisplayAlert("Erreur", "Erreur dans l'ajout du point de vente!", "Ok");
+                        return;
+                    }
+                    else
+                    {
+                        pointOfSalesList.Load(true);
+                        await Navigation.PopAsync();
                     }
                 }
-                //NavigationPage navigationPage = new NavigationPage(new ContentPage());
-                //await navigationPage.PushAsync(new PastryShopUploadPhotos(pastryShop));
-                //toUpload = true;
-                await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
-            }
-        }
-
-        private void editorFocused(object sender, EventArgs e)
-        {
-            if (LongDesc.Text == "Longue Description...")
-            {
-                LongDesc.Text = "";
-                LongDesc.TextColor = Color.Black;
-            }
-        }
-
-        private void ShortDesc_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string _text = ShortDesc.Text;
-            if (_text.Length > 30)
-            {
-                _text = _text.Remove(_text.Length - 1);
-                ShortDesc.Text = _text;
-            }
-        }
-
-        private void LongDesc_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string _text = LongDesc.Text;
-            if (_text.Length > 100)
-            {
-                _text = _text.Remove(_text.Length - 1);
-                LongDesc.Text = _text;
+                else
+                {
+                    await DisplayAlert("Erreur", "Erreur dans l'ajout de l'address!", "Ok");
+                }
             }
         }
     }

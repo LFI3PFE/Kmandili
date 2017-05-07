@@ -94,6 +94,14 @@
       <DependentUpon>PastryShopMasterDetailPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\POSListAndAdd\PointOfSaleForm.xaml.cs">
+      <DependentUpon>PointOfSaleForm.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\POSListAndAdd\PointOfSalesList.xaml.cs">
+      <DependentUpon>PointOfSalesList.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\PSProductList.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>PSProductList.xaml</DependentUpon>
@@ -376,6 +384,15 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PointOfSaleListAndFilter\" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\POSListAndAdd\PointOfSalesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\POSListAndAdd\PointOfSaleForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

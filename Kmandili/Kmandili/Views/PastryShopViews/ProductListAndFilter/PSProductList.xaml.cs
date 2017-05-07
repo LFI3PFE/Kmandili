@@ -193,6 +193,11 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 
         private async void RemoveProduct(object sender, EventArgs e)
         {
+            if (pastryShop.Products.Count == 1)
+            {
+                await DisplayAlert("Erreur", "Il faut avoir au moins un produit!", "Ok");
+                return;
+            }
             int ID = Int32.Parse(((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label).Text);
             if (pastryShop.Products.FirstOrDefault(p => p.ID == ID).OrderProducts.All(op => op.Order.Status.StatusName == "Reçue"))
             {

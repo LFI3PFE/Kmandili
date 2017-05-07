@@ -1,25 +1,50 @@
-﻿using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Models;
+using Kmandili.Models.RestClient;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews.SignIn
+namespace Kmandili.Views.PastryShopViews.POSListAndAdd
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopEnteringPointOfSales : ContentPage
+	public partial class PointOfSalesList : ContentPage
 	{
-        private PastryShop pastryShop;
-        public PastryShopEnteringPointOfSales(PastryShop pastryShop)
-        {
-            InitializeComponent();
-            this.pastryShop = pastryShop;
-        }
+	    private PastryShop pastryShop;
+	    private ToolbarItem addToolbarItem;
+
+		public PointOfSalesList (PastryShop pastryShop)
+		{
+		    this.pastryShop = pastryShop;
+			InitializeComponent ();
+            addToolbarItem = new ToolbarItem()
+            {
+                Text = "Ajouter",
+                Order = ToolbarItemOrder.Primary
+            };
+		    addToolbarItem.Clicked += AddToolbarItem_OnClicked;
+            ToolbarItems.Add(addToolbarItem);
+            Load(false);
+		}
+
+	    private async void AddToolbarItem_OnClicked(object sender, EventArgs e)
+	    {
+	        await Navigation.PushAsync(new PointOfSaleForm(this, pastryShop));
+	    }
+
+	    public async void Load(bool reload)
+	    {
+	        if (reload)
+	        {
+	            var pastryShopRC = new PastryShopRestClient();
+	            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+	        }
+            CoreStackLayout.Children.Clear();
+            pastryShop.PointOfSales.ToList().ForEach(p => CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p)));
+	    }
 
         private StackLayout MakePointOfSaleStackLayout(PointOfSale pointOfSale)
         {
@@ -35,15 +60,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
 
             StackLayout gridFirstStackChild = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
-            StackLayout s1 = new StackLayout()
-            {
-                Orientation = StackOrientation.Horizontal
-            };
-            s1.Children.Add(new Label() { Text = "Adresse:", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black, WidthRequest = 70 });
+            StackLayout s1 = new StackLayout();
+            s1.Children.Add(new Label() { Text = "Adresse:", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black});
             s1.Children.Add(new StackLayout()
             {
                 Padding = new Thickness(30, 0, 0, 0),
-                Children = { new Label() { Text = pointOfSale.Address.ToString(), FontSize = 15, TextColor = Color.Black } }
+                Children = {new Label() {Text = pointOfSale.Address.ToString(), FontSize = 15, TextColor = Color.Black}}
             });
 
             StackLayout s2 = new StackLayout()
@@ -129,18 +151,30 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             MainGrid.Children.Add(gridSecondStackChild, 1, 0);
 
             MainStack.Children.Add(MainGrid);
+            MainStack.Children.Add(new StackLayout()
+            {
+                HeightRequest = 2,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                BackgroundColor = Color.Black,
+                Margin = new Thickness(0,30,0,0)
+            });
             return MainStack;
         }
 
-        private async void DeleteTapGesture_Tapped(object sender, EventArgs e)
-        {
+	    private async void DeleteTapGesture_Tapped(object sender, EventArgs e)
+	    {
+	        if (pastryShop.PointOfSales.Count == 1)
+	        {
+	            await DisplayAlert("Erreur", "Il faut avoir au moins un point de vente!", "Ok");
+                return;
+	        }
             int ID = Int32.Parse(((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId);
             PointOfSale pointOfSale = pastryShop.PointOfSales.FirstOrDefault(p => p.ID == ID);
             if (pointOfSale != null)
             {
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
                 await pointOfSaleRC.DeleteAsync(pointOfSale.ID);
-                load();
+                Load(true);
             }
         }
 
@@ -169,68 +203,6 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     return "Dim.";
             }
             return null;
-        }
-
-        public async void load()
-        {
-            CoreStackLayout.Children.Clear();
-            NoResultsLabel.IsVisible = false;
-            LoadingLayout.IsVisible = true;
-            Loading.IsRunning = true;
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
-            LoadingLayout.IsVisible = false;
-            Loading.IsRunning = false;
-            if (pastryShop != null && pastryShop.PointOfSales.Count != 0)
-            {
-
-                NoResultsLabel.IsVisible = false;
-            }
-            else
-            {
-                NoResultsLabel.IsVisible = true;
-            }
-            foreach (PointOfSale p in pastryShop.PointOfSales)
-            {
-                CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p));
-            }
-        }
-
-        public async void DeletePointOfSale(Object sender, EventArgs e)
-        {
-            int ID = Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text);
-            RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-            await pointOfSaleRC.DeleteAsync(ID);
-            load();
-        }
-
-        public async void AddProduct_OnClick(Object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new PastryShopPointOfSaleForm(this, pastryShop));
-        }
-
-        protected override void OnAppearing()
-        {
-            load();
-        }
-
-        public async void Continue(Object sender, EventArgs e)
-        {
-            if (pastryShop.PointOfSales.Count != 0)
-            {
-                var page = new MainPage();
-                page.SignInAction(pastryShop.Email, pastryShop.Password);
-                App.Current.MainPage = new NavigationPage(page);
-            }
-            else
-            {
-                await DisplayAlert("Erreur", "Au moins un point de vente doit être entré!", "Ok");
-            }
-        }
-
-        public void SelectedNot(Object sender, EventArgs e)
-        {
-            (sender as ListView).SelectedItem = null;
         }
     }
 }

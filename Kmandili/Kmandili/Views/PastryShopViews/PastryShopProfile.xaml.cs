@@ -1,7 +1,7 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using System;
-
+using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
@@ -13,6 +13,7 @@ namespace Kmandili.Views.PastryShopViews
 	public partial class PastryShopProfile : ContentPage
 	{
         private ToolbarItem ProductList;
+        private ToolbarItem pointOfSaleList;
         private PastryShop pastryShop;
         private PastryShopMasterDetailPage pastryShopMasterDetailPage;
 
@@ -33,9 +34,22 @@ namespace Kmandili.Views.PastryShopViews
             };
             ProductList.Clicked += ProductListOnClick;
 
+            pointOfSaleList = new ToolbarItem()
+            {
+                Text = "Points de vente",
+                Order = ToolbarItemOrder.Secondary
+            };
+            pointOfSaleList.Clicked += PointOfSaleList_Clicked;
+
             ToolbarItems.Add(ProductList);
+            ToolbarItems.Add(pointOfSaleList);
             RefreshRating();
             load();
+        }
+
+        private async void PointOfSaleList_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new PointOfSalesList(pastryShop));
         }
 
         public async void Reload()
@@ -73,126 +87,11 @@ namespace Kmandili.Views.PastryShopViews
             {
                 PhoneNumbersLayout.Children.Add(new Label() { Text = phone.Number + " " + phone.PhoneNumberType.Type, TextColor = Color.Black, FontSize = 20 });
             }
-            CoreStackLayout.Children.Clear();
-            foreach (PointOfSale pointOfSale in pastryShop.PointOfSales)
-            {
-                CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(pointOfSale));
-            }
-        }
-
-        private StackLayout MakePointOfSaleStackLayout(PointOfSale pointOfSale)
-        {
-            StackLayout MainStack = new StackLayout()
-            {
-                BackgroundColor = Color.White,
-                Margin = new Thickness(0, 0, 0, 7),
-            };
-            Grid MainGrid = new Grid();
-            MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
-
-            StackLayout gridFirstStackChild = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
-            StackLayout s1 = new StackLayout()
-            {
-                Orientation = StackOrientation.Horizontal
-            };
-            s1.Children.Add(new Label() { Text = "Adresse:", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black, WidthRequest = 70 });
-            s1.Children.Add(new Label() { Text = pointOfSale.Address.ToString(), FontSize = 15, TextColor = Color.Black });
-
-            StackLayout s2 = new StackLayout()
-            {
-                Orientation = StackOrientation.Horizontal
-            };
-            s2.Children.Add(new Label() { Text = "Parking:", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black, WidthRequest = 70 });
-            s2.Children.Add(new Label() { Text = pointOfSale.Parking.ToString(), FontSize = 15, TextColor = Color.Black });
-
-            StackLayout s3 = new StackLayout()
-            {
-                Orientation = StackOrientation.Horizontal
-            };
-            s3.Children.Add(new Label() { Text = "Date de creation:", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black, WidthRequest = 70 });
-            s3.Children.Add(new Label() { Text = pointOfSale.CreationDate.Day + "/" + pointOfSale.CreationDate.Month + "/" + pointOfSale.CreationDate.Year, FontSize = 15, TextColor = Color.Black });
-
-            StackLayout s4 = new StackLayout();
-
-            StackLayout s4Child = new StackLayout() { Padding = new Thickness(10, 0, 0, 0) };
-            foreach (PhoneNumber ph in pointOfSale.PhoneNumbers)
-            {
-                s4Child.Children.Add(new Label() { Text = ph.Number + " " + ph.PhoneNumberType.Type, FontSize = 15, TextColor = Color.Black });
-            }
-
-            s4.Children.Add(new Label() { Text = "Numéro de telephones:", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black, HeightRequest = 20 });
-            s4.Children.Add(s4Child);
-
-            gridFirstStackChild.Children.Add(s1);
-            gridFirstStackChild.Children.Add(s2);
-            gridFirstStackChild.Children.Add(s3);
-            gridFirstStackChild.Children.Add(s4);
-
-            StackLayout gridSecondStackChild = new StackLayout()
-            {
-                Padding = new Thickness(0, 0, 0, 10),
-            };
-            Grid TimeTitelGrid = new Grid();
-            TimeTitelGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
-            TimeTitelGrid.Children.Add(new Label() { Text = "Jours", FontSize = 12, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 0, 0);
-            TimeTitelGrid.Children.Add(new Label() { Text = "Heures", FontSize = 12, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 1, 0);
-
-            gridSecondStackChild.Children.Add(TimeTitelGrid);
-
-            foreach (WorkDay w in pointOfSale.WorkDays)
-            {
-                StackLayout WorkDayStack = new StackLayout();
-                Grid WorkDayGrid = new Grid();
-                WorkDayGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
-                StackLayout HoursStack = new StackLayout() { Orientation = StackOrientation.Horizontal };
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.OpenTime), FontSize = 15, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = "-", FontSize = 13, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.CloseTime), FontSize = 13, TextColor = Color.Green });
-
-                WorkDayGrid.Children.Add(new Label() { Text = DayNumberToDayName(w.Day), FontSize = 13, TextColor = Color.Black }, 0, 0);
-                WorkDayGrid.Children.Add(HoursStack, 1, 0);
-                WorkDayStack.Children.Add(WorkDayGrid);
-                gridSecondStackChild.Children.Add(WorkDayStack);
-            }
-
-            MainGrid.Children.Add(gridFirstStackChild, 0, 0);
-            MainGrid.Children.Add(gridSecondStackChild, 1, 0);
-
-            MainStack.Children.Add(MainGrid);
-            return MainStack;
-        }
-
-        private string TimeSpanToTime(TimeSpan time)
-        {
-            return time.Hours + "h" + time.Minutes;
-        }
-
-        private string DayNumberToDayName(int Day)
-        {
-            switch (Day)
-            {
-                case 1:
-                    return "Lun.";
-                case 2:
-                    return "Mar.";
-                case 3:
-                    return "Mer.";
-                case 4:
-                    return "Jeu.";
-                case 5:
-                    return "Ven.";
-                case 6:
-                    return "Sam.";
-                case 7:
-                    return "Dim.";
-            }
-            return null;
+            //CoreStackLayout.Children.Clear();
+            //foreach (PointOfSale pointOfSale in pastryShop.PointOfSales)
+            //{
+            //    CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(pointOfSale));
+            //}
         }
 
         public async void RefreshRating()

@@ -249,13 +249,11 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private void AddPhoneNumber_Tapped(object sender, EventArgs e)
         {
-            if ((((sender as Image).Parent as StackLayout).Children[0] as Entry).Text != "")
-            {
-                (PhoneNumberStackLayouts.Last().Children[2] as Image).IsVisible = false;
-                (PhoneNumberStackLayouts.Last().Children[3] as Image).IsVisible = true;
-                StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
-                PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
-            }
+            if (string.IsNullOrEmpty((((sender as Image).Parent as StackLayout).Children[0] as Entry).Text)) return;
+            (PhoneNumberStackLayouts.Last().Children[2] as Image).IsVisible = false;
+            (PhoneNumberStackLayouts.Last().Children[3] as Image).IsVisible = true;
+            StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
+            PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
 
         private void ShortDesc_TextChanged(object sender, TextChangedEventArgs e)
