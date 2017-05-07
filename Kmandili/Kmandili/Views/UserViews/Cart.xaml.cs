@@ -36,7 +36,7 @@ namespace Kmandili.Views.UserViews
             this.ToolbarItems.Add(confirmToolbarItem);
             this.ToolbarItems.Add(clearToolbarItem);
             //PastryList.ItemsSource = App.Cart;
-            MainLayout.Children.Add(makeCartPastryView());
+            MainLayout.Children.Add(MakeCartPastryView());
 
             if (App.Cart.Count == 0)
             {
@@ -50,7 +50,7 @@ namespace Kmandili.Views.UserViews
             CartTotal.Text = App.Cart.Sum(p => p.Total).ToString();
         }
 
-        private StackLayout makeCartPastryView()
+        private StackLayout MakeCartPastryView()
         {
             StackLayout MainStackLayout = new StackLayout();
             foreach(CartPastry cartPastry in App.Cart)
@@ -153,10 +153,17 @@ namespace Kmandili.Views.UserViews
             StackLayout ImagePlaceHolderStackLayout = new StackLayout()
             {
                 BackgroundColor = Color.Gray,
-                WidthRequest = 129,
+                HeightRequest = 80,
+                WidthRequest = 129
+            };
+            Image productImage = new Image()
+            {
+                Source = cartProduct.Product.Pic,
+                Aspect = Aspect.AspectFill,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
                 HeightRequest = 80
             };
-            ImagePlaceHolderStackLayout.Children.Add(new Image() { Source = cartProduct.Product.Pic, HeightRequest = 80 });
+            ImagePlaceHolderStackLayout.Children.Add(productImage);
             ImageStackLayout.Children.Add(ImagePlaceHolderStackLayout);
             //*************\\
 

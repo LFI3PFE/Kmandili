@@ -22,7 +22,7 @@
                                     <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                         <StackLayout Padding="5" VerticalOptions="Center">
                                             <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                                <Image Source="{Binding Pic}" HeightRequest="80"/>
+                                                <Image Source="{Binding Pic}" Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <StackLayout Orientation="Vertical" Spacing="1">

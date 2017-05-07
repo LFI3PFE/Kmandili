@@ -17,6 +17,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    private PastryShopMasterDetailPage pastryShopMasterDetailPage;
 	    private PastryShop pastryShop;
 	    private ToolbarItem addToolbarItem;
+	    private bool reloadParent = false;
 
 		public EditDeleveryMethods (PastryShopMasterDetailPage pastryShopMasterDetailPage)
 		{
@@ -29,7 +30,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             };
             addToolbarItem.Clicked += AddToolbarItem_Clicked;
 		    ToolbarItems.Add(addToolbarItem);
-            Load();
+            Load(reloadParent);
 		}
 
         private async void AddToolbarItem_Clicked(object sender, EventArgs e)
@@ -37,18 +38,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             await PopupNavigation.PushAsync(new AddDeleveryMethodForm(this, pastryShop));
         }
 
-        public async void Load()
-	    {
+        public async void Load(bool reloadParentval)
+        {
+            this.reloadParent = reloadParentval;
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
 	        pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
             ContentLayout.Children.Clear();
 	        foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)
 	        {
-	            ContentLayout.Children.Add(makeDeleveryMethodLayout(pastryShopDeleveryMethod));
+	            ContentLayout.Children.Add(MakeDeleveryMethodLayout(pastryShopDeleveryMethod));
 	        }
 	    }
 
-	    private StackLayout makeDeleveryMethodLayout(PastryShopDeleveryMethod pastryShopDeleveryMethod)
+	    private StackLayout MakeDeleveryMethodLayout(PastryShopDeleveryMethod pastryShopDeleveryMethod)
 	    {
             StackLayout mainLayout = new StackLayout() {BackgroundColor = Color.White};
 	        StackLayout innerLayout = new StackLayout() {Padding = new Thickness(20,20,0,20)};
@@ -135,7 +137,15 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             int ID = Int32.Parse((sender as StackLayout).ClassId);
             RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
             await pastryShopDeleverMethodRC.DeleteAsync(ID);
-            Load();
+            Load(true);
         }
-    }
+
+	    protected override void OnDisappearing()
+	    {
+	        if (reloadParent)
+	        {
+                (pastryShopMasterDetailPage.Detail as PastryShopProfile).Reload();
+            }
+	    }
+	}
 }

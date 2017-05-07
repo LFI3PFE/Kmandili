@@ -122,7 +122,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	            };
 	            await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment);
 	        }
-	        editDeleveryMethods.Load();
+	        editDeleveryMethods.Load(true);
 	        await PopupNavigation.PopAllAsync();
 	    }
     }
