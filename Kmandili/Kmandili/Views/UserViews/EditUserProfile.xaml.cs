@@ -337,5 +337,24 @@ namespace Kmandili.Views.UserViews
             await PopupNavigation.PopAsync();
             await Navigation.PopAsync();
         }
-    }
+
+	    private async void DeleteBt_Clicked(object sender, EventArgs e)
+	    {
+            if (user.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
+            {
+                await
+                    DisplayAlert("Erreur",
+                        "Impossible de supprimer votre compte, une ou plusieurs commandes ne sont pas encore réglées!",
+                        "Ok");
+                return;
+            }
+            await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
+	        var userRC = new RestClient<User>();
+            if (await userRC.DeleteAsync(user.ID))
+            {
+                await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
+                App.Logout();
+            }
+        }
+	}
 }

@@ -217,14 +217,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             if (pastryShop.PointOfSales.Count != 0)
             {
-                (App.Current.MainPage as MainPage).SignInAction(pastryShop.Email, pastryShop.Password);
-
-                var page = Navigation.NavigationStack.First();
-
-                while (page.Navigation.NavigationStack.Count > 1)
-                {
-                    await page.Navigation.PopAsync();
-                }
+                var page = new MainPage();
+                page.SignInAction(pastryShop.Email, pastryShop.Password);
+                App.Current.MainPage = new NavigationPage(page);
             }
             else
             {

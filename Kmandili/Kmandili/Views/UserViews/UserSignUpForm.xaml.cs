@@ -267,8 +267,9 @@ namespace Kmandili.Views.UserViews
                 user = await userRC.PostAsync(user);
                 if (user != null)
                 {
-                    (App.Current.MainPage as MainPage).SignInAction(user.Email, user.Password);
-                    await Navigation.PopAsync();
+                    var page = new MainPage();
+                    page.SignInAction(user.Email, user.Password);
+                    App.Current.MainPage = new NavigationPage(page);
                 }
                 else
                 {

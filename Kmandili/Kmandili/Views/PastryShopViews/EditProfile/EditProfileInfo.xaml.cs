@@ -542,5 +542,24 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             UploadRestClient uploadRC = new UploadRestClient();
             return (await uploadRC.Delete(fileName));
 	    }
-    }
+
+	    private async void DeleteBt_Clicked(object sender, EventArgs e)
+	    {
+	        if (pastryShop.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
+	        {
+	            await
+	                DisplayAlert("Erreur",
+	                    "Impossible de supprimer votre compte, une ou plusieurs commandes ne sont pas encore réglées!",
+	                    "Ok");
+                return;
+	        }
+            await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
+            var pastryShopRC = new PastryShopRestClient();
+	        if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+	        {
+	            await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
+                App.Logout();
+	        }
+	    }
+	}
 }

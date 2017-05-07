@@ -54,6 +54,7 @@ namespace Kmandili
                 //await navigationPage.PushAsync(new UserSignUpForm());
                 //isLoading(false);
                 await Navigation.PushAsync(new UserSignUpForm());
+                //App.Current.MainPage = new NavigationPage(new UserSignUpForm());
             }
             else if(choice == "Pâtisserie")
             {
@@ -62,6 +63,7 @@ namespace Kmandili
                 //await navigationPage.PushAsync(new PastryShopSignUpForm());
                 //isLoading(false);
                 await Navigation.PushAsync(new PastryShopSignUpForm());
+                //App.Current.MainPage = new NavigationPage(new PastryShopSignUpForm());
                 //await Navigation.PushModalAsync(new NavigationPage(new PastryShopPointOfSaleForm(new PastryShop())));
             }
         }

@@ -21,7 +21,7 @@ namespace Kmandili
 			InitializeComponent();
 
             //Main = new MainPage();
-			MainPage = new MainPage();
+			MainPage = new NavigationPage(new MainPage());
 		}
 
         public async static void Logout()
@@ -29,7 +29,7 @@ namespace Kmandili
             Connected = null;
             Cart.Clear();
             galleryIsOpent = false;
-            Current.MainPage = new MainPage();
+            Current.MainPage = new NavigationPage(new MainPage());
             //await Main.Navigation.PopModalAsync();
         }
 

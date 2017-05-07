@@ -44,7 +44,7 @@
                     <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Confirmer" WidthRequest="150" FontSize="20" FontAttributes="Bold"/>
                 </StackLayout>
                 <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,20,0">
-                    <Button x:Name="DeleteBt" BackgroundColor="IndianRed" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Supprimer Mon Compte" HorizontalOptions="FillAndExpand" FontSize="20" FontAttributes="Bold"/>
+                    <Button x:Name="DeleteBt" BackgroundColor="IndianRed" Clicked="DeleteBt_Clicked" TextColor="#3b4552" Text="Supprimer Mon Compte" HorizontalOptions="FillAndExpand" FontSize="20" FontAttributes="Bold"/>
                 </StackLayout>
             </StackLayout>
         </StackLayout>

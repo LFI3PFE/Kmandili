@@ -375,4 +375,7 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\PointOfSaleListAndFilter\" />
+  </ItemGroup>
 </Project>
