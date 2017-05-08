@@ -32,7 +32,7 @@ namespace Kmandili.Views.UserViews
 #pragma warning disable CS0618 // Type or member is obsolete
             RateItem = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null, null, "full_star.png"),
+                Icon = Device.OnPlatform(null, null, "fullStar.png"),
                 Text = "Noter",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -325,7 +325,7 @@ namespace Kmandili.Views.UserViews
             var lsi = RatingStack.Children;
             foreach (Image i in lsi)
             {
-                i.Source = "empty_star.png";
+                i.Source = "emptyStar.png";
             }
             ReactionLabel.Text = "";
         }
@@ -419,11 +419,11 @@ namespace Kmandili.Views.UserViews
             {
                 if (int.Parse(i.ClassId) <= starIndex)
                 {
-                    i.Source = "full_star.png";
+                    i.Source = "fullStar.png";
                 }
                 else
                 {
-                    i.Source = "empty_star.png";
+                    i.Source = "emptyStar.png";
                 }
             }
         }

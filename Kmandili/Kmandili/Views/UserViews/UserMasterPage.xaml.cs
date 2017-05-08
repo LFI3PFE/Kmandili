@@ -31,7 +31,7 @@ namespace Kmandili.Views.UserViews
 	    public void UpdateOrderNotificationNumber(List<Order> orders)
 	    {
             int number = orders.Count(o => !o.SeenUser);
-	        NorificationsNumber.Source = "NotificationNumbers/" + (number != 0 ? (number > 9 ? "9+.png" : number + ".png") : "");
+	        NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)

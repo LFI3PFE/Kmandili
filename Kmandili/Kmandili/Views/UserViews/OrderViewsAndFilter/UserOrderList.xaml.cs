@@ -36,7 +36,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Filter.png"),
+                Icon = "filter.png",
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -44,7 +44,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 Text = "Trier",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Sort.png"),
+                Icon = "sort.png"
             };
             sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
@@ -52,7 +52,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Search.png"),
+                Icon = "search.png"
             };
             searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
@@ -66,10 +66,10 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 #pragma warning restore 618
 
             ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
             ToolbarItems.Add(filterToolbarItem);
+            ToolbarItems.Add(sortToolbarItem);
 
-		    displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
+            displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
             OrderList.ItemsSource = displayedOrders;
             load();
 		}

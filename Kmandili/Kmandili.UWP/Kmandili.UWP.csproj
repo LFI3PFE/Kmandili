@@ -112,29 +112,29 @@
     <None Include="Kmandili.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="account-edit.png" />
+    <Content Include="accountEdit.png" />
     <Content Include="addToCart.png" />
-    <Content Include="add_Icon.png" />
+    <Content Include="addIcon.png" />
     <Content Include="cancel.png" />
     <Content Include="cart.png" />
     <Content Include="confirm.png" />
-    <Content Include="cube-send.png" />
+    <Content Include="cubeSend.png" />
     <Content Include="delete.png" />
     <Content Include="emptyCart.png" />
-    <Content Include="empty_star.PNG" />
-    <Content Include="NotificationNumbers\1.png" />
-    <Content Include="NotificationNumbers\2.png" />
-    <Content Include="NotificationNumbers\3.png" />
-    <Content Include="NotificationNumbers\4.png" />
-    <Content Include="NotificationNumbers\5.png" />
-    <Content Include="NotificationNumbers\6.png" />
-    <Content Include="NotificationNumbers\7.png" />
-    <Content Include="NotificationNumbers\8.png" />
-    <Content Include="NotificationNumbers\9+.png" />
-    <Content Include="NotificationNumbers\9.png" />
+    <Content Include="emptyStar.png" />
+    <Content Include="_1.png" />
+    <Content Include="_2.png" />
+    <Content Include="_3.png" />
+    <Content Include="_4.png" />
+    <Content Include="_5.png" />
+    <Content Include="_6.png" />
+    <Content Include="_7.png" />
+    <Content Include="_8.png" />
+    <Content Include="_9plus.png" />
+    <Content Include="_9.png" />
     <Content Include="orders.png" />
-    <Content Include="Filter.png" />
-    <Content Include="full_star.png" />
+    <Content Include="filter.png" />
+    <Content Include="fullStar.png" />
     <Content Include="like.png" />
     <Content Include="logout.png" />
     <Content Include="logo_OmyMna.jpg" />
@@ -169,9 +169,9 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="RedNotificationDot.png" />
-    <Content Include="Search.png" />
+    <Content Include="search.png" />
     <Content Include="shop.png" />
-    <Content Include="Sort.png" />
+    <Content Include="sort.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
