@@ -37,11 +37,10 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             this.pastryShop = pastryShop;
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
-
-#pragma warning disable 618
+            
             addProduct = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null,null,"plus.png"),
+                Icon = "plus.png",
                 Text = "Ajouter",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -52,7 +51,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Secondary,
-                Icon = Device.OnPlatform("", "", "Filter.png"),
+                Icon = "filter.png"
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -60,7 +59,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Search.png"),
+                Icon = "search.png"
             };
             searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
@@ -68,7 +67,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "cancel.png"),
+                Icon = "close.png"
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
@@ -76,9 +75,8 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             {
                 Text = "Trier",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Sort.png"),
+                Icon = "sort.png"
             };
-#pragma warning restore 618 // Type or member is obsolete
             sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
             ToolbarItems.Add(addProduct);

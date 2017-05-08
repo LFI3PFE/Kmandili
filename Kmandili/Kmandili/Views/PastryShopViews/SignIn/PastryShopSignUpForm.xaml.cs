@@ -69,7 +69,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             };
             Image addIcon = new Image()
             {
-                Source = "add_Icon.png",
+                Source = "add.png",
                 WidthRequest = 20,
             };
             Image removeIcon = new Image()

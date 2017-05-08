@@ -25,9 +25,7 @@ namespace Kmandili.Views.PastryShopViews
             //ToolbarItems.Clear();
             ProductList = new ToolbarItem
             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                Icon = Device.OnPlatform(null, null, "products.png"),
-#pragma warning restore CS0618 // Type or member is obsolete
+                Icon = "products.png",
                 Text = "Produits",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -172,30 +170,9 @@ namespace Kmandili.Views.PastryShopViews
             DeleveryMethodsLayout.HeightRequest = height;
         }
 
-        //public async void RefreshRating()
-        //{
-        //    //PastryShopRestClient rs = new PastryShopRestClient();
-        //    //PastryShop pp = await rs.GetAsyncById(pastryShop.ID);
-        //    //pastryShop = pp;
-        //}
-
         public async void ProductListOnClick(Object sender, EventArgs e)
         {
             await Navigation.PushAsync(new PSProductList(pastryShop));
-            //switch (Device.RuntimePlatform)
-            //{
-            //    case Device.WinPhone:
-            //        await Navigation.PushModalAsync(new NavigationPage(new PastryShopProductList(pastryShop)));
-            //        break;
-            //    case Device.Windows:
-            //        NavigationPage nav = new NavigationPage(new ContentPage());
-            //        await nav.PushAsync(new PastryShopProductList(pastryShop));
-            //        await Navigation.PushModalAsync(nav);
-            //        break;
-            //    default:
-            //        await Navigation.PushAsync(new PastryShopProductList(pastryShop));
-            //        break;
-            //}
         }
 
     }

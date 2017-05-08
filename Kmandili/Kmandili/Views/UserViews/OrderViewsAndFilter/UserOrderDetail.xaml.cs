@@ -25,7 +25,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 ToolbarItem canceToolbarItem = new ToolbarItem()
                 {
-                    Icon = Device.OnPlatform(null, null, "cancel.png"),
+                    Icon = "close.png",
                     Text = "Annuler"
                 };
                 canceToolbarItem.Clicked += CanceToolbarItem_Clicked;
@@ -34,7 +34,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 ToolbarItem confirmToolbarItem = new ToolbarItem()
                 {
-                    Icon = Device.OnPlatform(null, null, "confirm.png"),
+                    Icon = "confirm.png",
                     Text = "Reçus"
                 };
                 confirmToolbarItem.Clicked += ConfirmToolbarItem_Clicked;

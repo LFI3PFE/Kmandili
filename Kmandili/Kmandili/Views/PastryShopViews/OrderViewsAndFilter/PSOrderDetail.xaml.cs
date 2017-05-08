@@ -23,7 +23,12 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 		{
             InitializeComponent ();
             load();
-            confirmToolbarItem = new ToolbarItem() {Icon = Device.OnPlatform(null, null, "confirm.png"), Text = "Confirmer", Order = ToolbarItemOrder.Primary};
+		    confirmToolbarItem = new ToolbarItem()
+		    {
+		        Icon = "confirm.png",
+		        Text = "Confirmer",
+		        Order = ToolbarItemOrder.Primary
+		    };
             confirmToolbarItem.Clicked += ConfirmToolbarItem_Clicked;
             this.order = order;
 		    this.pastryShopOrderList = pastryShopOrderList;

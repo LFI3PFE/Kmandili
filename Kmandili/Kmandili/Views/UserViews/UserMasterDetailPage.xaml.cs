@@ -40,8 +40,9 @@ namespace Kmandili.Views.UserViews
         public UserMasterDetailPage (User user)
 		{
 			InitializeComponent ();
-#pragma warning disable CS0618 // Type or member is obsolete
+
             NavigationPage.SetHasNavigationBar(this, false);
+#pragma warning disable 618
             pastryShopList = new PastryShopList()
             {
                 Icon = Device.OnPlatform("shop.png", null, "shop.png"),
@@ -52,7 +53,7 @@ namespace Kmandili.Views.UserViews
                 Icon = Device.OnPlatform("products.png", null, "products.png"),
                 Title = "Liste des Produits"
             };
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore 618
             MyTabbedPage tab = new MyTabbedPage(this)
             {
                 Children =

@@ -35,13 +35,12 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             List.SeparatorVisibility = SeparatorVisibility.None;
             displayedPastryShops.CollectionChanged += DisplayedPastryShops_CollectionChanged;
             List.ItemsSource = displayedPastryShops;
-
-#pragma warning disable 618
+            
             filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
-                Order = ToolbarItemOrder.Secondary,
-                Icon = Device.OnPlatform("", "", "Filter.png"),
+                Order = ToolbarItemOrder.Primary,
+                Icon = "filter.png"
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -49,7 +48,7 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Search.png"),
+                Icon = "search.png"
             };
             searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
@@ -57,7 +56,7 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "cancel.png"),
+                Icon = "close.png"
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
             
@@ -65,14 +64,13 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             {
                 Text = "Trier",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "Sort.png"),
+                Icon = "sort.png"
             };
-#pragma warning restore 618
             sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
             ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
             ToolbarItems.Add(filterToolbarItem);
+            ToolbarItems.Add(sortToolbarItem);
             load();
 		}
 
@@ -172,8 +170,8 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             SearchBar.Unfocus();
             ToolbarItems.Clear();
             ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
             ToolbarItems.Add(filterToolbarItem);
+            ToolbarItems.Add(sortToolbarItem);
             await BodyLayout.TranslateTo(0, -50);
 	    }
 

@@ -28,11 +28,10 @@ namespace Kmandili.Views.UserViews
             InitializeComponent ();
             this.pastryShop = pastryShop;
             ToolbarItems.Clear();
-
-#pragma warning disable CS0618 // Type or member is obsolete
+            
             RateItem = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null, null, "fullStar.png"),
+                Icon = "fullStarItem.png",
                 Text = "Noter",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -41,7 +40,7 @@ namespace Kmandili.Views.UserViews
 
             ProductList = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null, null, "products.png"),
+                Icon = "products.png",
                 Text = "Produits",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -50,7 +49,7 @@ namespace Kmandili.Views.UserViews
 
             submitItem = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null, null, "confirm.png"),
+                Icon = "confirm.png",
                 Text = "Envoyer",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
@@ -59,7 +58,7 @@ namespace Kmandili.Views.UserViews
 
             cancelItem = new ToolbarItem
             {
-                Icon = Device.OnPlatform(null, null, "cancel.png"),
+                Icon = "close.png",
                 Text = "Annuler",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 1

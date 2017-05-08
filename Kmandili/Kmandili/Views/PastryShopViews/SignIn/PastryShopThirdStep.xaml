@@ -51,7 +51,7 @@
                                         <StackLayout Orientation="Horizontal">
                                             <Picker x:Name="DeleverMethodPicker" StyleClass="first" WidthRequest="160" ClassId="{Binding Index}" SelectedIndexChanged="DeleverMethodPicker_SelectedIndexChanged" PropertyChanged="DeleverMethodPicker_PropertyChanged" ItemsSource="{Binding DeleveryMethods}"/>
                                             <Picker x:Name="DelayPicker" WidthRequest="120" PropertyChanged="DelayPicker_PropertyChanged" SelectedIndexChanged="DelayPicker_SelectedIndexChanged" ItemsSource="{Binding DeleveryDelays}"/>
-                                            <Image Source="add_Icon.png" HeightRequest="20" IsVisible="{Binding IsLast}">
+                                            <Image Source="add.png" HeightRequest="20" IsVisible="{Binding IsLast}">
                                                 <Image.GestureRecognizers>
                                                     <TapGestureRecognizer Tapped="Add_Tapped" NumberOfTapsRequired="1"/>
                                                 </Image.GestureRecognizers>

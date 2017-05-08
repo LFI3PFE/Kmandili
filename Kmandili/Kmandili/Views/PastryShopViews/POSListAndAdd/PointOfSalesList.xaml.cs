@@ -23,7 +23,8 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
             addToolbarItem = new ToolbarItem()
             {
                 Text = "Ajouter",
-                Order = ToolbarItemOrder.Primary
+                Order = ToolbarItemOrder.Primary,
+                Icon = "plus.png"
             };
 		    addToolbarItem.Clicked += AddToolbarItem_OnClicked;
             ToolbarItems.Add(addToolbarItem);

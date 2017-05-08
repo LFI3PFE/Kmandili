@@ -28,8 +28,21 @@ namespace Kmandili.Views.UserViews
             this.ToolbarItems.Clear();
 
 #pragma warning disable CS0618 // Type or member is obsolete
-            ToolbarItem confirmToolbarItem = new ToolbarItem { Icon = Device.OnPlatform(null, null, "confirm.png"), Text = "Confirmer", Order = ToolbarItemOrder.Primary, Priority = 1 };
-            ToolbarItem clearToolbarItem = new ToolbarItem { Icon = Device.OnPlatform(null, null, "emptyCart.png"), Text = "Vider", Order = Device.OnPlatform(ToolbarItemOrder.Secondary, ToolbarItemOrder.Secondary, ToolbarItemOrder.Primary), Priority = 2 };
+            ToolbarItem confirmToolbarItem = new ToolbarItem
+            {
+                Icon = "confirm.png",
+                Text = "Confirmer",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 1
+            };
+            ToolbarItem clearToolbarItem = new ToolbarItem
+            {
+                Icon = "emptyCart.png",
+                Text = "Vider",
+                Order =
+                    Device.OnPlatform(ToolbarItemOrder.Secondary, ToolbarItemOrder.Secondary, ToolbarItemOrder.Primary),
+                Priority = 2
+            };
 #pragma warning restore CS0618 // Type or member is obsolete
             confirmToolbarItem.Clicked += confirmToolbarItemClicked;
             clearToolbarItem.Clicked += clearToolbarItemClicked;

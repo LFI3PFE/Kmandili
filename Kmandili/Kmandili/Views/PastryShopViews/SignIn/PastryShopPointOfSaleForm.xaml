@@ -69,7 +69,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -132,7 +132,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -195,7 +195,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -258,7 +258,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -321,7 +321,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -384,7 +384,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>
@@ -447,7 +447,7 @@
                                                 <TapGestureRecognizer Tapped="RemoveDay"/>
                                             </Image.GestureRecognizers>
                                         </Image>
-                                        <Image Source="add_Icon.png" WidthRequest="22" IsVisible="False">
+                                        <Image Source="add.png" WidthRequest="22" IsVisible="False">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="AddDay"/>
                                             </Image.GestureRecognizers>

@@ -30,8 +30,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 		{
 			InitializeComponent ();
 		    BodyLayout.TranslateTo(0, -50);
-
-#pragma warning disable 618
+            
             filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
@@ -60,10 +59,9 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = Device.OnPlatform("", "", "cancel.png"),
+                Icon = "close.png",
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
-#pragma warning restore 618
 
             ToolbarItems.Add(searchToolbarItem);
             ToolbarItems.Add(filterToolbarItem);

@@ -28,11 +28,6 @@
                             <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
                                 <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
                                 <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
-                                    <!--<StackLayout Padding="5" VerticalOptions="Center">
-                                        <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                            <Image Source="{Binding PastryShop.ProfilePic}" HeightRequest="80"/>
-                                        </StackLayout>
-                                    </StackLayout>-->
                                     <StackLayout Margin="30,0,0,0" Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
                                             <Grid HorizontalOptions="FillAndExpand">
@@ -53,11 +48,6 @@
                                                         <Label Text="#REF " FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
                                                         <Label Text="{Binding ID}" FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
                                                     </StackLayout>
-                                                    <!--<Image Source="delete.png" WidthRequest="20">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="RemoveProduct"/>
-                                                        </Image.GestureRecognizers>
-                                                    </Image>-->
                                                 </StackLayout>
                                             </Grid>
                                         </StackLayout>

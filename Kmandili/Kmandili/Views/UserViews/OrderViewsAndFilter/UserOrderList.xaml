@@ -52,11 +52,6 @@
                                                         <Label Text="#REF " FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
                                                         <Label Text="{Binding ID}" FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
                                                     </StackLayout>
-                                                    <!--<Image Source="delete.png" WidthRequest="20">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="RemoveProduct"/>
-                                                        </Image.GestureRecognizers>
-                                                    </Image>-->
                                                 </StackLayout>
                                             </Grid>
                                         </StackLayout>

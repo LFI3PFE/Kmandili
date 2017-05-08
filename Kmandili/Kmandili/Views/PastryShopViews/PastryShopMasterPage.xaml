@@ -94,46 +94,5 @@
             </StackLayout>
             <StackLayout Margin="0,1,0,0" VerticalOptions="FillAndExpand" HeightRequest="20" HorizontalOptions="FillAndExpand" BackgroundColor="White"></StackLayout>
         </StackLayout>
-        <!--<Label x:Name="NotificationNumber" FontSize="20" TextColor="Gray"/>-->
-        <!--<Grid VerticalOptions="FillAndExpand">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="6*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <StackLayout Grid.Row="0" Grid.Column="0"></StackLayout>
-            <StackLayout Grid.Row="1" Grid.Column="0">
-                <StackLayout Orientation="Horizontal" Spacing="10">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ToEditDeleveryMethod" NumberOfTapsRequired="1"/>
-                    </StackLayout.GestureRecognizers>
-                    <Label VerticalOptions="End"  Text="Edit Delevery Methods" FontSize="20" TextColor="Gray"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Spacing="10">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ToEditProfile" NumberOfTapsRequired="1"/>
-                    </StackLayout.GestureRecognizers>
-                    <Label VerticalOptions="End"  Text="Editer Profile" FontSize="20" TextColor="Gray"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Spacing="10">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ToOrderList" NumberOfTapsRequired="1"/>
-                    </StackLayout.GestureRecognizers>
-                    <Label VerticalOptions="End"  Text="Commandes" FontSize="20" TextColor="Gray"/>
-                    <Label x:Name="NotificationNumber" FontSize="20" TextColor="Gray"/>
-                </StackLayout>
-            </StackLayout>
-            <StackLayout Grid.Row="2" Grid.Column="0">
-                <StackLayout>
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Logout" NumberOfTapsRequired="1"/>
-                    </StackLayout.GestureRecognizers>
-                    <Label VerticalOptions="End"  Text="Se Deconnecter" FontSize="20" TextColor="Gray"/>
-                </StackLayout>
-            </StackLayout>
-        </Grid>-->
     </StackLayout>
 </ContentPage>

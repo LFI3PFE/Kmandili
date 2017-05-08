@@ -207,48 +207,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\like.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\products.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\shop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\logo_OmyMna.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\empty_star.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\full_star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\addToCart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\add_Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cancel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cart.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\confirm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\RedNotificationDot.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\slider-default_trackBackground%402x.png" />
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +271,108 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\slider-default-handle-disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\_9plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\accountEdit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\addToCart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\confirm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cubeSend.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\emptyCart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\emptyStar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\filter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fullStar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\like.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\logout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\orders.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\products.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\RedNotificationDot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\shop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\sort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fullStarItem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\categories.png" />
   </ItemGroup>
   <Import Project="..\Kmandili\Kmandili.projitems" Label="Shared" Condition="Exists('..\Kmandili\Kmandili.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

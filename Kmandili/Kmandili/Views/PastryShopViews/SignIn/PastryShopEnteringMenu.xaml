@@ -66,39 +66,6 @@
                             </StackLayout>
                         </StackLayout>
                     </ViewCell>
-                    <!--<ViewCell>
-                        <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100" IsEnabled="False">
-                            <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
-                                <StackLayout Padding="5" VerticalOptions="Center">
-                                    <StackLayout BackgroundColor="Gray" HeightRequest="80" WidthRequest="129">
-                                        <Image Source="{Binding Pic}" HeightRequest="80"/>
-                                    </StackLayout>
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" Spacing="1">
-                                    <StackLayout Orientation="Horizontal" Spacing="30">
-                                        <Label x:Name="PatisserieId" Text="{Binding ID}" IsVisible="False"/>
-                                        <Label Text="{Binding Name}" FontSize="30" TextColor="Black" WidthRequest="150"/>
-                                        <Image x:Name="DeleteIcon" Source="delete.png" HeightRequest="30" IsVisible="True">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Tapped="DeleteProduct" NumberOfTapsRequired="1"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </StackLayout>
-                                    <StackLayout Padding="20,0,0,0">
-                                        <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>
-                                        <StackLayout Orientation="Horizontal" Spacing="15" Padding="10,0,0,0">
-                                            <StackLayout Orientation="Horizontal">
-                                                <StackLayout Orientation="Horizontal" Spacing="3">
-                                                    <Label Text="{Binding Price, StringFormat='{0:F} TND'}" FontSize="25" TextColor="Black"/>
-                                                    <Label Text="{Binding SaleUnit.Name, StringFormat='/{0:F0}'}" FontSize="20" TextColor="Black"/>
-                                                </StackLayout>
-                                            </StackLayout>
-                                        </StackLayout>
-                                    </StackLayout>
-                                </StackLayout>
-                            </StackLayout>
-                        </StackLayout>
-                    </ViewCell>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

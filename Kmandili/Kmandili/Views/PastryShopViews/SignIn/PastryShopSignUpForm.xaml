@@ -9,7 +9,6 @@
                     <Label Text="Inscription" FontSize="30" TextColor="Black" HorizontalTextAlignment="Center"/>
                 </StackLayout>
                 <StackLayout Spacing="20" Padding="30">
-                    <!--Padding="30,80,70,0"-->
                     <Entry x:Name="Name" PlaceholderColor="Gray" Placeholder="Nom" TextColor="Black" WidthRequest="150" FontSize="25" />
                     <Entry x:Name="Email" PlaceholderColor="Gray" TextColor="Black" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
                     <Entry x:Name="Password" PlaceholderColor="Gray" TextColor="Black" Placeholder="Mot de passe" WidthRequest="150" FontSize="25" IsPassword="True"/>

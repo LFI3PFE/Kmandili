@@ -78,7 +78,8 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             {
                 Text = "Categories",
                 Order = ToolbarItemOrder.Primary,
-                Priority = 1
+                Priority = 1,
+                Icon = "categories.png"
             };
             categoriesToolbarItem.Clicked += CategoriesToolbarItem_Clicked;
 
@@ -204,7 +205,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             };
             Image addIcon = new Image()
             {
-                Source = "add_Icon.png",
+                Source = "add.png",
                 WidthRequest = 20,
                 IsVisible = phoneNumber == null
             };

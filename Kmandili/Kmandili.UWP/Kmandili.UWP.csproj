@@ -114,14 +114,17 @@
   <ItemGroup>
     <Content Include="accountEdit.png" />
     <Content Include="addToCart.png" />
-    <Content Include="addIcon.png" />
+    <Content Include="add.png" />
     <Content Include="cancel.png" />
     <Content Include="cart.png" />
+    <Content Include="categories.png" />
+    <Content Include="close.png" />
     <Content Include="confirm.png" />
     <Content Include="cubeSend.png" />
     <Content Include="delete.png" />
     <Content Include="emptyCart.png" />
     <Content Include="emptyStar.png" />
+    <Content Include="fullStarItem.png" />
     <Content Include="_1.png" />
     <Content Include="_2.png" />
     <Content Include="_3.png" />
@@ -137,7 +140,6 @@
     <Content Include="fullStar.png" />
     <Content Include="like.png" />
     <Content Include="logout.png" />
-    <Content Include="logo_OmyMna.jpg" />
     <Content Include="plus.png" />
     <Content Include="products.png" />
     <Content Include="Properties\Default.rd.xml" />
