@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -246,56 +246,55 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void ConfirmBt_Clicked(object sender, EventArgs e)
         {
-            if (await valid())
+            if (!await valid()) return;
+            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            if (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
             {
-                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                RestClient<Address> addressRC = new RestClient<Address>();
-                RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
-
-                if (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
-                {
-                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                    Email.Text = "";
-                    return;
-                }
-
-                Address address = new Address()
-                {
-                    Number = Int32.Parse(Number.Text),
-                    Street = Street.Text,
-                    City = City.Text,
-                    State = State.Text,
-                    Country = Country.Text,
-                    ZipCode = Int32.Parse(ZipCode.Text)
-                };
-
-                PastryShop pastryShop = new PastryShop()
-                {
-                    Name = Name.Text,
-                    Email = Email.Text.ToLower(),
-                    Password = Password.Text,
-                    Address = address,
-                    LongDesc = LongDesc.Text,
-                    ShortDesc = ShortDesc.Text,
-                    PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID
-                };
-                foreach (StackLayout s in PhoneNumberStackLayouts)
-                {
-                    if ((s.Children[0] as Entry).Text != "")
-                    {
-                        PhoneNumber p = new PhoneNumber()
-                        {
-                            Number = (s.Children[0] as Entry).Text,
-                            PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
-                        };
-                        pastryShop.PhoneNumbers.Add(p);
-                    }
-                }
-                //NavigationPage navigationPage = new NavigationPage(new ContentPage());
-                //await navigationPage.PushAsync(new PastryShopUploadPhotos(pastryShop));
-                //toUpload = true;
-                await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
+                await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                Email.Text = "";
+                return;
             }
+            await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+        }
+
+	    public async void EmailVerified()
+	    {
+            Address address = new Address()
+            {
+                Number = Int32.Parse(Number.Text),
+                Street = Street.Text,
+                City = City.Text,
+                State = State.Text,
+                Country = Country.Text,
+                ZipCode = Int32.Parse(ZipCode.Text)
+            };
+
+            PastryShop pastryShop = new PastryShop()
+            {
+                Name = Name.Text,
+                Email = Email.Text.ToLower(),
+                Password = Password.Text,
+                Address = address,
+                LongDesc = LongDesc.Text,
+                ShortDesc = ShortDesc.Text,
+                PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID
+            };
+            foreach (StackLayout s in PhoneNumberStackLayouts)
+            {
+                if ((s.Children[0] as Entry).Text != "")
+                {
+                    PhoneNumber p = new PhoneNumber()
+                    {
+                        Number = (s.Children[0] as Entry).Text,
+                        PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
+                    };
+                    pastryShop.PhoneNumbers.Add(p);
+                }
+            }
+            //NavigationPage navigationPage = new NavigationPage(new ContentPage());
+            //await navigationPage.PushAsync(new PastryShopUploadPhotos(pastryShop));
+            //toUpload = true;
+            await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
         }
 
         private void editorFocused(object sender, EventArgs e)

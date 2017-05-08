@@ -14,7 +14,7 @@ using Xamarin.Forms;
 namespace Kmandili
 {
     public partial class MainPage : ContentPage
-	{
+    {
 
         public MainPage()
 		{

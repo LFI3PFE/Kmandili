@@ -18,6 +18,22 @@ namespace Kmandili.Models.RestClient
             return false;
         }
 
+        public async Task<string> SendEmailVerification(string email)
+        {
+            var httpClient = new HttpClient();
+
+            string WebServiceUrl = App.ServerURL + "api/sendEmailVerificationCode/" + email + "/";
+            var result = await httpClient.PostAsync(WebServiceUrl, null);
+            var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
+            return taskModels;
+
+            //if (!(await CheckConnection())) return null;
+            //var httpClient = new HttpClient();
+            //var result = await httpClient.PostAsync(App.ServerURL + "api/sendEmailVerificationCode/" + email + "/", null);
+
+            //return (await result.Content.ReadAsStringAsync());
+        }
+
         public async Task<bool> SendOrderEmail(int id)
         {
             if (!(await CheckConnection())) return false;

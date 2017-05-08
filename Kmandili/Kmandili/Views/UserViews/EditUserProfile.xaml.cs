@@ -335,10 +335,10 @@ namespace Kmandili.Views.UserViews
                         }
                     }
                 }
+                await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
+                await PopupNavigation.PopAsync();
+                await Navigation.PopAsync();
             }
-            await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
-            await PopupNavigation.PopAsync();
-            await Navigation.PopAsync();
         }
 
 	    private async void DeleteBt_Clicked(object sender, EventArgs e)
