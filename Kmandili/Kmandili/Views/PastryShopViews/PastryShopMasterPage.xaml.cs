@@ -22,7 +22,7 @@ namespace Kmandili.Views.PastryShopViews
 			InitializeComponent ();
 		    this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
 		    this.pastryShop = pastryShop;
-		    NotificationNumber.Text = pastryShop.Orders.Count(o => !o.SeenPastryShop).ToString();
+		    UpdateOrderNotificationNumber(pastryShop.Orders.ToList());
 		}
 
 	    protected async override void OnAppearing()
@@ -36,9 +36,10 @@ namespace Kmandili.Views.PastryShopViews
             App.Logout();
         }
 
-        public void updateOrderNotificationNumber(List<Order> orders)
+        public void UpdateOrderNotificationNumber(List<Order> orders)
         {
-            NotificationNumber.Text = orders.Count(o => !o.SeenPastryShop).ToString();
+            int number = orders.Count(o => !o.SeenPastryShop);
+            NorificationsNumber.Source = "NotificationNumbers/" + (number != 0 ? (number > 9 ? "9+.png" : number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)

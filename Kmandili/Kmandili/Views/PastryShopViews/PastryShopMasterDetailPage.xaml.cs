@@ -41,7 +41,7 @@ namespace Kmandili.Views.PastryShopViews
         protected async override void OnAppearing()
         {
             OrderRestClient orderRC = new OrderRestClient();
-            (Master as PastryShopMasterPage).updateOrderNotificationNumber(await orderRC.GetAsyncByPastryShopID(App.Connected.Id));
+            (Master as PastryShopMasterPage).UpdateOrderNotificationNumber(await orderRC.GetAsyncByPastryShopID(App.Connected.Id));
         }
 
         public void ReloadPastryShop()

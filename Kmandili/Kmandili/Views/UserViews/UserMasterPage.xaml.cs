@@ -20,10 +20,7 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 		    this.userMasterDetailPage = userMasterDetailPage;
 		    var x = user.Orders.Count(o => !o.SeenUser);
-		    if (x != 0)
-		    {
-		        NotificationNumber.Text = x.ToString();
-		    }
+		    UpdateOrderNotificationNumber(user.Orders.ToList());
 		}
 
         private void Logout(object sender, EventArgs e)
@@ -31,26 +28,30 @@ namespace Kmandili.Views.UserViews
             App.Logout();
         }
 
-	    public void updateOrderNotificationNumber(List<Order> orders)
+	    public void UpdateOrderNotificationNumber(List<Order> orders)
 	    {
-            NotificationNumber.Text = orders.Count(o => !o.SeenUser).ToString();
-	    }
+            int number = orders.Count(o => !o.SeenUser);
+	        NorificationsNumber.Source = "NotificationNumbers/" + (number != 0 ? (number > 9 ? "9+.png" : number + ".png") : "");
+        }
 
         private async void ToOrderList(object sender, EventArgs e)
         {
             userMasterDetailPage.IsPresented = false;
+            if (userMasterDetailPage.Detail.GetType().Name == "UserOrderList") return;
             await userMasterDetailPage.Detail.Navigation.PushAsync(new UserOrderList());
         }
 
 	    private async void UpdateUser_OnTapped(object sender, EventArgs e)
 	    {
             userMasterDetailPage.IsPresented = false;
-	        await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile());
+            if (userMasterDetailPage.Detail.GetType().Name == "EditUserProfile") return;
+            await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile());
 	    }
 
 	    private async void ToCart(object sender, EventArgs e)
 	    {
             userMasterDetailPage.IsPresented = false;
+            if (userMasterDetailPage.Detail.GetType().Name == "Cart") return;
             await userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
 	    }
 	}

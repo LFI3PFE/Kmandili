@@ -25,7 +25,7 @@ namespace Kmandili.Views.UserViews
             protected async override void OnAppearing()
             {
                 OrderRestClient orderRC = new OrderRestClient();
-                (userMasterDetailPage.Master as UserMasterPage).updateOrderNotificationNumber(await orderRC.GetAsyncByUserID(App.Connected.Id));
+                (userMasterDetailPage.Master as UserMasterPage).UpdateOrderNotificationNumber(await orderRC.GetAsyncByUserID(App.Connected.Id));
             }
 
             protected override bool OnBackButtonPressed()
