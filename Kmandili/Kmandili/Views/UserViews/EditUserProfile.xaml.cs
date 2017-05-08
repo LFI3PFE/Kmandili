@@ -46,6 +46,7 @@ namespace Kmandili.Views.UserViews
         {
             UserRestClient userRestClient = new UserRestClient();
             user = await userRestClient.GetAsyncById(App.Connected.Id);
+            if (user == null) return;
             Name.Text = user.Name;
             LastName.Text = user.LastName;
             Email.Text = user.Email;
@@ -58,6 +59,7 @@ namespace Kmandili.Views.UserViews
             State.Text = user.Address.State;
             Country.Text = user.Address.Country;
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            if(phoneNumberTypes == null) return;
             foreach (var phoneNumber in user.PhoneNumbers)
             {
                 StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(phoneNumber);
@@ -293,7 +295,7 @@ namespace Kmandili.Views.UserViews
                     Country = Country.Text,
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
-                await addressRC.PutAsync(address.ID, address);
+                if(!(await addressRC.PutAsync(address.ID, address))) return;
 
                 User user = new User()
                 {
@@ -304,11 +306,11 @@ namespace Kmandili.Views.UserViews
                     Password = Password.Text,
                     Address_FK = address.ID
                 };
-                await userRC.PutAsync(user.ID, user);
+                if(!(await userRC.PutAsync(user.ID, user))) return;
                 RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
                 foreach (var removedPhoneNumber in removedPhoneNumbers)
                 {
-                    await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID);
+                    if(!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
                 }
                 foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
                 {
@@ -324,12 +326,12 @@ namespace Kmandili.Views.UserViews
                         {
                             int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
                             p.ID = phoneNumberID;
-                            await phoneNumberRestClient.PutAsync(p.ID, p);
+                            if(!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
                         }
                         else
                         {
                             p.User = user;
-                            await phoneNumberRestClient.PostAsync(p);
+                            if(await phoneNumberRestClient.PostAsync(p) == null) return;
                         }
                     }
                 }

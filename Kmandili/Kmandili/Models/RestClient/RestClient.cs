@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using Plugin.Connectivity;
 
 namespace Kmandili.Models.RestClient
 {
@@ -37,8 +38,19 @@ namespace Kmandili.Models.RestClient
             WebServiceUrl = App.ServerURL + "api/" + controllerName + "/";
         }
 
+        protected async Task<bool> CheckConnection()
+        {
+            while (!CrossConnectivity.Current.IsConnected)
+            {
+                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
+                return (await CheckConnection());
+            }
+            return true;
+        }
+
         public async Task<List<T>> GetAsync()
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
             try
             {
@@ -52,11 +64,11 @@ namespace Kmandili.Models.RestClient
             {
                 return null;
             }
-            
         }
 
         public async Task<T> GetAsyncById(int id)
         {
+            if (!(await CheckConnection())) return default(T);
             var httpClient = new HttpClient();
             try
             {
@@ -71,89 +83,10 @@ namespace Kmandili.Models.RestClient
                 return default(T);
             }
         }
-
-        //public async Task<bool> Upload(Stream stream, string FileName)
-        //{
-        //    HttpClient client = new HttpClient();
-        //    var imageStream = new StreamContent(stream);
-        //    var multi = new MultipartContent();
-        //    multi.Add(imageStream);
-        //    var response = await client.PostAsync(App.serverURL + "api/Upload/" + FileName, multi);
-        //    return response.IsSuccessStatusCode;
-        //}
-
-        //public async Task<List<T>> GetAsyncByMail(string email)
-        //{
-        //    var httpClient = new HttpClient();
-
-        //    var json = await httpClient.GetStringAsync(WebServiceUrl + "Get" + typeof(T).Name + "ByMail/" + email + "/");
-
-        //    var taskModels = JsonConvert.DeserializeObject<List<T>>(json);
-
-        //    return taskModels;
-        //}
-
-        //public async Task<List<T>> GetAsyncOrderByPrice<TRus>(Func<T, TRus> linqFunc, bool isDescending)
-        //{
-        //    var httpClient = new HttpClient();
-
-        //    var json = await httpClient.GetStringAsync(WebServiceUrl);
-
-        //    List<T> taskModels = JsonConvert.DeserializeObject<List<T>>(json);
-
-        //    if (isDescending)
-        //        return taskModels.OrderByDescending(linqFunc).ToList();
-        //    else
-        //        return taskModels.OrderBy(linqFunc).ToList();
-        //}
-
-        //public async Task<List<T>> GetAsyncByName(Func<T, bool> func)
-        //{
-        //    var httpClient = new HttpClient();
-
-        //    var json = await httpClient.GetStringAsync(WebServiceUrl);
-
-        //    List<T> taskModels = JsonConvert.DeserializeObject<List<T>>(json);
-
-        //    return taskModels.Where(func).ToList();
-        //}
-
-        //public async Task<List<T>> GetAsyncOrderBy(string propertyName, bool isDescending)
-        //{
-        //    var httpClient = new HttpClient();
-
-        //    var s = WebServiceUrl + "Get" + typeof(T).Name + "sByProperty/" + propertyName + "/" + isDescending;
-
-        //    var json = await httpClient.GetStringAsync(s);
-
-        //    var taskModels = JsonConvert.DeserializeObject<List<T>>(json);
-
-        //    return taskModels;
-        //}
-
-        //public async Task<List<T>> GetAsyncByName(string KeyWord)
-        //{
-        //    var httpClient = new HttpClient();
-        //    string s;
-        //    if (KeyWord.Length == 0 || KeyWord == null)
-        //    {
-        //        s = WebServiceUrl + "Get" + typeof(T).Name + "sByProperty/Rating/true";
-        //    }
-        //    else
-        //    {
-        //        s = WebServiceUrl + "Get" + typeof(T).Name + "sByName/" + KeyWord;
-        //    }
-
-        //    var json = await httpClient.GetStringAsync(s);
-
-        //    var taskModels = JsonConvert.DeserializeObject<List<T>>(json);
-
-        //    return taskModels;
-        //}
-
-
+        
         public async Task<T> PostAsync(T t)
         {
+            if (!(await CheckConnection())) return default(T);
             var httpClient = new HttpClient();
 
             var json = JsonConvert.SerializeObject(t);
@@ -165,11 +98,11 @@ namespace Kmandili.Models.RestClient
             var result = await httpClient.PostAsync(WebServiceUrl, httpContent);
             var taskModels = JsonConvert.DeserializeObject<T>(await result.Content.ReadAsStringAsync());
             return taskModels;
-            //return result.IsSuccessStatusCode;
         }
 
         public async Task<bool> PutAsync(int id, T t)
         {
+            if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
 
             var json = JsonConvert.SerializeObject(t);
@@ -185,6 +118,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> DeleteAsync(int id)
         {
+            if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
 
             var response = await httpClient.DeleteAsync(WebServiceUrl + id);

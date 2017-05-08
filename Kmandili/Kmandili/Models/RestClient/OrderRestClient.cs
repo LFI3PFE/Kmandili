@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<List<Order>> GetAsyncByUserID(int id)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
             try
             {
@@ -29,6 +31,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<List<Order>> GetAsyncByPastryShopID(int id)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
             try
             {
@@ -44,38 +47,24 @@ namespace Kmandili.Models.RestClient
             }
         }
 
-        public async Task<List<Order>> MarkAsSeenUser(int id)
+        public async Task<bool> MarkAsSeenUser(int id)
         {
+            if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
-            try
-            {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/markAsSeenUser/" + id);
 
-                var taskModels = JsonConvert.DeserializeObject<List<Order>>(json);
+            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
 
-                return taskModels;
-            }
-            catch (HttpRequestException)
-            {
-                return null;
-            }
+            return result.IsSuccessStatusCode;
         }
 
-        public async Task<List<Order>> MarkAsSeenPastryShop(int id)
+        public async Task<bool> MarkAsSeenPastryShop(int id)
         {
+            if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
-            try
-            {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id);
 
-                var taskModels = JsonConvert.DeserializeObject<List<Order>>(json);
+            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);
 
-                return taskModels;
-            }
-            catch (HttpRequestException)
-            {
-                return null;
-            }
+            return result.IsSuccessStatusCode;
         }
     }
 }

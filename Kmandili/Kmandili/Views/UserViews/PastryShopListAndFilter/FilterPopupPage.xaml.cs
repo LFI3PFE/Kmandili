@@ -33,6 +33,7 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
 	    {
             RestClient<Category> categorieRC = new RestClient<Category>();
 	        categories = await categorieRC.GetAsync();
+	        if (categories == null) return;
 	        this.Content = MakeContent();
 	    }
 

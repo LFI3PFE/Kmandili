@@ -53,6 +53,7 @@ namespace Kmandili.Views.PastryShopViews
         {
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            if(pastryShop == null) return;
             Load();
         }
 

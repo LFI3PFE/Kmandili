@@ -62,6 +62,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             if (await orderRC.PutAsync(newOrder.ID, newOrder))
             {
                 order = await orderRC.GetAsyncById(order.ID);
+                if (order == null) return;
                 EmailRestClient emailRC = new EmailRestClient();
                 await emailRC.SendOrderEmail(order.ID);
                 updateParent = true;
@@ -85,6 +86,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             {
                 RestClient<Status> statusRC = new RestClient<Status>();
                 status = await statusRC.GetAsync();
+                if(status == null) return;
             }
             if (order.Status.StatusName == "En Attente")
             {
@@ -110,8 +112,8 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             if (!order.SeenPastryShop)
             {
                 OrderRestClient orderRC = new OrderRestClient();
-                await orderRC.MarkAsSeenPastryShop(order.ID);
-                updateParent = true;
+                if(await orderRC.MarkAsSeenPastryShop(order.ID))
+                    updateParent = true;
             }
         }
 

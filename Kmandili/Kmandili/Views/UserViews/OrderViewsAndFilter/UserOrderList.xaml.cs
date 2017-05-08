@@ -145,7 +145,9 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = (await orderRC.GetAsyncByUserID(App.Connected.Id)).OrderBy(o => o.SeenUser).ToList();
+            orders = await orderRC.GetAsyncByUserID(App.Connected.Id);
+            if (orders == null) return;
+            orders = orders.OrderBy(o => o.SeenUser).ToList();
             displayedOrders.Clear();
             orders.ForEach(o => displayedOrders.Add(o));
             selectedSortType.SortTypeIndex = 1;

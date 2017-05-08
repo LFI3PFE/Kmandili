@@ -145,7 +145,9 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            pastryShops = (await pastryShopRC.GetAsync()).OrderBy(p => p.Name).ToList();
+            pastryShops = await pastryShopRC.GetAsync();
+            if (pastryShops == null) return;
+            pastryShops = pastryShops.OrderBy(p => p.Name).ToList();
             pastryShops.ForEach(p => displayedPastryShops.Add(p));
             selectedSortType.SortTypeIndex = 0;
             selectedSortType.IsAsc = true; 

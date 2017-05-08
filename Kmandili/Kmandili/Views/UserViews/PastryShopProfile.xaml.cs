@@ -89,6 +89,7 @@ namespace Kmandili.Views.UserViews
             {
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                 pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+                if (pastryShop == null) return;
             }
             Rating.Text = pastryShop.Rating.ToString();
             NumberOfReviews.Text = "(" + pastryShop.NumberOfRatings.ToString() + " avis)";
@@ -356,7 +357,7 @@ namespace Kmandili.Views.UserViews
 
                 var x = pastryShopTemp;
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                await pastryShopRC.PutAsync(pastryShop.ID, pastryShopTemp);
+                if(!(await pastryShopRC.PutAsync(pastryShop.ID, pastryShopTemp)));
                 Load(true);
                 ResetToolbar();
             }

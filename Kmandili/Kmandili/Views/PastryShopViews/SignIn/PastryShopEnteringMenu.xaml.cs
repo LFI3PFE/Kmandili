@@ -27,6 +27,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Loading.IsRunning = true;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            if (pastryShop == null) return;
             if(pastryShop.Products.Count == 0)
             {
                 NoResultsLabel.IsVisible = true;
@@ -44,7 +45,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Loading.IsRunning = true;
             int ID = Int32.Parse(((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<Product> productRC = new RestClient<Product>();
-            await productRC.DeleteAsync(ID);
+            if(!(await productRC.DeleteAsync(ID))) return;
             load();
         }
 

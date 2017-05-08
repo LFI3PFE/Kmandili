@@ -97,7 +97,9 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            products = (await productRC.GetAsync()).OrderBy(p => p.Name).ToList();
+            products = await productRC.GetAsync();
+            if (products == null) return;
+            products = products.OrderBy(p => p.Name).ToList();
             products.ForEach(p => displayedProducts.Add(p));
             selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = products.Max(p => p.Price);
             selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = products.Min(p => p.Price);

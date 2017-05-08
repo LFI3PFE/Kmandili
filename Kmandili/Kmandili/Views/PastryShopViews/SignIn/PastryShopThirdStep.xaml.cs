@@ -82,12 +82,15 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             RestClient<DeleveryDelay> deleveryDelayRC = new RestClient<DeleveryDelay>();
             deleveryDelays = await deleveryDelayRC.GetAsync();
+            if (deleveryDelays == null) return;
 
             RestClient<DeleveryMethod> deleveryMethodRC = new RestClient<DeleveryMethod>();
             deleveryMethods = await deleveryMethodRC.GetAsync();
+            if(deleveryMethods == null) return;
 
             RestClient<Category> categoryRC = new RestClient<Category>();
             categoryList = await categoryRC.GetAsync();
+            if (categoryList == null) return;
             CategoriesListView.HeightRequest = categoryList.Count * 30;
             CategoriesListView.ItemsSource = categoryList;
 
@@ -275,11 +278,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         pastryShopDM.PastryDeleveryPayments.Clear();
                         RestClient<PastryShopDeleveryMethod> pastryShopDeleveryMethodRC = new RestClient<PastryShopDeleveryMethod>();
                         PastryShopDeleveryMethod PSDM = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDM);
+                        if (PSDM == null) return;
                         foreach (PastryDeleveryPayment p in pastryDeleveryPayments)
                         {
                             //p.PastryShopDeleveryMethods.Add(pastryShopDM);
                             p.PastryShopDeleveryMethod_FK = PSDM.ID;
-                            await pastryDeleveryPaymentRC.PostAsync(p);
+                            if(await pastryDeleveryPaymentRC.PostAsync(p) == null) return;
                         }
                     }
                     await Navigation.PushAsync(new PastryShopEnteringMenu(pastry));

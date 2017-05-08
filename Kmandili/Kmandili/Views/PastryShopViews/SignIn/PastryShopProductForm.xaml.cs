@@ -44,11 +44,15 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         public async void Load()
         {
             RestClient<SaleUnit> saleUnitRC = new RestClient<SaleUnit>();
-            PickerUnit.ItemsSource = saleUnits = await saleUnitRC.GetAsync();
+            saleUnits = await saleUnitRC.GetAsync();
+            if (saleUnits == null) return;
+            PickerUnit.ItemsSource = saleUnits;
             PickerUnit.SelectedIndex = 0;
 
             RestClient<Category> categoryRC = new RestClient<Category>();
-            CategoryPicker.ItemsSource = categories = await categoryRC.GetAsync();
+            categories = await categoryRC.GetAsync();
+            if (categories == null) return;
+            CategoryPicker.ItemsSource = categories;
             CategoryPicker.SelectedIndex = 0;
         }
 

@@ -43,6 +43,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             priceRanges = await priceRangeTypeRC.GetAsync();
+            if (phoneNumberTypes == null || priceRanges == null) return;
             PriceRange.ItemsSource = priceRanges;
             PriceRange.SelectedIndex = 0;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();

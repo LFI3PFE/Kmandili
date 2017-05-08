@@ -45,9 +45,13 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             var deleveryMethodRC = new RestClient<DeleveryMethod>();
             var deleveryDelayRC = new RestClient<DeleveryDelay>();
 
-            DeleveryPicker.ItemsSource = deleveryMethods = (await deleveryMethodRC.GetAsync()).Where(d => pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod_FK != d.ID)).ToList();
+            deleveryMethods = await deleveryMethodRC.GetAsync();
+            if(deleveryMethods == null) return;
+            DeleveryPicker.ItemsSource = deleveryMethods = deleveryMethods.Where(d => pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod_FK != d.ID)).ToList();
 	        DeleveryPicker.SelectedIndex = 0;
-            DelayPicker.ItemsSource = deleveryDelays = await deleveryDelayRC.GetAsync();
+            deleveryDelays = await deleveryDelayRC.GetAsync();
+            if (deleveryDelays == null) return;
+            DelayPicker.ItemsSource = deleveryDelays;
             DelayPicker.SelectedIndex = 0;
 	    }
 
@@ -120,7 +124,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	                PastryShopDeleveryMethod_FK = pastryShopDeleveryMethod.ID,
                     Payment_FK = selectedPayment.ID
 	            };
-	            await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment);
+	            if (await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment) == null) return;
 	        }
 	        editDeleveryMethods.Load(true);
 	        await PopupNavigation.PopAllAsync();

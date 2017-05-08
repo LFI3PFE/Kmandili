@@ -34,8 +34,7 @@ namespace Kmandili
                 await DisplayAlert("Erreur Email", "Adresse email invalide", "OK");
                 return false;
             }
-
-            //Password Verification
+            
             if (Password.Text == null || Password.Text.Length == 0)
             {
                 await DisplayAlert("Erreur mot de passe", "Mot de passe obligatoir", "OK");
@@ -49,22 +48,11 @@ namespace Kmandili
             var choice = await DisplayActionSheet("S'inscrire comme", "Annuler", null, "Client", "Pâtisserie");
             if (choice == "Client")
             {
-                //isLoading(true);
-                //NavigationPage navigationPage = new NavigationPage(new ContentPage());
-                //await navigationPage.PushAsync(new UserSignUpForm());
-                //isLoading(false);
                 await Navigation.PushAsync(new UserSignUpForm());
-                //App.Current.MainPage = new NavigationPage(new UserSignUpForm());
             }
             else if(choice == "Pâtisserie")
             {
-                //isLoading(true);
-                //NavigationPage navigationPage = new NavigationPage(new ContentPage());
-                //await navigationPage.PushAsync(new PastryShopSignUpForm());
-                //isLoading(false);
                 await Navigation.PushAsync(new PastryShopSignUpForm());
-                //App.Current.MainPage = new NavigationPage(new PastryShopSignUpForm());
-                //await Navigation.PushModalAsync(new NavigationPage(new PastryShopPointOfSaleForm(new PastryShop())));
             }
         }
 
@@ -82,7 +70,6 @@ namespace Kmandili
         {
             if (await valid())
             {
-                //await Navigation.PushModalAsync(new UserMasterDetailPage());
                 SignInAction(Email.Text.ToLower(), Password.Text);
             }
         }
@@ -92,8 +79,16 @@ namespace Kmandili
             isLoading(true);
             UserRestClient userRC = new UserRestClient();
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-
-            User u = await userRC.GetAsyncByEmailAndPass(email, password);
+            User u;
+            try
+            {
+                u = await userRC.GetAsyncByEmailAndPass(email, password);
+            }
+            catch (ConnectionLostException e)
+            {
+                isLoading(false);
+                return;
+            }
             if (u != null)
             {
                 Connected connected = new Connected();
@@ -126,7 +121,16 @@ namespace Kmandili
             }
             else
             {
-                PastryShop p = await pastryShopRC.GetAsyncByEmailAndPass(email, password);
+                PastryShop p;
+                try
+                {
+                    p = await pastryShopRC.GetAsyncByEmailAndPass(email, password);
+                }
+                catch (ConnectionLostException e)
+                {
+                    isLoading(false);
+                    return;
+                }
                 if (p != null)
                 {
                     Connected connected = new Connected();
@@ -156,7 +160,6 @@ namespace Kmandili
                             App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
                             break;
                     }
-                    //await Navigation.PushModalAsync(new PastryShopMasterDetailPage(p));
                 }
                 else
                 {

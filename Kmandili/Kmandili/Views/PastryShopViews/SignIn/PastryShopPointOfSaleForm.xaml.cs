@@ -43,11 +43,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             CreationDate.MaximumDate = DateTime.Now.Date;
             RestClient<Parking> parkingRC = new RestClient<Parking>();
-            ParkingPicker.ItemsSource = parkings = await parkingRC.GetAsync();
+            parkings = await parkingRC.GetAsync();
+            if (parkings == null) return;
+            ParkingPicker.ItemsSource = parkings;
             ParkingPicker.SelectedIndex = 0;
 
             RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            if(phoneNumberTypes == null) return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }

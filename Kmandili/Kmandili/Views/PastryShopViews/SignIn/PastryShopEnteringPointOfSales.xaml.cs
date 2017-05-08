@@ -139,7 +139,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             if (pointOfSale != null)
             {
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-                await pointOfSaleRC.DeleteAsync(pointOfSale.ID);
+                if(!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID))) return;
                 load();
             }
         }
@@ -179,6 +179,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Loading.IsRunning = true;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            if(pastryShop == null) return;
             LoadingLayout.IsVisible = false;
             Loading.IsRunning = false;
             if (pastryShop != null && pastryShop.PointOfSales.Count != 0)
@@ -200,7 +201,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             int ID = Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-            await pointOfSaleRC.DeleteAsync(ID);
+            if(!(await pointOfSaleRC.DeleteAsync(ID))) return;
             load();
         }
 

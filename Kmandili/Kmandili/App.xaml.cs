@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Kmandili.Views;
+using Plugin.Connectivity;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace Kmandili
@@ -19,10 +22,21 @@ namespace Kmandili
         public App ()
 		{
 			InitializeComponent();
-
-            //Main = new MainPage();
+            
 			MainPage = new NavigationPage(new MainPage());
+            CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
 		}
+
+        private async void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
+        {
+            if (!e.IsConnected)
+                await PopupNavigation.PushAsync(new ConnectionLostPopupPage());
+            else
+            {
+                if (PopupNavigation.PopupStack.Any() && PopupNavigation.PopupStack.Last().GetType().Name == "ConnectionLostPopupPage")
+                    await PopupNavigation.PopAsync();
+            }
+        }
 
         public async static void Logout()
         {
@@ -45,10 +59,13 @@ namespace Kmandili
                 return (false);
         }
 
-        protected override void OnStart ()
+        protected async override void OnStart ()
 		{
-			// Handle when your app starts
-		}
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                await PopupNavigation.PushAsync(new ConnectionLostPopupPage());
+            }
+        }
 
 		protected override void OnSleep ()
 		{
@@ -59,5 +76,6 @@ namespace Kmandili
 		{
 			// Handle when your app resumes
 		}
+        
 	}
 }

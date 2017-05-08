@@ -38,6 +38,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             pastryShop.Categories.ToList().ForEach(c => allSelectedCategories.Add(c));
 	        var categoryRC = new RestClient<Category>();
 	        categories = await categoryRC.GetAsync();
+	        if (categories == null) return;
             CategoriesLayout.Children.Clear();
             categories.ForEach(c => CategoriesLayout.Children.Add(MakeCategoryLayout(c)));
 	    }

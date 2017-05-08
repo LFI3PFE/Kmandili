@@ -44,6 +44,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             this.reloadParent = reloadParentval;
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
 	        pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+            if (pastryShop == null) return;
             ContentLayout.Children.Clear();
 	        foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)
 	        {
@@ -137,7 +138,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             int ID = Int32.Parse((sender as StackLayout).ClassId);
             RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
-            await pastryShopDeleverMethodRC.DeleteAsync(ID);
+            if(!(await pastryShopDeleverMethodRC.DeleteAsync(ID))) return;
             Load(true);
         }
 

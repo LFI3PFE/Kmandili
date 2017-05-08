@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\PointOfSale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PriceRange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PastryShopRestClient.cs" />
@@ -46,8 +47,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Status.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WorkDay.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\FilterPopupPage.xaml.cs">
-      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ConnectionLostPopupPage.xaml.cs">
+      <DependentUpon>ConnectionLostPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\LoadingPopupPage.xaml.cs">
@@ -352,7 +353,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\FilterPopupPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\ConnectionLostPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

@@ -42,6 +42,7 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
 	        {
 	            var pastryShopRC = new PastryShopRestClient();
 	            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+	            if (pastryShop == null) return;
 	        }
             CoreStackLayout.Children.Clear();
             pastryShop.PointOfSales.ToList().ForEach(p => CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p)));
@@ -174,7 +175,7 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
             if (pointOfSale != null)
             {
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-                await pointOfSaleRC.DeleteAsync(pointOfSale.ID);
+                if(!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID))) return;
                 Load(true);
             }
         }

@@ -145,7 +145,9 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = (await orderRC.GetAsyncByPastryShopID(App.Connected.Id)).OrderBy(p => p.SeenPastryShop).ToList();
+            orders = await orderRC.GetAsyncByPastryShopID(App.Connected.Id);
+            if (orders == null) return;
+            orders = orders.OrderBy(p => p.SeenPastryShop).ToList();
             displayedOrders.Clear();
             orders.ForEach(o => displayedOrders.Add(o));
             selectedSortType.SortTypeIndex = 1;

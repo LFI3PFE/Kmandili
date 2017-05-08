@@ -203,7 +203,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 LoadingLayout.IsVisible = true;
                 Loading.IsRunning = true;
                 RestClient<Product> productRC = new RestClient<Product>();
-                await productRC.DeleteAsync(ID);
+                if(!(await productRC.DeleteAsync(ID))) return;
                 load(true);
             }
             else
@@ -226,6 +226,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 Loading.IsRunning = true;
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                 pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                if (pastryShop == null) return;
                 Loading.IsRunning = false;
                 LoadingLayout.IsVisible = false;
             }

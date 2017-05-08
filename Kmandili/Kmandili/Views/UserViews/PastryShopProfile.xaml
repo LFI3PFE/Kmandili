@@ -44,7 +44,7 @@
                                     <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
                                 </Image.GestureRecognizers>
                             </Image>
-                            <Image BackgroundColor="Transparent" Source="empty_star.png" HeightRequest="30" ClassId="5">
+                            <Image BackgroundColor="Transparent" Source="emptyStar.png" HeightRequest="30" ClassId="5">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="starOnClick" NumberOfTapsRequired="1"/>
                                 </Image.GestureRecognizers>

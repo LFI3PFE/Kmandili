@@ -35,6 +35,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
         {
             RestClient<Status> statusRC = new RestClient<Status>();
             statuses = await statusRC.GetAsync();
+            if (statuses == null) return;
             this.Content = MakeContent();
         }
 

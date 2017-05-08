@@ -155,8 +155,10 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+            if (pastryShop == null) return;
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             priceRanges = await priceRangeTypeRC.GetAsync();
+            if (phoneNumberTypes == null || priceRanges == null) return;
             PriceRange.ItemsSource = priceRanges;
 
             Name.Text = pastryShop.Name;
@@ -444,7 +446,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                     Country = Country.Text,
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
-                await addressRC.PutAsync(address.ID, address);
+                if(!(await addressRC.PutAsync(address.ID, address))) return;
                 
                 if (_mediaFileProfile != null)
                 {
@@ -479,10 +481,10 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                     ProfilePic = pastryShop.ProfilePic,
                     CoverPic = pastryShop.CoverPic,
                 };
-                await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop);
+                if(!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
                 foreach (var removedPhoneNumber in removedPhoneNumbers)
                 {
-                    await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID);
+                    if(!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
                 }
                 foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
                 {
@@ -498,12 +500,12 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                         {
                             int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
                             p.ID = phoneNumberID;
-                            await phoneNumberRC.PutAsync(p.ID, p);
+                            if(!(await phoneNumberRC.PutAsync(p.ID, p))) return;
                         }
                         else
                         {
                             p.PastryShop = newPastryShop;
-                            await phoneNumberRC.PostAsync(p);
+                            if(await phoneNumberRC.PostAsync(p) == null) return;
                         }
                     }
                 }

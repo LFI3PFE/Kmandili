@@ -71,8 +71,8 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 	        if (!order.SeenUser)
 	        {
                 OrderRestClient orderRC = new OrderRestClient();
-	            await orderRC.MarkAsSeenUser(order.ID);
-	            updateParent = true;
+	            if(await orderRC.MarkAsSeenUser(order.ID))
+	                updateParent = true;
 	        }
 	    }
 
@@ -104,6 +104,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             if (await orderRC.PutAsync(newOrder.ID, newOrder))
             {
                 order = await orderRC.GetAsyncById(order.ID);
+                if (order == null) return;
                 EmailRestClient emailRC = new EmailRestClient();
                 await emailRC.SendOrderEmail(order.ID);
                 updateParent = true;
@@ -119,7 +120,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             OrderRestClient orderRC = new OrderRestClient();
             EmailRestClient emailRC = new EmailRestClient();
-            await emailRC.SendCancelOrderEmail(order.ID);
+            if(!await emailRC.SendCancelOrderEmail(order.ID)) return;
             if (await orderRC.DeleteAsync(order.ID))
             {
                 userOrderList.load();

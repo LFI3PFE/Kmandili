@@ -11,6 +11,10 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<User> GetAsyncByEmailAndPass(string email, string password)
         {
+            if (!(await CheckConnection()))
+            {
+                throw new ConnectionLostException();
+            }
             var httpClient = new HttpClient();
             try
             {
@@ -28,6 +32,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<User> GetAsyncByEmail(string email)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
             try
             {

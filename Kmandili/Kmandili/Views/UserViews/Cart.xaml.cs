@@ -281,7 +281,7 @@ namespace Kmandili.Views.UserViews
                         }
                     }
                     EmailRestClient emailRC = new EmailRestClient();
-                    var emailBool = await emailRC.SendOrderEmail(order.ID);
+                    await emailRC.SendOrderEmail(order.ID);
                 }
                 else
                 {

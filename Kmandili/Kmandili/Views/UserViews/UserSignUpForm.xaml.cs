@@ -40,6 +40,7 @@ namespace Kmandili.Views.UserViews
         private async void load()
         {
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            if (phoneNumberTypes == null) return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
@@ -244,7 +245,7 @@ namespace Kmandili.Views.UserViews
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
                 address = await addressRC.PostAsync(address);
-
+                if (address == null) return;
                 User user = new User()
                 {
                     Name = Name.Text.ToLower(),

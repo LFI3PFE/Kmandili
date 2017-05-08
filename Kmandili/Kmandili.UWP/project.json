@@ -4,6 +4,7 @@
     "Newtonsoft.Json": "10.0.2",
     "Rg.Plugins.Popup": "1.0.4",
     "System.Net.Http": "4.3.0",
+    "Xam.Plugin.Connectivity": "2.3.0",
     "Xam.Plugin.Media": "2.6.2",
     "Xamarin.Forms": "2.3.4.224",
     "Xamarin.Forms.RangeSlider": "0.6.17"

@@ -12,6 +12,10 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<PastryShop> GetAsyncByEmailAndPass(string email, string password)
         {
+            if (!(await CheckConnection()))
+            {
+                throw new ConnectionLostException();
+            }
             var httpClient = new HttpClient();
             try
             {
@@ -27,6 +31,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<PastryShop> GetAsyncByEmail(string email)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
             try
             {
@@ -43,6 +48,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> PutAsyncCategories(int id, PastryShop pastryShop)
         {
+            if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
 
             var json = JsonConvert.SerializeObject(pastryShop);
