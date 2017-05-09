@@ -326,7 +326,7 @@ namespace Kmandili.Views.UserViews
                 }
             }
             await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
-            await PopupNavigation.PopAsync();
+            await PopupNavigation.PopAllAsync();
             await Navigation.PopAsync();
         }
 

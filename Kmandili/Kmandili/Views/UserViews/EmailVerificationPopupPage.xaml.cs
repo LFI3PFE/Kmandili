@@ -51,9 +51,13 @@ namespace Kmandili.Views.UserViews
 	        if (Code.Text.Length == 6 && code == Code.Text)
 	        {
 	            if (userSignUpForm != null)
+	            {
 	                userSignUpForm.EmailVerified();
+	            }
 	            else
-	                editUserProfile.EmailVerified();
+	            {
+                    editUserProfile.EmailVerified();
+                }
 	            await PopupNavigation.PopAsync();
 	        }
 	        else

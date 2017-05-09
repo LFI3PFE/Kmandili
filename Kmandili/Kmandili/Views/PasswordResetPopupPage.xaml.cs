@@ -48,6 +48,7 @@ namespace Kmandili.Views
 	            }
 	        }
 	        await DisplayAlert("Succès", "Mot de passe mis à jours avec succés", "Ok");
+	        await PopupNavigation.PopAsync();
 	    }
 	}
 }
