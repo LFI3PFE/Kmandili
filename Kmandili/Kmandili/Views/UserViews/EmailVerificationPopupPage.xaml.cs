@@ -16,6 +16,7 @@ namespace Kmandili.Views.UserViews
 	{
         private string email;
 	    private UserSignUpForm userSignUpForm;
+	    private EditUserProfile editUserProfile;
 	    private string code = "";
 
 		public EmailVerificationPopupPage (UserSignUpForm userSignUpForm, string email)
@@ -28,7 +29,17 @@ namespace Kmandili.Views.UserViews
             InitializeComponent ();
 		}
 
-	    private async void SendEmail()
+        public EmailVerificationPopupPage(EditUserProfile editUserProfile, string email)
+        {
+            this.email = email;
+            this.editUserProfile = editUserProfile;
+            SendEmail();
+            BackgroundColor = Color.FromHex("#CC000000");
+            CloseWhenBackgroundIsClicked = false;
+            InitializeComponent();
+        }
+
+        private async void SendEmail()
 	    {
             EmailRestClient emailRC = new EmailRestClient();
             code = await emailRC.SendEmailVerification(email);
@@ -39,7 +50,10 @@ namespace Kmandili.Views.UserViews
 	        if (string.IsNullOrEmpty(Code.Text)) return;
 	        if (Code.Text.Length == 6 && code == Code.Text)
 	        {
-                userSignUpForm.EmailVerified();
+	            if (userSignUpForm != null)
+	                userSignUpForm.EmailVerified();
+	            else
+	                editUserProfile.EmailVerified();
 	            await PopupNavigation.PopAsync();
 	        }
 	        else

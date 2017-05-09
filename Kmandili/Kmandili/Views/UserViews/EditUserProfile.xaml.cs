@@ -269,75 +269,87 @@ namespace Kmandili.Views.UserViews
             return true;
         }
 
+
+        public async void EmailVerified()
+        {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            UserRestClient userRC = new UserRestClient();
+            RestClient<Address> addressRC = new RestClient<Address>();
+            Address address = new Address()
+            {
+                ID = Int32.Parse(Address.ClassId),
+                Number = Int32.Parse(Number.Text),
+                Street = Street.Text,
+                City = City.Text,
+                State = State.Text,
+                Country = Country.Text,
+                ZipCode = Int32.Parse(ZipCode.Text)
+            };
+            if (!(await addressRC.PutAsync(address.ID, address))) return;
+
+            User user = new User()
+            {
+                ID = this.user.ID,
+                Name = Name.Text.ToLower(),
+                LastName = LastName.Text.ToLower(),
+                Email = Email.Text.ToLower(),
+                Password = Password.Text,
+                Address_FK = address.ID
+            };
+            if (!(await userRC.PutAsync(user.ID, user))) return;
+            RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
+            foreach (var removedPhoneNumber in removedPhoneNumbers)
+            {
+                if (!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
+            }
+            foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
+            {
+                Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
+                if (phoneNumberEntry.Text != "")
+                {
+                    PhoneNumber p = new PhoneNumber()
+                    {
+                        Number = phoneNumberEntry.Text,
+                        PhoneNumberType_FK = (phoneNumberTypes.ElementAt((phoneNumberStackLayout.Children[1] as Picker).SelectedIndex)).ID,
+                    };
+                    if (phoneNumberEntry.ClassId != "")
+                    {
+                        int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
+                        p.ID = phoneNumberID;
+                        if (!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
+                    }
+                    else
+                    {
+                        p.User = user;
+                        if (await phoneNumberRestClient.PostAsync(p) == null) return;
+                    }
+                }
+            }
+            await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
+            await PopupNavigation.PopAsync();
+            await Navigation.PopAsync();
+        }
+
         public async void UpdateBt_Clicked(object sender, EventArgs e)
         {
             if (await valid())
             {
-                await PopupNavigation.PushAsync(new LoadingPopupPage());
                 UserRestClient userRC = new UserRestClient();
-                RestClient<Address> addressRC = new RestClient<Address>();
-                //RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
-                if (this.user.Email != Email.Text.ToLower() && await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
+                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+                if (user.Email != Email.Text.ToLower())
                 {
-                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                    Email.Text = "";
-                    await PopupNavigation.PopAsync();
-                    return;
-                }
-
-                Address address = new Address()
-                {
-                    ID = Int32.Parse(Address.ClassId),
-                    Number = Int32.Parse(Number.Text),
-                    Street = Street.Text,
-                    City = City.Text,
-                    State = State.Text,
-                    Country = Country.Text,
-                    ZipCode = Int32.Parse(ZipCode.Text)
-                };
-                if(!(await addressRC.PutAsync(address.ID, address))) return;
-
-                User user = new User()
-                {
-                    ID = this.user.ID,
-                    Name = Name.Text.ToLower(),
-                    LastName = LastName.Text.ToLower(),
-                    Email = Email.Text.ToLower(),
-                    Password = Password.Text,
-                    Address_FK = address.ID
-                };
-                if(!(await userRC.PutAsync(user.ID, user))) return;
-                RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
-                foreach (var removedPhoneNumber in removedPhoneNumbers)
-                {
-                    if(!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
-                }
-                foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
-                {
-                    Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
-                    if (phoneNumberEntry.Text != "")
+                    if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
                     {
-                        PhoneNumber p = new PhoneNumber()
-                        {
-                            Number = phoneNumberEntry.Text,
-                            PhoneNumberType_FK = (phoneNumberTypes.ElementAt((phoneNumberStackLayout.Children[1] as Picker).SelectedIndex)).ID,
-                        };
-                        if (phoneNumberEntry.ClassId != "")
-                        {
-                            int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
-                            p.ID = phoneNumberID;
-                            if(!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
-                        }
-                        else
-                        {
-                            p.User = user;
-                            if(await phoneNumberRestClient.PostAsync(p) == null) return;
-                        }
+                        await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                        Email.Text = "";
+                        return;
                     }
+                    await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
                 }
-                await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
-                await PopupNavigation.PopAsync();
-                await Navigation.PopAsync();
+                else
+                {
+                    EmailVerified();
+                }
             }
         }
 

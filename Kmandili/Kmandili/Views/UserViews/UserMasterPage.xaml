@@ -4,8 +4,8 @@
              x:Class="Kmandili.Views.UserViews.UserMasterPage"
              Title="Menu">
     <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="#f2f2f2">
-        <StackLayout HorizontalOptions="FillAndExpand" HeightRequest="155" BackgroundColor="Brown">
-            <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source=""/>
+        <StackLayout x:Name="CoverLayout" HorizontalOptions="FillAndExpand" HeightRequest="155" BackgroundColor="Brown">
+            <Image Source="test.jpg"/>
         </StackLayout>
         <StackLayout Padding="0,30,0,0" Spacing="0">
             <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">

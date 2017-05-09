@@ -170,5 +170,9 @@ namespace Kmandili
             }
         }
 
+        private async void RestPasswordTapped(object sender, EventArgs e)
+        {
+            await PopupNavigation.PushAsync(new PasswordResetEmailPopupPage());
+        }
     }
 }

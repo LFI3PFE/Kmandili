@@ -39,6 +39,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PasswordResetRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PastryShopRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\UploadRestClient.cs" />
@@ -53,6 +54,14 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\LoadingPopupPage.xaml.cs">
       <DependentUpon>LoadingPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PasswordResetEmailPopupPage.xaml.cs">
+      <DependentUpon>PasswordResetEmailPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PasswordResetPopupPage.xaml.cs">
+      <DependentUpon>PasswordResetPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\AddDeleveryMethodForm.xaml.cs">
@@ -142,6 +151,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\PastryShopUploadPhotos.xaml.cs">
       <DependentUpon>PastryShopUploadPhotos.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PasswordResetCodeVerification.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PasswordResetCodeVerification.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\Cart.xaml.cs">
       <DependentUpon>Cart.xaml</DependentUpon>
@@ -242,6 +255,10 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PasswordResetCodeVerification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -418,6 +435,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\EmailVerificationPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PasswordResetEmailPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PasswordResetPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

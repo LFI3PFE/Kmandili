@@ -4249,8 +4249,8 @@ namespace Kmandili.Droid
 			// aapt resource value: 0x7f0200bb
 			public const int mr_ic_play_light = 2130837691;
 			
-			// aapt resource value: 0x7f0200c6
-			public const int notification_template_icon_bg = 2130837702;
+			// aapt resource value: 0x7f0200c7
+			public const int notification_template_icon_bg = 2130837703;
 			
 			// aapt resource value: 0x7f0200bc
 			public const int orders = 2130837692;
@@ -4281,6 +4281,9 @@ namespace Kmandili.Droid
 			
 			// aapt resource value: 0x7f0200c5
 			public const int sort = 2130837701;
+			
+			// aapt resource value: 0x7f0200c6
+			public const int test = 2130837702;
 			
 			static Drawable()
 			{

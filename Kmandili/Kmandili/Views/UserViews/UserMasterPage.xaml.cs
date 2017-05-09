@@ -53,6 +53,6 @@ namespace Kmandili.Views.UserViews
             userMasterDetailPage.IsPresented = false;
             if (userMasterDetailPage.Detail.GetType().Name == "Cart") return;
             await userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
-	    }
+        }
 	}
 }

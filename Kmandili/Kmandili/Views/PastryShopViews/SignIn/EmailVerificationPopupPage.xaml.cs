@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.EditProfile;
 using Kmandili.Views.UserViews;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
@@ -17,12 +18,23 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 	{
         private string email;
         private PastryShopSignUpForm pastryShopSignUpForm;
+	    private EditProfileInfo editProfileInfo;
         private string code = "";
 
         public EmailVerificationPopupPage(PastryShopSignUpForm pastryShopSignUpForm, string email)
         {
             this.email = email;
             this.pastryShopSignUpForm = pastryShopSignUpForm;
+            SendEmail();
+            BackgroundColor = Color.FromHex("#CC000000");
+            CloseWhenBackgroundIsClicked = false;
+            InitializeComponent();
+        }
+
+        public EmailVerificationPopupPage(EditProfileInfo editProfileInfo, string email)
+        {
+            this.email = email;
+            this.editProfileInfo = editProfileInfo;
             SendEmail();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
@@ -40,7 +52,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             if (string.IsNullOrEmpty(Code.Text)) return;
             if (Code.Text.Length == 6 && code == Code.Text)
             {
-                pastryShopSignUpForm.EmailVerified();
+                if (pastryShopSignUpForm != null)
+                {
+                    pastryShopSignUpForm.EmailVerified();
+                }
+                else
+                {
+                    editProfileInfo.EmailVerified();
+                }
                 await PopupNavigation.PopAsync();
             }
             else

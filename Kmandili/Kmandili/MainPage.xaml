@@ -7,9 +7,18 @@
         <StackLayout>
             <Label Text="Connection" FontSize="35" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
-        <StackLayout Spacing="40">
-            <Entry x:Name="Email" TextColor="Black" PlaceholderColor="Gray" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
-            <Entry x:Name="Password" TextColor="Black" PlaceholderColor="Gray" Placeholder="Mot de Passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
+        <StackLayout Spacing="10">
+            <StackLayout Spacing="40">
+                <Entry x:Name="Email" TextColor="Black" PlaceholderColor="Gray" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
+                <Entry x:Name="Password" TextColor="Black" PlaceholderColor="Gray" Placeholder="Mot de Passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Center">
+                <Label Text="Mot de passe oublié!" FontSize="20" TextColor="DodgerBlue" HorizontalOptions="Center" HorizontalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="RestPasswordTapped"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
         </StackLayout>
         <StackLayout> 
             <Button x:Name="SignInBt" BackgroundColor="#2cc184" TextColor="#3b4552" Text="Se Connecter" FontAttributes="Bold" FontSize="30" Clicked="SignIn"/>

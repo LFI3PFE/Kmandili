@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.SignIn;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Rg.Plugins.Popup.Services;
@@ -418,101 +419,113 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             return true;
         }
 
+	    public async void EmailVerified()
+	    {
+            UpdateBt.IsEnabled = false;
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            RestClient<Address> addressRC = new RestClient<Address>();
+            RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
+
+            Address address = new Address()
+            {
+                ID = Int32.Parse(Address.ClassId),
+                Number = Int32.Parse(Number.Text),
+                Street = Street.Text,
+                City = City.Text,
+                State = State.Text,
+                Country = Country.Text,
+                ZipCode = Int32.Parse(ZipCode.Text)
+            };
+            if (!(await addressRC.PutAsync(address.ID, address))) return;
+
+            if (_mediaFileProfile != null)
+            {
+                string newURL = await Upload(_mediaFileProfile);
+                if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.ProfilePic)))
+                {
+                    pastryShop.ProfilePic = newURL;
+                }
+            }
+
+            if (_mediaFileCover != null)
+            {
+                string newURL = await Upload(_mediaFileProfile);
+                if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.CoverPic)))
+                {
+                    pastryShop.CoverPic = newURL;
+                }
+            }
+
+            PastryShop newPastryShop = new PastryShop()
+            {
+                ID = pastryShop.ID,
+                Name = Name.Text,
+                Email = Email.Text.ToLower(),
+                Password = Password.Text,
+                Address_FK = address.ID,
+                LongDesc = LongDesc.Text,
+                ShortDesc = ShortDesc.Text,
+                PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID,
+                NumberOfRatings = pastryShop.NumberOfRatings,
+                RatingSum = pastryShop.RatingSum,
+                ProfilePic = pastryShop.ProfilePic,
+                CoverPic = pastryShop.CoverPic,
+            };
+            if (!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
+            foreach (var removedPhoneNumber in removedPhoneNumbers)
+            {
+                if (!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
+            }
+            foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
+            {
+                Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
+                if (phoneNumberEntry.Text != "")
+                {
+                    PhoneNumber p = new PhoneNumber()
+                    {
+                        Number = phoneNumberEntry.Text,
+                        PhoneNumberType_FK = (phoneNumberTypes.ElementAt((phoneNumberStackLayout.Children[1] as Picker).SelectedIndex)).ID,
+                    };
+                    if (phoneNumberEntry.ClassId != "")
+                    {
+                        int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
+                        p.ID = phoneNumberID;
+                        if (!(await phoneNumberRC.PutAsync(p.ID, p))) return;
+                    }
+                    else
+                    {
+                        p.PastryShop = newPastryShop;
+                        if (await phoneNumberRC.PostAsync(p) == null) return;
+                    }
+                }
+            }
+            await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
+            await PopupNavigation.PopAsync();
+            UpdateParent = true;
+            await Navigation.PopAsync();
+        }
+
         private async void UpdateBt_Clicked(object sender, EventArgs e)
         {
-            UpdateBt.IsEnabled = false;
             if (await valid())
             {
-                await PopupNavigation.PushAsync(new LoadingPopupPage());
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                RestClient<Address> addressRC = new RestClient<Address>();
-                RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
-
-                if (pastryShop.Email != Email.Text.ToLower() && await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null)
+                UserRestClient userRC = new UserRestClient();
+                if (pastryShop.Email != Email.Text.ToLower())
                 {
-                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                    Email.Text = "";
-                    await PopupNavigation.PopAsync();
-                    return;
-                }
-
-                Address address = new Address()
-                {
-                    ID = Int32.Parse(Address.ClassId),
-                    Number = Int32.Parse(Number.Text),
-                    Street = Street.Text,
-                    City = City.Text,
-                    State = State.Text,
-                    Country = Country.Text,
-                    ZipCode = Int32.Parse(ZipCode.Text)
-                };
-                if(!(await addressRC.PutAsync(address.ID, address))) return;
-                
-                if (_mediaFileProfile != null)
-                {
-                    string newURL = await Upload(_mediaFileProfile);
-                    if(!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.ProfilePic)))
+                    if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await  userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
                     {
-                        pastryShop.ProfilePic = newURL;
+                        await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                        Email.Text = "";
+                        return;
                     }
+                    await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
                 }
-
-                if (_mediaFileCover != null)
+                else
                 {
-                    string newURL = await Upload(_mediaFileProfile);
-                    if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.CoverPic)))
-                    {
-                        pastryShop.CoverPic = newURL;
-                    }
+                    EmailVerified();
                 }
-
-                PastryShop newPastryShop = new PastryShop()
-                {
-                    ID = pastryShop.ID,
-                    Name = Name.Text,
-                    Email = Email.Text.ToLower(),
-                    Password = Password.Text,
-                    Address_FK = address.ID,
-                    LongDesc = LongDesc.Text,
-                    ShortDesc = ShortDesc.Text,
-                    PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID,
-                    NumberOfRatings =  pastryShop.NumberOfRatings,
-                    RatingSum = pastryShop.RatingSum,
-                    ProfilePic = pastryShop.ProfilePic,
-                    CoverPic = pastryShop.CoverPic,
-                };
-                if(!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
-                foreach (var removedPhoneNumber in removedPhoneNumbers)
-                {
-                    if(!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
-                }
-                foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
-                {
-                    Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
-                    if (phoneNumberEntry.Text != "")
-                    {
-                        PhoneNumber p = new PhoneNumber()
-                        {
-                            Number = phoneNumberEntry.Text,
-                            PhoneNumberType_FK = (phoneNumberTypes.ElementAt((phoneNumberStackLayout.Children[1] as Picker).SelectedIndex)).ID,
-                        };
-                        if (phoneNumberEntry.ClassId != "")
-                        {
-                            int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
-                            p.ID = phoneNumberID;
-                            if(!(await phoneNumberRC.PutAsync(p.ID, p))) return;
-                        }
-                        else
-                        {
-                            p.PastryShop = newPastryShop;
-                            if(await phoneNumberRC.PostAsync(p) == null) return;
-                        }
-                    }
-                }
-                await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
-                await PopupNavigation.PopAsync();
-                UpdateParent = true;
-                await Navigation.PopAsync();
             }
         }
 
