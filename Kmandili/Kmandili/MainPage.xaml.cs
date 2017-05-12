@@ -5,6 +5,7 @@ using Kmandili.Views.PastryShopViews;
 using Kmandili.Views.PastryShopViews.SignIn;
 using Kmandili.Views.UserViews;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Kmandili.Views;
 using Rg.Plugins.Popup.Extensions;
@@ -20,7 +21,7 @@ namespace Kmandili
 		{
 			InitializeComponent();
             NavigationPage.SetHasNavigationBar(this, false);
-		}
+        }
 
         public async Task<bool> valid()
         {
@@ -58,6 +59,7 @@ namespace Kmandili
 
         private void isLoading(bool loading)
         {
+            ResetPasswordLabel.IsVisible = !loading;
             Loading.IsRunning = loading;
             Loading.IsVisible = loading;
             Email.IsEnabled = !loading;

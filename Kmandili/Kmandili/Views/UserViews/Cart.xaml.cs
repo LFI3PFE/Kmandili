@@ -76,20 +76,33 @@ namespace Kmandili.Views.UserViews
                     Spacing = 10
                 };
 
-                StackLayout deleveryLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Spacing = 10, Padding = new Thickness(10, 0, 10, 0) };
+                StackLayout deleveryLayout = new StackLayout() { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0) };
+                StackLayout innerDeleveryLayout = new StackLayout() {Orientation = StackOrientation.Horizontal, Spacing = 20};
                 Picker deleveryMethodPicker = new Picker() { ItemsSource = cartPastry.PastryShop.PastryShopDeleveryMethods.ToList(), ClassId = cartPastry.PastryShop.ID.ToString(), HorizontalOptions = LayoutOptions.FillAndExpand};
                 deleveryMethodPicker.SelectedIndex = 0;
                 cartPastry.DeleveryMethod = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(0).DeleveryMethod;
                 deleveryMethodPicker.SelectedIndexChanged += DeleveryMethodPicker_SelectedIndexChanged;
-                deleveryLayout.Children.Add(new Label() { Text = "Livraison:", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center });
-                deleveryLayout.Children.Add(deleveryMethodPicker);
+
+                innerDeleveryLayout.Children.Add(deleveryMethodPicker);
+                innerDeleveryLayout.Children.Add(new StackLayout()
+                {
+                    Orientation = StackOrientation.Horizontal,
+                    Children =
+                    {
+                        new Label() { Text = "Delais: ", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold},
+                        new Label() { Text = (deleveryMethodPicker.SelectedItem as PastryShopDeleveryMethod).DeleveryDelay.ToString(), TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center }
+                    }
+                });
+                
+                deleveryLayout.Children.Add(new Label() { Text = "Livraison:", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold});
+                deleveryLayout.Children.Add(innerDeleveryLayout);
 
                 StackLayout paymentLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Spacing = 10, Padding = new Thickness(10, 0, 10, 0) };
                 Picker paymentPicker = new Picker() { ItemsSource = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(deleveryMethodPicker.SelectedIndex).PastryDeleveryPayments.ToList(), ClassId = cartPastry.PastryShop.ID.ToString(), HorizontalOptions = LayoutOptions.FillAndExpand };
                 paymentPicker.SelectedIndex = 0;
                 cartPastry.PaymentMethod = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(deleveryMethodPicker.SelectedIndex).PastryDeleveryPayments.ElementAt(0).Payment;
                 paymentPicker.SelectedIndexChanged += PaymentPicker_SelectedIndexChanged;
-                paymentLayout.Children.Add(new Label() { Text = "Payment:", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center });
+                paymentLayout.Children.Add(new Label() { Text = "Payment:", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold});
                 paymentLayout.Children.Add(paymentPicker);
 
                 headerStackLayout.Children.Add(new Label() { Text = cartPastry.PastryShop.Name, TextColor = Color.Black, FontSize = 25 });
@@ -137,7 +150,9 @@ namespace Kmandili.Views.UserViews
         private void DeleveryMethodPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker).ClassId)).DeleveryMethod = ((sender as Picker).SelectedItem as PastryShopDeleveryMethod).DeleveryMethod;
-            Picker paymentPicker = (((((sender as Picker).Parent as StackLayout).Parent as StackLayout).Children[2] as StackLayout).Children[1] as Picker);
+            ((((sender as Picker).Parent as StackLayout).Children[1] as StackLayout).Children[1] as Label).Text =
+                ((sender as Picker).SelectedItem as PastryShopDeleveryMethod).DeleveryDelay.ToString();
+            Picker paymentPicker = ((((((sender as Picker).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[2] as StackLayout).Children[1] as Picker);
             paymentPicker.ItemsSource = App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker).ClassId)).PastryShop.PastryShopDeleveryMethods.ElementAt((sender as Picker).SelectedIndex).PastryDeleveryPayments.ToList();
             paymentPicker.SelectedIndex = 0;
         }
