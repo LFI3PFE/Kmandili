@@ -18,7 +18,6 @@ namespace Kmandili
         public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
-        //public static MainPage Main;
         public App ()
 		{
 			InitializeComponent();
@@ -26,6 +25,26 @@ namespace Kmandili
 			MainPage = new NavigationPage(new MainPage());
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
 		}
+
+	    public static void setMainPage(MasterDetailPage newMainPage)
+	    {
+            switch (Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    App.Current.MainPage = newMainPage;
+                    break;
+                case Device.Android:
+                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    break;
+                case Device.WinPhone:
+                case Device.Windows:
+                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    break;
+                default:
+                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    break;
+            }
+        }
 
         private async void Current_ConnectivityChanged(object sender, Plugin.Connectivity.Abstractions.ConnectivityChangedEventArgs e)
         {

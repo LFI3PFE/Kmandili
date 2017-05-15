@@ -24,7 +24,6 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
         public FilterPopupPage(PSOrderList pastryShopOrderList, List<Status> selectedStatuses)
         {
             BackgroundColor = Color.FromHex("#CC000000");
-            CloseWhenBackgroundIsClicked = false;
             this.pastryShopOrderList = pastryShopOrderList;
             this.selectedStatuses = selectedStatuses;
             InitializeComponent();

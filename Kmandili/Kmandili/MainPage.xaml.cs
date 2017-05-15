@@ -104,22 +104,23 @@ namespace Kmandili
                 Email.Text = "";
                 Password.Text = "";
                 //App.Current.MainPage = new UserMasterDetailPage(u);
-                switch (Device.RuntimePlatform)
-                {
-                    case Device.iOS:
-                        App.Current.MainPage = new UserMasterDetailPage(u);
-                        break;
-                    case Device.Android:
-                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                        break;
-                    case Device.WinPhone:
-                    case Device.Windows:
-                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                        break;
-                    default:
-                        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                        break;
-                }
+                //switch (Device.RuntimePlatform)
+                //{
+                //    case Device.iOS:
+                //        App.Current.MainPage = new UserMasterDetailPage(u);
+                //        break;
+                //    case Device.Android:
+                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                //        break;
+                //    case Device.WinPhone:
+                //    case Device.Windows:
+                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                //        break;
+                //    default:
+                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
+                //        break;
+                //}
+                App.setMainPage(new UserMasterDetailPage(u));
             }
             else
             {
@@ -146,22 +147,23 @@ namespace Kmandili
                     Email.Text = "";
                     Password.Text = "";
                     //App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                    switch (Device.RuntimePlatform)
-                    {
-                        case Device.iOS:
-                            App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                            break;
-                        case Device.Android:
-                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                            break;
-                        case Device.WinPhone:
-                        case Device.Windows:
-                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                            break;
-                        default:
-                            App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                            break;
-                    }
+                    //switch (Device.RuntimePlatform)
+                    //{
+                    //    case Device.iOS:
+                    //        App.Current.MainPage = new PastryShopMasterDetailPage(p);
+                    //        break;
+                    //    case Device.Android:
+                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                    //        break;
+                    //    case Device.WinPhone:
+                    //    case Device.Windows:
+                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                    //        break;
+                    //    default:
+                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
+                    //        break;
+                    //}
+                    App.setMainPage(new PastryShopMasterDetailPage(p));
                 }
                 else
                 {

@@ -9,16 +9,13 @@ namespace Kmandili.Views.PastryShopViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PastryShopMasterDetailPage : MasterDetailPage
 	{
-        private PastryShop pastryShop;
         private PastryShopProfile pastryShopProfile;
 
 		public PastryShopMasterDetailPage (PastryShop pastryShop)
 		{
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
-            this.pastryShop = pastryShop;
             Master = new PastryShopMasterPage(this, pastryShop);
-            //Detail = new PastryShopProfile(this, pastryShop);
 		    pastryShopProfile = new PastryShopProfile(this, pastryShop);
             switch (Device.RuntimePlatform)
             {
@@ -36,14 +33,13 @@ namespace Kmandili.Views.PastryShopViews
                     Detail = new NavigationPage(pastryShopProfile);
                     break;
             }
+            IsPresentedChanged += PastryShopMasterDetailPage_IsPresentedChanged;
         }
 
-        protected async override void OnAppearing()
+        private void PastryShopMasterDetailPage_IsPresentedChanged(object sender, System.EventArgs e)
         {
-            OrderRestClient orderRC = new OrderRestClient();
-            var orders = await orderRC.GetAsyncByPastryShopID(App.Connected.Id);
-            if (orders == null) return;
-            (Master as PastryShopMasterPage)?.UpdateOrderNotificationNumber(orders);
+            if(IsPresented)
+                (Master as PastryShopMasterPage).UpdateOrderNotificationNumber();
         }
 
         public void ReloadPastryShop()

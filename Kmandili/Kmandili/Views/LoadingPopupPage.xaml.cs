@@ -20,5 +20,10 @@ namespace Kmandili.Views
             InitializeComponent();
             Loading.IsRunning = true;
         }
+
+	    protected override bool OnBackButtonPressed()
+	    {
+	        return true;
+	    }
     }
 }

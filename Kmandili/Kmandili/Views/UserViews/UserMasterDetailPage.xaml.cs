@@ -22,13 +22,14 @@ namespace Kmandili.Views.UserViews
             {
                 this.userMasterDetailPage = userMasterDetailPage;
             }
-            protected async override void OnAppearing()
-            {
-                OrderRestClient orderRC = new OrderRestClient();
-                var orders = await orderRC.GetAsyncByUserID(App.Connected.Id);
-                if (orders == null) return;
-                (userMasterDetailPage.Master as UserMasterPage)?.UpdateOrderNotificationNumber(orders);
-            }
+
+            //protected async override void OnAppearing()
+            //{
+            //    OrderRestClient orderRC = new OrderRestClient();
+            //    var orders = await orderRC.GetAsyncByUserID(App.Connected.Id);
+            //    if (orders == null) return;
+            //    (userMasterDetailPage.Master as UserMasterPage)?.UpdateOrderNotificationNumber(orders);
+            //}
 
             protected override bool OnBackButtonPressed()
             {
@@ -81,6 +82,13 @@ namespace Kmandili.Views.UserViews
                     Detail = new NavigationPage(tab); ;
                     break;
             }
+            IsPresentedChanged += UserMasterDetailPage_IsPresentedChanged;
         }
+
+        private void UserMasterDetailPage_IsPresentedChanged(object sender, EventArgs e)
+        {
+            if(IsPresented)
+                (Master as UserMasterPage).UpdateOrderNotificationNumber();
         }
+    }
 }

@@ -27,7 +27,6 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
             PriceRange maxPriceRange, PriceRange selectedPriceRange)
         {
             BackgroundColor = Color.FromHex("#CC000000");
-            CloseWhenBackgroundIsClicked = false;
             this.maxPriceRange = maxPriceRange;
             this.selectedpriceRange = selectedPriceRange;
             this.selectedCategories = selectedCategories;

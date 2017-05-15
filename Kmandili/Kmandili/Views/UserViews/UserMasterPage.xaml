@@ -88,7 +88,7 @@
                         <Image Source="logout.png" HeightRequest="25" VerticalOptions="Center"/>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Padding="0,10,0,0">
-                        <Label Text="Deconnection" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
+                        <Label Text="Déconnexion" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
                     </StackLayout>
                 </Grid>
             </StackLayout>

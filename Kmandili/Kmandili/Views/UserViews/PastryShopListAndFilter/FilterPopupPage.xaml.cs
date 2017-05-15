@@ -22,7 +22,6 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
 		public FilterPopupPage(PastryShopList pastryShopList, List<Category> selectedCategories)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-		    this.CloseWhenBackgroundIsClicked = false;
 		    this.selectedCategories = selectedCategories;
 		    this.pastryShopList = pastryShopList;
             InitializeComponent ();

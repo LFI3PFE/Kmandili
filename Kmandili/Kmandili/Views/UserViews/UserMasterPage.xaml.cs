@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
+using Kmandili.Models.RestClient;
 using Kmandili.Views.UserViews.OrderViewsAndFilter;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -15,9 +16,11 @@ namespace Kmandili.Views.UserViews
 	public partial class UserMasterPage : ContentPage
 	{
 	    private UserMasterDetailPage userMasterDetailPage;
+	    private User user;
 		public UserMasterPage (UserMasterDetailPage userMasterDetailPage, User user)
 		{
 			InitializeComponent ();
+		    this.user = user;
 		    this.userMasterDetailPage = userMasterDetailPage;
 		    var x = user.Orders.Count(o => !o.SeenUser);
 		    UpdateOrderNotificationNumber(user.Orders.ToList());
@@ -28,7 +31,16 @@ namespace Kmandili.Views.UserViews
             App.Logout();
         }
 
-	    public void UpdateOrderNotificationNumber(List<Order> orders)
+        public async void UpdateOrderNotificationNumber()
+        {
+            UserRestClient userRC = new UserRestClient();
+            user = await userRC.GetAsyncById(App.Connected.Id);
+            if(user == null) return;
+            int number = user.Orders.Count(o => !o.SeenUser);
+            NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
+        }
+
+        public void UpdateOrderNotificationNumber(List<Order> orders)
 	    {
             int number = orders.Count(o => !o.SeenUser);
 	        NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");

@@ -22,8 +22,8 @@ namespace Kmandili.Views.PastryShopViews
 			InitializeComponent ();
 		    this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
 		    this.pastryShop = pastryShop;
-		    UpdateOrderNotificationNumber(pastryShop.Orders.ToList());
-		}
+            UpdateOrderNotificationNumber(pastryShop.Orders.ToList());
+        }
 
 	    protected async override void OnAppearing()
 	    {
@@ -34,6 +34,15 @@ namespace Kmandili.Views.PastryShopViews
 	    public void Logout(object sender, EventArgs e)
         {
             App.Logout();
+        }
+
+        public async void UpdateOrderNotificationNumber()
+        {
+            PastryShopRestClient pastryShopRestClient = new PastryShopRestClient();
+            pastryShop = await pastryShopRestClient.GetAsyncById(pastryShop.ID);
+            if (pastryShop == null) return;
+            int number = pastryShop.Orders.Count(o => !o.SeenPastryShop);
+            NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         public void UpdateOrderNotificationNumber(List<Order> orders)
@@ -63,5 +72,6 @@ namespace Kmandili.Views.PastryShopViews
             pastryShopMasterDetailPage.IsPresented = false;
             await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShopMasterDetailPage));
         }
+        
     }
 }

@@ -23,7 +23,6 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 		public FilterPopupPage (UserOrderList userOrderList, List<Status> selectedStatuses )
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-            CloseWhenBackgroundIsClicked = false;
             this.userOrderList = userOrderList;
 		    this.selectedStatuses = selectedStatuses;
 			InitializeComponent ();

@@ -136,6 +136,11 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private async void RemoveGestureRecognizer_Tapped(object sender, EventArgs e)
         {
+            if (pastryShop.PastryShopDeleveryMethods.Count == 1)
+            {
+                await DisplayAlert("Erreur", "Il faut avoir au moins une methode de livraison!", "Ok");
+                return;
+            }
             int ID = Int32.Parse((sender as StackLayout).ClassId);
             RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
             if(!(await pastryShopDeleverMethodRC.DeleteAsync(ID))) return;
@@ -146,7 +151,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    {
 	        if (reloadParent)
 	        {
-                (pastryShopMasterDetailPage.Detail as PastryShopProfile).Reload();
+                pastryShopMasterDetailPage.ReloadPastryShop();
             }
 	    }
 	}

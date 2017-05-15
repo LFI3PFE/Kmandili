@@ -112,7 +112,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             if (!order.SeenPastryShop)
             {
                 OrderRestClient orderRC = new OrderRestClient();
-                if(await orderRC.MarkAsSeenPastryShop(order.ID))
+                if (await orderRC.MarkAsSeenPastryShop(order.ID))
                     updateParent = true;
             }
         }
