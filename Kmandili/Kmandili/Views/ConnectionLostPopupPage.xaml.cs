@@ -45,5 +45,10 @@ namespace Kmandili.Views
             };
 		    Content = contentLayout;
 		}
+
+	    protected override bool OnBackButtonPressed()
+	    {
+	        return true;
+	    }
 	}
 }
