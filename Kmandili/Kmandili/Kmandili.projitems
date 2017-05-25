@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\CartProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\Connected.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\SortType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\TokenResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Order.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\OrderProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Parking.cs" />
@@ -37,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\PointOfSale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PriceRange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AuthorizationRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />

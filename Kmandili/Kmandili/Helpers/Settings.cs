@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Kmandili.Models.LocalModels;
+using Newtonsoft.Json;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -16,7 +17,6 @@ namespace Kmandili.Helpers
                 return CrossSettings.Current;
             }
         }
-
 
         public static string Email
         {
@@ -66,12 +66,48 @@ namespace Kmandili.Helpers
             }
         }
 
+        public static string Type
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<string>("Type", "");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<string>("Type", value);
+            }
+        }
+
+        public static string ExpireDate
+        {
+            get
+            {
+                return AppSettings.GetValueOrDefault<string>("ExpireDate", "");
+            }
+            set
+            {
+                AppSettings.AddOrUpdateValue<string>("ExpireDate", value);
+            }
+        }
+
         public static void ClearSettings()
         {
             Email = "";
             Password = "";
             Id = -1;
             Token = "";
+            Type = "";
+            ExpireDate = "";
+        }
+
+        public static void SetSettings(string email, string password, int id, string token, string type, string expireDate)
+        {
+            Email = email;
+            Password = password;
+            Id = id;
+            Token = token;
+            Type = type;
+            ExpireDate = expireDate;
         }
 
     }

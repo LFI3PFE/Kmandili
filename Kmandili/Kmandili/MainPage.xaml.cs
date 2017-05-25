@@ -78,68 +78,47 @@ namespace Kmandili
             }
         }
 
+        private bool TokenExpired()
+        {
+            if (string.IsNullOrEmpty(Settings.ExpireDate)) return false;
+            var expireDate = DateTime.ParseExact(Settings.ExpireDate,
+                    System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern,
+                    System.Globalization.CultureInfo.CurrentCulture);
+            return expireDate < DateTime.Now;
+        }
+
         public async void SignInAction(string email, string password)
         {
             isLoading(true);
-            UserRestClient userRC = new UserRestClient();
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            User u;
-            try
+            if (Settings.Id < 0 || TokenExpired())
             {
-                u = await userRC.GetAsyncByEmailAndPass(email, password);
-            }
-            catch (ConnectionLostException e)
-            {
-                isLoading(false);
-                return;
-            }
-            if (u != null)
-            {
-                if (Settings.Id < 0)
-                {
-                    Settings.Email = u.Email;
-                    Settings.Password = u.Password;
-                    Settings.Id = u.ID;
-                    Settings.Token = "";
-                    isLoading(false);
-                }
-                Email.Text = "";
-                Password.Text = "";
-                App.setMainPage(new UserMasterDetailPage(u));
-            }
-            else
-            {
-                PastryShop p;
-                try
-                {
-                    p = await pastryShopRC.GetAsyncByEmailAndPass(email, password);
-                }
-                catch (ConnectionLostException e)
-                {
-                    isLoading(false);
-                    return;
-                }
-                if (p != null)
-                {
-                    if (Settings.Id < 0)
-                    {
-                        Settings.Email = p.Email;
-                        Settings.Password = p.Password;
-                        Settings.Id = p.ID;
-                        Settings.Token = "";
-                    }
-                    isLoading(false);
-                    Email.Text = "";
-                    Password.Text = "";
-                    App.setMainPage(new PastryShopMasterDetailPage(p));
-                }
-                else
+                var authorizationRestClient = new AuthorizationRestClient();
+                var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
+                if (tokenResponse == null)
                 {
                     isLoading(false);
                     await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
                     Email.Focus();
-                    Settings.ClearSettings();
+                    return;
                 }
+                Settings.SetSettings(email, password, tokenResponse.UserId, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+            }
+            Email.Text = "";
+            Password.Text = "";
+            switch (Settings.Type)
+            {
+                case "u":
+                    var userRestClient = new UserRestClient();
+                    var u = await userRestClient.GetAsyncById(Settings.Id);
+                    isLoading(false);
+                    App.setMainPage(new UserMasterDetailPage(u));
+                    break;
+                case "p":
+                    var pastryShopRestClient = new PastryShopRestClient();
+                    var p = await pastryShopRestClient.GetAsyncById(Settings.Id);
+                    isLoading(false);
+                    App.setMainPage(new PastryShopMasterDetailPage(p));
+                    break;
             }
         }
 
