@@ -6,8 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Kmandili.Helpers;
 using Kmandili.Views;
-using Newtonsoft.Json;
-using Org.Json;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
