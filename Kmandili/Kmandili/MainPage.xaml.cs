@@ -78,19 +78,10 @@ namespace Kmandili
             }
         }
 
-        private bool TokenExpired()
-        {
-            if (string.IsNullOrEmpty(Settings.ExpireDate)) return false;
-            var expireDate = DateTime.ParseExact(Settings.ExpireDate,
-                    System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern,
-                    System.Globalization.CultureInfo.CurrentCulture);
-            return expireDate < DateTime.Now;
-        }
-
         public async void SignInAction(string email, string password)
         {
             isLoading(true);
-            if (Settings.Id < 0 || TokenExpired())
+            if (Settings.Id < 0 || App.TokenExpired())
             {
                 var authorizationRestClient = new AuthorizationRestClient();
                 var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
