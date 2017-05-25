@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
@@ -43,7 +44,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             this.reloadParent = reloadParentval;
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-	        pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+	        pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
             if (pastryShop == null) return;
             ContentLayout.Children.Clear();
 	        foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
@@ -45,7 +46,7 @@ namespace Kmandili.Views.UserViews
         private async void load()
         {
             UserRestClient userRestClient = new UserRestClient();
-            user = await userRestClient.GetAsyncById(App.Connected.Id);
+            user = await userRestClient.GetAsyncById(Settings.Id);
             if (user == null) return;
             Name.Text = user.Name;
             LastName.Text = user.LastName;

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.PastryShopViews.SignIn;
@@ -155,7 +156,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         public async void load()
         {
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+            pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
             if (pastryShop == null) return;
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             priceRanges = await priceRangeTypeRC.GetAsync();

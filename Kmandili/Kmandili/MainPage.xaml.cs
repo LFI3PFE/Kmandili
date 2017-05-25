@@ -7,7 +7,9 @@ using Kmandili.Views.UserViews;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Views;
+using Newtonsoft.Json;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -93,33 +95,16 @@ namespace Kmandili
             }
             if (u != null)
             {
-                Connected connected = new Connected();
-                connected.type = typeof(User).Name;
-                connected.Id = u.ID;
-                connected.Email = u.Email;
-                connected.Password = u.Password;
-
-                App.Connected = connected;
-                isLoading(false);
+                if (Settings.Id < 0)
+                {
+                    Settings.Email = u.Email;
+                    Settings.Password = u.Password;
+                    Settings.Id = u.ID;
+                    Settings.Token = "";
+                    isLoading(false);
+                }
                 Email.Text = "";
                 Password.Text = "";
-                //App.Current.MainPage = new UserMasterDetailPage(u);
-                //switch (Device.RuntimePlatform)
-                //{
-                //    case Device.iOS:
-                //        App.Current.MainPage = new UserMasterDetailPage(u);
-                //        break;
-                //    case Device.Android:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //    case Device.WinPhone:
-                //    case Device.Windows:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //    default:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //}
                 App.setMainPage(new UserMasterDetailPage(u));
             }
             else
@@ -136,33 +121,16 @@ namespace Kmandili
                 }
                 if (p != null)
                 {
-                    Connected connected = new Connected();
-                    connected.type = typeof(PastryShop).Name;
-                    connected.Id = p.ID;
-                    connected.Email = p.Email;
-                    connected.Password = p.Password;
-
-                    App.Connected = connected;
+                    if (Settings.Id < 0)
+                    {
+                        Settings.Email = p.Email;
+                        Settings.Password = p.Password;
+                        Settings.Id = p.ID;
+                        Settings.Token = "";
+                    }
                     isLoading(false);
                     Email.Text = "";
                     Password.Text = "";
-                    //App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                    //switch (Device.RuntimePlatform)
-                    //{
-                    //    case Device.iOS:
-                    //        App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                    //        break;
-                    //    case Device.Android:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //    case Device.WinPhone:
-                    //    case Device.Windows:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //    default:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //}
                     App.setMainPage(new PastryShopMasterDetailPage(p));
                 }
                 else
@@ -177,6 +145,15 @@ namespace Kmandili
         private async void RestPasswordTapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new PasswordResetEmailPopupPage());
+        }
+
+        protected override void OnAppearing()
+        {
+            if (Settings.Id > -1)
+            {
+                SignInAction(Settings.Email, Settings.Password);
+                //App.Cart = Settings.Cart;
+            }
         }
     }
 }

@@ -6,6 +6,7 @@
     "System.Net.Http": "4.3.0",
     "Xam.Plugin.Connectivity": "2.3.0",
     "Xam.Plugin.Media": "2.6.2",
+    "Xam.Plugins.Settings": "2.5.8",
     "Xamarin.Forms": "2.3.4.224",
     "Xamarin.Forms.RangeSlider": "0.6.17"
   },

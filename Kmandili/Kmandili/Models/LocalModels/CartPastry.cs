@@ -14,6 +14,7 @@ namespace Kmandili.Models.LocalModels
         }
 
         public PastryShop PastryShop { get; set; }
+
         public List<CartProduct> CartProducts { get; set; }
         public double Total {
             get {

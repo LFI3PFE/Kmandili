@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Kmandili.Helpers;
 using Kmandili.Views;
+using Newtonsoft.Json;
+using Org.Json;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -15,7 +18,7 @@ namespace Kmandili
 	{
         //public static string ServerURL = "http://192.168.1.5:300/";
         public static string ServerURL = "http://seifiisexpress.sytes.net:300/";
-        public static Connected Connected = null;
+        //public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
         public App ()
@@ -59,7 +62,8 @@ namespace Kmandili
 
         public async static void Logout()
         {
-            Connected = null;
+            Settings.ClearSettings();
+            //Connected = null;
             Cart.Clear();
             galleryIsOpent = false;
             Current.MainPage = new NavigationPage(new MainPage());
@@ -88,8 +92,8 @@ namespace Kmandili
 
 		protected override void OnSleep ()
 		{
-			// Handle when your app sleeps
-		}
+            // Handle when your app sleeps
+        }
 
 		protected override void OnResume ()
 		{

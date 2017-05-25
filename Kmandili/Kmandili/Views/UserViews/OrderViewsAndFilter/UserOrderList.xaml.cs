@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models.LocalModels;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -145,7 +146,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = await orderRC.GetAsyncByUserID(App.Connected.Id);
+            orders = await orderRC.GetAsyncByUserID(Settings.Id);
             if (orders == null) return;
             orders = orders.OrderBy(o => o.SeenUser).ToList();
             displayedOrders.Clear();
