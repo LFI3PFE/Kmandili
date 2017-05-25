@@ -138,6 +138,7 @@ namespace Kmandili
                     isLoading(false);
                     await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
                     Email.Focus();
+                    Settings.ClearSettings();
                 }
             }
         }
