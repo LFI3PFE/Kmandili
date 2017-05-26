@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Helpers;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -134,14 +135,22 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void DeleteTapGesture_Tapped(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             int ID = Int32.Parse(((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId);
             PointOfSale pointOfSale = pastryShop.PointOfSales.FirstOrDefault(p => p.ID == ID);
-            if (pointOfSale != null)
+            if (pointOfSale == null)
             {
-                RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-                if(!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID))) return;
-                load();
+                await PopupNavigation.PopAsync();
+                return;
             }
+            RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
+            if (!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID)))
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
+            await PopupNavigation.PopAsync();
+            load();
         }
 
         private string TimeSpanToTime(TimeSpan time)
@@ -177,20 +186,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             NoResultsLabel.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
+            AddBt.IsEnabled = false;
+            ContinueBt.IsEnabled = false;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
             if(pastryShop == null) return;
-            LoadingLayout.IsVisible = false;
-            Loading.IsRunning = false;
-            if (pastryShop != null && pastryShop.PointOfSales.Count != 0)
-            {
-
-                NoResultsLabel.IsVisible = false;
-            }
-            else
+            ContinueBt.IsEnabled = true;
+            if (pastryShop == null || pastryShop.PointOfSales.Count == 0)
             {
                 NoResultsLabel.IsVisible = true;
+                ContinueBt.IsEnabled = false;
             }
+            LoadingLayout.IsVisible = false;
+            Loading.IsRunning = false;
+            AddBt.IsEnabled = true;
             foreach (PointOfSale p in pastryShop.PointOfSales)
             {
                 CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p));
@@ -199,9 +208,15 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void DeletePointOfSale(Object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             int ID = Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-            if(!(await pointOfSaleRC.DeleteAsync(ID))) return;
+            if (!(await pointOfSaleRC.DeleteAsync(ID)))
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
+            await PopupNavigation.PopAsync();
             load();
         }
 
@@ -219,9 +234,13 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             if (pastryShop.PointOfSales.Count != 0)
             {
-                var page = new MainPage();
-                page.SignInAction(pastryShop.Email, pastryShop.Password);
-                App.Current.MainPage = new NavigationPage(page);
+                //var page = new MainPage();
+                //page.SignInAction(pastryShop.Email, pastryShop.Password);
+                var authorizationRestClient = new AuthorizationRestClient();
+                var tokenResponse =
+                    await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
+                Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                App.Current.MainPage = new NavigationPage(new MainPage());
             }
             else
             {

@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using Kmandili.Helpers;
 using Plugin.Connectivity;
 
 namespace Kmandili.Models.RestClient
@@ -50,8 +51,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<List<T>> GetAsync()
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
                 var json = await httpClient.GetStringAsync(WebServiceUrl);
@@ -68,8 +70,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<T> GetAsyncById(int id)
         {
-            if (!(await CheckConnection())) return default(T);
+            if (!(await CheckConnection()) || (App.TokenExpired())) return default(T);
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
                 var json = await httpClient.GetStringAsync(WebServiceUrl + id);
@@ -86,8 +89,9 @@ namespace Kmandili.Models.RestClient
         
         public async Task<T> PostAsync(T t)
         {
-            if (!(await CheckConnection())) return default(T);
+            if (!(await CheckConnection()) || (App.TokenExpired())) return default(T);
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             var json = JsonConvert.SerializeObject(t);
 
@@ -102,8 +106,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> PutAsync(int id, T t)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             var json = JsonConvert.SerializeObject(t);
 
@@ -118,8 +123,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             var response = await httpClient.DeleteAsync(WebServiceUrl + id);
 

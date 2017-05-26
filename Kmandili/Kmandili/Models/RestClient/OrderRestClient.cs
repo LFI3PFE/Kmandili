@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 
 namespace Kmandili.Models.RestClient
 {
@@ -12,8 +13,9 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<List<Order>> GetAsyncByUserID(int id)
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
                 var json = await httpClient.GetStringAsync(App.ServerURL + "api/ordersByUserID/" + id);
@@ -31,8 +33,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<List<Order>> GetAsyncByPastryShopID(int id)
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
                 var json = await httpClient.GetStringAsync(App.ServerURL + "api/ordersByPastryShopID/" + id);
@@ -49,8 +52,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> MarkAsSeenUser(int id)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
 
@@ -59,8 +63,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> MarkAsSeenPastryShop(int id)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || App.TokenExpired()) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);
 

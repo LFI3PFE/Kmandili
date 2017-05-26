@@ -1,7 +1,7 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using System;
-
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,13 +25,18 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Liste.ItemsSource = null;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
+            AddBt.IsEnabled = false;
+            ContinueBt.IsEnabled = false;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
             if (pastryShop == null) return;
-            if(pastryShop.Products.Count == 0)
+            ContinueBt.IsEnabled = true;
+            if (pastryShop.Products.Count == 0)
             {
                 NoResultsLabel.IsVisible = true;
+                ContinueBt.IsEnabled = false;
             }
+            AddBt.IsEnabled = true;
             LoadingLayout.IsVisible = false;
             Loading.IsRunning = false;
             Liste.ItemsSource = pastryShop.Products;
@@ -39,13 +44,19 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void DeleteProduct(Object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             NoResultsLabel.IsVisible = false;
             Liste.ItemsSource = null;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             int ID = Int32.Parse(((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<Product> productRC = new RestClient<Product>();
-            if(!(await productRC.DeleteAsync(ID))) return;
+            if (!(await productRC.DeleteAsync(ID)))
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
+            await PopupNavigation.PopAsync();
             load();
         }
 

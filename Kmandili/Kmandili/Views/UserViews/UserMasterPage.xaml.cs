@@ -23,7 +23,6 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 		    this.user = user;
 		    this.userMasterDetailPage = userMasterDetailPage;
-		    var x = user.Orders.Count(o => !o.SeenUser);
 		    UpdateOrderNotificationNumber(user.Orders.ToList());
 		}
 

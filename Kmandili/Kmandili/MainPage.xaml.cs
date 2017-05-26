@@ -78,7 +78,7 @@ namespace Kmandili
             }
         }
 
-        public async void SignInAction(string email, string password)
+        private async void SignInAction(string email, string password)
         {
             isLoading(true);
             if (Settings.Id < 0 || App.TokenExpired())

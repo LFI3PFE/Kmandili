@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -39,10 +40,12 @@ namespace Kmandili.Views.UserViews
 
         private async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             if (phoneNumberTypes == null) return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout()
@@ -223,22 +226,26 @@ namespace Kmandili.Views.UserViews
         public async void ConfirmBt_Clicked(object sender, EventArgs e)
         {
             if (!await valid()) return;
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRC = new UserRestClient();
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
             {
+                await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
                 Email.Text = "";
                 return;
             }
+            await PopupNavigation.PopAsync();
             await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
         }
 
 	    public async void EmailVerified()
 	    {
+	        await PopupNavigation.PopAllAsync();
+	        await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRC = new UserRestClient();
             RestClient<Address> addressRC = new RestClient<Address>();
-            RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
             
             Address address = new Address()
             {
@@ -250,7 +257,11 @@ namespace Kmandili.Views.UserViews
                 ZipCode = Int32.Parse(ZipCode.Text)
             };
             address = await addressRC.PostAsync(address);
-            if (address == null) return;
+	        if (address == null)
+	        {
+	            await PopupNavigation.PopAsync();
+	            return;
+	        }
             User user = new User()
             {
                 Name = Name.Text.ToLower(),
@@ -274,12 +285,15 @@ namespace Kmandili.Views.UserViews
             user = await userRC.PostAsync(user);
             if (user != null)
             {
-                var page = new MainPage();
-                page.SignInAction(user.Email, user.Password);
-                App.Current.MainPage = new NavigationPage(page);
+                var authorizationRestClient = new AuthorizationRestClient();
+                var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(user.Email, user.Password);
+                Settings.SetSettings(user.Email, user.Password, user.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                await PopupNavigation.PopAsync();
+                App.Current.MainPage = new NavigationPage(new MainPage());
             }
             else
             {
+                await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de l'enregistrement des informations!", "Ok");
                 return;
             }

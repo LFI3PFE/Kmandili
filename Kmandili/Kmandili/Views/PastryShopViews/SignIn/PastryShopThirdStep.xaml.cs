@@ -7,7 +7,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Helpers;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -80,6 +81,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             RestClient<DeleveryDelay> deleveryDelayRC = new RestClient<DeleveryDelay>();
             deleveryDelays = await deleveryDelayRC.GetAsync();
             if (deleveryDelays == null) return;
@@ -106,6 +108,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             };
             localDeleveryMethods.Add(local);
             DeleveryMethodsListView.ItemsSource = localDeleveryMethods;
+            await PopupNavigation.PopAsync();
         }
 
         private void selectedNot(object sender, EventArgs e)
@@ -207,6 +210,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void NextBt_Clicked(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             List<PastryShopDeleveryMethod> PSdeleveryMethods = new List<PastryShopDeleveryMethod>();
             foreach (deleveryMethodLocal delevery in localDeleveryMethods)
             {
@@ -238,11 +242,13 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             if (PSdeleveryMethods.Count == 0)
             {
+                await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Au moins une methode de livraison avec une methode de payment doit être fournit!", "Ok!");
                 return;
             }
             if (categorySwitchs.Count == 0)
             {
+                await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Au moins une catégorie doit être séléctionné!", "Ok!");
                 return;
             }
@@ -265,6 +271,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
                 if (pastry == null)
                 {
+                    await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur lors de l'enregistrement des informations!", "Ok");
                     return;
                 }
@@ -278,14 +285,26 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         pastryShopDM.PastryDeleveryPayments.Clear();
                         RestClient<PastryShopDeleveryMethod> pastryShopDeleveryMethodRC = new RestClient<PastryShopDeleveryMethod>();
                         PastryShopDeleveryMethod PSDM = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDM);
-                        if (PSDM == null) return;
+                        if (PSDM == null)
+                        {
+                            await PopupNavigation.PopAsync();
+                            return;
+                        }
                         foreach (PastryDeleveryPayment p in pastryDeleveryPayments)
                         {
                             //p.PastryShopDeleveryMethods.Add(pastryShopDM);
                             p.PastryShopDeleveryMethod_FK = PSDM.ID;
-                            if(await pastryDeleveryPaymentRC.PostAsync(p) == null) return;
+                            if (await pastryDeleveryPaymentRC.PostAsync(p) == null)
+                            {
+                                await PopupNavigation.PopAsync();
+                                return;
+                            }
                         }
                     }
+                    var authorizationRestClient = new AuthorizationRestClient();
+                    var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(pastry.Email, pastry.Password);
+                    Settings.SetSettings(pastry.Email, pastry.Password, pastry.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                    await PopupNavigation.PopAsync();
                     await Navigation.PushAsync(new PastryShopEnteringMenu(pastry));
                 }
             }
