@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -87,12 +88,13 @@ namespace Kmandili.Views.UserViews
         {
             if (reload)
             {
+                App.updatePastryList = true;
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
                 if (pastryShop == null) return;
             }
             Rating.Text = pastryShop.Rating.ToString();
-            NumberOfReviews.Text = "(" + pastryShop.NumberOfRatings.ToString() + " avis)";
+            NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
             Cover.Source = pastryShop.CoverPic;
             ProfilImage.Source = pastryShop.ProfilePic;
             PastryName.Text = pastryShop.Name;
@@ -315,6 +317,7 @@ namespace Kmandili.Views.UserViews
 
         public async void ResetToolbar()
         {
+            ReactionLabel.IsVisible = false;
             await RatingLayout.TranslateTo(0, 0);
             RatingLayout.IsVisible = false;
             ToolbarItems.Clear();
@@ -327,7 +330,6 @@ namespace Kmandili.Views.UserViews
             {
                 i.Source = "emptyStar.png";
             }
-            ReactionLabel.Text = "";
         }
 
         public async void ProductListOnClick(Object sender, EventArgs e)
@@ -339,31 +341,55 @@ namespace Kmandili.Views.UserViews
         {
             if (starIndex != 0)
             {
-                PastryShop pastryShopTemp = new PastryShop()
-                {
-                    ID = pastryShop.ID,
-                    Name = pastryShop.Name,
-                    Email = pastryShop.Email,
-                    Password = pastryShop.Password,
-                    Address_FK = pastryShop.Address_FK,
-                    ProfilePic = pastryShop.ProfilePic,
-                    CoverPic = pastryShop.CoverPic,
-                    PriceRange_FK = pastryShop.PriceRange_FK,
-                    LongDesc = pastryShop.LongDesc,
-                    ShortDesc = pastryShop.ShortDesc,
-                    NumberOfRatings = ++pastryShop.NumberOfRatings,
-                    RatingSum = pastryShop.RatingSum + starIndex,
-                };
+                //PastryShop pastryShopTemp = new PastryShop()
+                //{
+                //    ID = pastryShop.ID,
+                //    Name = pastryShop.Name,
+                //    Email = pastryShop.Email,
+                //    Password = pastryShop.Password,
+                //    Address_FK = pastryShop.Address_FK,
+                //    ProfilePic = pastryShop.ProfilePic,
+                //    CoverPic = pastryShop.CoverPic,
+                //    PriceRange_FK = pastryShop.PriceRange_FK,
+                //    LongDesc = pastryShop.LongDesc,
+                //    ShortDesc = pastryShop.ShortDesc,
+                //    NumberOfRatings = ++pastryShop.NumberOfRatings,
+                //    RatingSum = pastryShop.RatingSum + starIndex,
+                //};
 
-                var x = pastryShopTemp;
-                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                if(!(await pastryShopRC.PutAsync(pastryShop.ID, pastryShopTemp)));
+                //var x = pastryShopTemp;
+                //PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+                //if(!(await pastryShopRC.PutAsync(pastryShop.ID, pastryShopTemp)));
+                var rating = pastryShop.Ratings.FirstOrDefault(r => r.User_FK == Settings.Id);
+                if ((rating != null) && (rating.Value != starIndex))
+                {
+                    rating.PastryShop = null;
+                    rating.User = null;
+                    rating.Value = starIndex;
+                    var ratingRC = new RatingRestClient();
+                    await PopupNavigation.PushAsync(new LoadingPopupPage());
+                    if (!(await ratingRC.PutAsync(rating.User_FK, rating.PastryShop_FK, rating)))
+                    {
+                        await DisplayAlert("Erreur", "Une erreur s'est produite pendant la mise à jours de votre avis.", "Ok");
+                    }
+                    await PopupNavigation.PopAsync();
+                }
+                else
+                {
+                    rating = new Rating();
+                    rating.User_FK = Settings.Id;
+                    rating.PastryShop_FK = pastryShop.ID;
+                    rating.Value = starIndex;
+                    var ratingRC = new RatingRestClient();
+                    await PopupNavigation.PushAsync(new LoadingPopupPage());
+                    if ((await ratingRC.PostAsync(rating)) == null)
+                    {
+                        await DisplayAlert("Erreur", "Une erreur s'est produite pendant la ajout de votre avis.", "Ok");
+                    }
+                    await PopupNavigation.PopAsync();
+                }
                 Load(true);
                 ResetToolbar();
-            }
-            else
-            {
-                ReactionLabel.Text = "Select a star!";
             }
         }
 
@@ -372,8 +398,18 @@ namespace Kmandili.Views.UserViews
             ResetToolbar();
         }
 
-        public void RateOnClick(Object sender, EventArgs e)
+        public async void RateOnClick(Object sender, EventArgs e)
         {
+            var ratingRC = new RatingRestClient();
+            var rating = await ratingRC.GetAsyncById(Settings.Id, pastryShop.ID);
+            if (rating != null)
+            {
+                ReactionLabel.IsVisible = true;
+                for (var i = 0; i < rating.Value; i++)
+                {
+                    ((RatingStack.Children as IList<View>).ElementAt(i) as Image).Source = "fullStar.png";
+                }
+            }
             this.ToolbarItems.Clear();
             this.ToolbarItems.Add(submitItem);
             this.ToolbarItems.Add(cancelItem);
@@ -391,29 +427,29 @@ namespace Kmandili.Views.UserViews
         {
             var x = sender as Image;
             starIndex = int.Parse(x.ClassId);
-            switch (starIndex)
-            {
-                case 1:
-                    ReactionLabel.Text = hate_string;
-                    ReactionLabel.TextColor = Color.Black;
-                    break;
-                case 2:
-                    ReactionLabel.Text = dislike_string;
-                    ReactionLabel.TextColor = Color.Black;
-                    break;
-                case 3:
-                    ReactionLabel.Text = ok_string;
-                    ReactionLabel.TextColor = Color.Black;
-                    break;
-                case 4:
-                    ReactionLabel.Text = like_string;
-                    ReactionLabel.TextColor = Color.Black;
-                    break;
-                case 5:
-                    ReactionLabel.Text = love_string;
-                    ReactionLabel.TextColor = Color.FromHex("#c84f3b");
-                    break;
-            }
+            //switch (starIndex)
+            //{
+            //    case 1:
+            //        ReactionLabel.Text = hate_string;
+            //        ReactionLabel.TextColor = Color.Black;
+            //        break;
+            //    case 2:
+            //        ReactionLabel.Text = dislike_string;
+            //        ReactionLabel.TextColor = Color.Black;
+            //        break;
+            //    case 3:
+            //        ReactionLabel.Text = ok_string;
+            //        ReactionLabel.TextColor = Color.Black;
+            //        break;
+            //    case 4:
+            //        ReactionLabel.Text = like_string;
+            //        ReactionLabel.TextColor = Color.Black;
+            //        break;
+            //    case 5:
+            //        ReactionLabel.Text = love_string;
+            //        ReactionLabel.TextColor = Color.FromHex("#c84f3b");
+            //        break;
+            //}
             var lsi = RatingStack.Children;
             foreach (Image i in lsi)
             {
@@ -427,5 +463,18 @@ namespace Kmandili.Views.UserViews
                 }
             }
         }
+
+	    private async void RemoveRating(object sender, EventArgs e)
+	    {
+	        await PopupNavigation.PushAsync(new LoadingPopupPage());
+	        var ratingRC = new RatingRestClient();
+	        if(!(await ratingRC.DeleteAsync(Settings.Id, pastryShop.ID)))
+	        {
+	            await DisplayAlert("Erreur", "Une erreur s'est produite pendant la suppression de votre avis.", "Ok");
+	        }
+	        await PopupNavigation.PopAsync();
+            Load(true);
+            ResetToolbar();
+	    }
     }
 }

@@ -478,8 +478,6 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 LongDesc = LongDesc.Text,
                 ShortDesc = ShortDesc.Text,
                 PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID,
-                NumberOfRatings = pastryShop.NumberOfRatings,
-                RatingSum = pastryShop.RatingSum,
                 ProfilePic = pastryShop.ProfilePic,
                 CoverPic = pastryShop.CoverPic,
             };

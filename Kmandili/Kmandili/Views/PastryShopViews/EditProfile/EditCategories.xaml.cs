@@ -137,8 +137,6 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 ProfilePic = pastryShop.ProfilePic,
                 PriceRange_FK = pastryShop.PriceRange_FK,
                 Address_FK = pastryShop.Address_FK,
-                NumberOfRatings = pastryShop.NumberOfRatings,
-                RatingSum = pastryShop.RatingSum,
                 Categories = pastryShop.Categories
 	        };
             toRemoveCategories.ForEach(rc => p.Categories.Remove(p.Categories.FirstOrDefault(c => c.ID == rc.ID)));

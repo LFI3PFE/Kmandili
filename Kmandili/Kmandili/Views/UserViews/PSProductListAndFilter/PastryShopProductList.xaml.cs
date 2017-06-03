@@ -213,7 +213,7 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
             ResetSearch();
         }
 
-        public void SelectedNot(object sender, EventArgs e)
+	    public void SelectedNot(object sender, EventArgs e)
         {
             (sender as ListView).SelectedItem = null;
         }

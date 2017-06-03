@@ -1,6 +1,7 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using System;
+using System.Linq;
 using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -64,8 +65,8 @@ namespace Kmandili.Views.PastryShopViews
 
         private void Load()
         {
-            Rating.Text = pastryShop.Rating.ToString();
-            NumberOfReviews.Text = "(" + pastryShop.NumberOfRatings.ToString() + " avis)";
+            Rating.Text = pastryShop.Ratings.Sum(r => r.Value).ToString();
+            NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
             Cover.Source = pastryShop.CoverPic;
             ProfilImage.Source = pastryShop.ProfilePic;
             PastryName.Text = pastryShop.Name;

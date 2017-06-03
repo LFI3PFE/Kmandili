@@ -148,12 +148,22 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             pastryShops = await pastryShopRC.GetAsync();
             if (pastryShops == null) return;
             pastryShops = pastryShops.OrderBy(p => p.Name).ToList();
+            displayedPastryShops.Clear();
             pastryShops.ForEach(p => displayedPastryShops.Add(p));
             selectedSortType.SortTypeIndex = 0;
             selectedSortType.IsAsc = true; 
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             ListLayout.IsVisible = true;
+        }
+
+        protected override void OnAppearing()
+        {
+            if (App.updatePastryList)
+            {
+                load();
+                App.updatePastryList = false;
+            }
         }
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
@@ -211,11 +221,11 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
 	            res = res.OrderByDescending(p => p.Name).ToList();
 	        }else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
 	        {
-	            res = res.OrderBy(p => p.Rating).ToList();
+	            res = res.OrderBy(p => p.Ratings.Sum(r => r.Value)).ToList();
 	        }
 	        else
 	        {
-	            res = res.OrderByDescending(p => p.Rating).ToList();
+	            res = res.OrderByDescending(p => p.Ratings.Sum(r => r.Value)).ToList();
 	        }
             displayedPastryShops.Clear();
             res.ForEach(p=> displayedPastryShops.Add(p));

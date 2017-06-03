@@ -50,8 +50,11 @@
                                 </Image.GestureRecognizers>
                             </Image>
                         </StackLayout>
-                        <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" WidthRequest="150" HorizontalOptions="Center">
-                            <Label BackgroundColor="Transparent" x:Name="ReactionLabel" FontSize="25" TextColor="Black" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                        <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" Padding="0,0,10,0" WidthRequest="150" HorizontalOptions="Center">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="RemoveRating"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="Supprimer mon avis" IsVisible="False" BackgroundColor="Transparent" x:Name="ReactionLabel" FontSize="15" FontAttributes="Bold" TextColor="Black" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
                         </StackLayout>
                     </StackLayout>
                 </RelativeLayout>

@@ -39,7 +39,7 @@
                                                             <Label Text="{Binding Rating}" FontSize="25" TextColor="Black"/>
                                                         </StackLayout>
                                                     </StackLayout>
-                                                    <Label Text="{Binding NumberOfRatings, StringFormat='({0:F0} reviews)'}" FontSize="15" TextColor="Black"/>
+                                                    <Label Text="{Binding Ratings.Count, StringFormat='({0:F0} avis)'}" FontSize="15" TextColor="Black"/>
                                                 </StackLayout>
                                             </StackLayout>
                                         </StackLayout>

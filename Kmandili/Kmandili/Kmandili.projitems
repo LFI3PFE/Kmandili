@@ -38,12 +38,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\PointOfSale.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PriceRange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Rating.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AuthorizationRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PasswordResetRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PastryShopRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\RatingRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\UploadRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\UserRestClient.cs" />

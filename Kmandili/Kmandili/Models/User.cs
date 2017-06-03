@@ -9,8 +9,8 @@ namespace Kmandili.Models
         public User()
         {
             this.Orders = new HashSet<Order>();
+            this.Ratings = new HashSet<Rating>();
             this.PhoneNumbers = new HashSet<PhoneNumber>();
-            JoindDate = DateTime.Now;
         }
 
         public int ID { get; set; }
@@ -23,6 +23,7 @@ namespace Kmandili.Models
 
         public virtual Address Address { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<PhoneNumber> PhoneNumbers { get; set; }
     }
 }

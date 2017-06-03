@@ -19,6 +19,7 @@ namespace Kmandili
         //public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
+	    public static bool updatePastryList = false;
         public App ()
 		{
 			InitializeComponent();
