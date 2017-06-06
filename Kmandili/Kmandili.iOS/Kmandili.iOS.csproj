@@ -112,6 +112,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BaseUrl_iOS.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -390,6 +391,15 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\categories.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Chart.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\local.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\Main.js" />
   </ItemGroup>
   <Import Project="..\Kmandili\Kmandili.projitems" Label="Shared" Condition="Exists('..\Kmandili\Kmandili.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

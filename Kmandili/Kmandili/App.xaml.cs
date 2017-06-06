@@ -23,8 +23,9 @@ namespace Kmandili
         public App ()
 		{
 			InitializeComponent();
-            
-			MainPage = new NavigationPage(new MainPage());
+
+            //MainPage = new WebViewTest();
+            MainPage = new NavigationPage(new MainPage());
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
 		}
 

@@ -14,6 +14,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToNotConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IBaseUrl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -40,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Rating.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AuthorizationRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ChartsRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />
@@ -227,6 +229,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\UserViews\UserSignUpForm.xaml.cs">
       <DependentUpon>UserSignUpForm.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WebViewTest.xaml.cs">
+      <DependentUpon>WebViewTest.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -452,6 +458,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PasswordResetPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WebViewTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

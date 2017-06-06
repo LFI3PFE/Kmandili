@@ -100,6 +100,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BaseUrl.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -118,6 +119,7 @@
     <Content Include="cancel.png" />
     <Content Include="cart.png" />
     <Content Include="categories.png" />
+    <Content Include="Chart.js" />
     <Content Include="close.png" />
     <Content Include="confirm.png" />
     <Content Include="cubeSend.png" />
@@ -125,6 +127,8 @@
     <Content Include="emptyCart.png" />
     <Content Include="emptyStar.png" />
     <Content Include="fullStarItem.png" />
+    <Content Include="local.html" />
+    <Content Include="Main.js" />
     <Content Include="_1.png" />
     <Content Include="_2.png" />
     <Content Include="_3.png" />

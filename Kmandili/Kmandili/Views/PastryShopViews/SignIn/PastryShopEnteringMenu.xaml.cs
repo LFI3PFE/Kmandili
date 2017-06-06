@@ -44,12 +44,15 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void DeleteProduct(Object sender, EventArgs e)
         {
+            Label label =
+                ((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as
+                    StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label);
+            int ID = Int32.Parse(label.Text);
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             NoResultsLabel.IsVisible = false;
             Liste.ItemsSource = null;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            int ID = Int32.Parse(((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<Product> productRC = new RestClient<Product>();
             if (!(await productRC.DeleteAsync(ID)))
             {

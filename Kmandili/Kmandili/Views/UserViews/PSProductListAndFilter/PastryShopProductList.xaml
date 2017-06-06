@@ -12,8 +12,8 @@
                     <Label Text="(Aucun Produit Trouvé)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
                 </StackLayout>
             </StackLayout>
-            <StackLayout Padding="0,20,0,0" x:Name="ListLayout">
-                <ListView x:Name="List" HasUnevenRows="True" ItemSelected="SelectedNot">
+            <StackLayout Padding="0,20,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
+                <ListView x:Name="List" HasUnevenRows="True" ItemSelected="SelectedNot" VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -22,7 +22,7 @@
                                     <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                         <StackLayout Padding="5" VerticalOptions="Center">
                                             <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                                <Image Source="{Binding Pic}" Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+                                                <Image Source="{Binding Pic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="0">
