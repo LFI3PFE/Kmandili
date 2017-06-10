@@ -120,6 +120,7 @@
     <Content Include="cart.png" />
     <Content Include="categories.png" />
     <Content Include="Chart.js" />
+    <Content Include="chart.png" />
     <Content Include="close.png" />
     <Content Include="confirm.png" />
     <Content Include="cubeSend.png" />

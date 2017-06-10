@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.Charts;
 using Kmandili.Views.PastryShopViews.EditProfile;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -72,6 +73,29 @@ namespace Kmandili.Views.PastryShopViews
             pastryShopMasterDetailPage.IsPresented = false;
             await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShopMasterDetailPage));
         }
-        
+
+	    private async void ToChart(object sender, EventArgs e)
+	    {
+            pastryShopMasterDetailPage.IsPresented = false;
+	        var doughnutPage = new Doughnut()
+	        {
+                Icon = "",
+                Title = "Meilleurs produits"
+	        };
+	        var linePage = new Line()
+	        {
+	            Icon = "",
+	            Title = "Graphe des commandes"
+	        };
+            TabbedPage chartsPage = new TabbedPage()
+            {
+                Children =
+                {
+                    linePage,
+                    doughnutPage,
+                }
+            };
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(chartsPage);
+        }
     }
 }

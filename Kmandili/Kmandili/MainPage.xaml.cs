@@ -102,12 +102,24 @@ namespace Kmandili
                     var userRestClient = new UserRestClient();
                     var u = await userRestClient.GetAsyncById(Settings.Id);
                     isLoading(false);
+                    if (u == null)
+                    {
+                        await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
+                        Settings.ClearSettings();
+                        return;
+                    }
                     App.setMainPage(new UserMasterDetailPage(u));
                     break;
                 case "p":
                     var pastryShopRestClient = new PastryShopRestClient();
                     var p = await pastryShopRestClient.GetAsyncById(Settings.Id);
                     isLoading(false);
+                    if (p == null)
+                    {
+                        await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
+                        Settings.ClearSettings();
+                        return;
+                    }
                     App.setMainPage(new PastryShopMasterDetailPage(p));
                     break;
             }

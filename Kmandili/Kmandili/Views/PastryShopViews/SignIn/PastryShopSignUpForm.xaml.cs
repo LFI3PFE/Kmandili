@@ -249,6 +249,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         public async void ConfirmBt_Clicked(object sender, EventArgs e)
         {
             if (!await valid()) return;
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             UserRestClient userRC = new UserRestClient();
             if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
@@ -257,6 +258,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 Email.Text = "";
                 return;
             }
+            await PopupNavigation.PopAllAsync();
             await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
         }
 
@@ -297,8 +299,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             //NavigationPage navigationPage = new NavigationPage(new ContentPage());
             //await navigationPage.PushAsync(new PastryShopUploadPhotos(pastryShop));
             //toUpload = true;
-            await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
-        }
+            //await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
+	        await Navigation.PushAsync(new PastryShopThirdStep(pastryShop));
+	    }
 
         private void editorFocused(object sender, EventArgs e)
         {

@@ -19,6 +19,11 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             load();
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
+
         public async void load()
         {
             NoResultsLabel.IsVisible = false;

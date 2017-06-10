@@ -149,6 +149,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 s.ClassId = PhoneNumberStackLayouts.IndexOf(s).ToString();
                 PhoneNumbersLayout.Children.Add(s);
             }
+            if(!PhoneNumberStackLayouts.Any()) return;
             PhoneNumberStackLayouts.Last().Children[2].IsVisible = true;
             PhoneNumberStackLayouts.Last().Children[3].IsVisible = false;
         }
@@ -187,6 +188,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             State.Text = pastryShop.Address.State;
             Country.Text = pastryShop.Address.Country;
 
+            PhoneNumberStackLayouts.Clear();
             foreach (var phoneNumber in pastryShop.PhoneNumbers)
             {
                 StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(phoneNumber);

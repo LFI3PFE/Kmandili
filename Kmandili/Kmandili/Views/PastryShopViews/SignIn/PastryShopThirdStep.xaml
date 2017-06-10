@@ -14,7 +14,7 @@
                 <StackLayout Padding="10,30,0,10">
                     <Label Text="Les Catégories:" FontSize="23" TextColor="Black"/>
                 </StackLayout>
-                <StackLayout Padding="30,0,0,0">
+                <StackLayout x:Name="CategoriesContentLayout" Padding="30,0,0,0">
                     <ListView x:Name="CategoriesListView" ItemSelected="selectedNot" RowHeight="30" HeightRequest="30" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -37,44 +37,26 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackLayout>
+                <StackLayout x:Name="LoadingLayout" IsVisible="False">
+                    <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="20" IsRunning="False"/>
+                </StackLayout>
             </StackLayout>
-            <StackLayout Padding="10,0,0,0">
-                <StackLayout>
+            <StackLayout>
+                <StackLayout Padding="10,30,0,0">
                     <Label Text="Methodes de Livraison:" FontSize="23" TextColor="Black"/>
                 </StackLayout>
-                <StackLayout Padding="20,0,0,0">
-                    <ListView x:Name="DeleveryMethodsListView" ItemSelected="selectedNot" HasUnevenRows="True">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout>
-                                        <StackLayout Orientation="Horizontal">
-                                            <Picker x:Name="DeleverMethodPicker" StyleClass="first" WidthRequest="160" ClassId="{Binding Index}" SelectedIndexChanged="DeleverMethodPicker_SelectedIndexChanged" PropertyChanged="DeleverMethodPicker_PropertyChanged" ItemsSource="{Binding DeleveryMethods}"/>
-                                            <Picker x:Name="DelayPicker" WidthRequest="120" PropertyChanged="DelayPicker_PropertyChanged" SelectedIndexChanged="DelayPicker_SelectedIndexChanged" ItemsSource="{Binding DeleveryDelays}"/>
-                                            <Image Source="add.png" HeightRequest="20" IsVisible="{Binding IsLast}">
-                                                <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="Add_Tapped" NumberOfTapsRequired="1"/>
-                                                </Image.GestureRecognizers>
-                                            </Image>
-                                            <Image Source="delete.png" HeightRequest="20" ClassId="{Binding Index}" IsVisible="{Binding IsLast, Converter={StaticResource BoolToNotConverter}}">
-                                                <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Tapped="Remove_Tapped" NumberOfTapsRequired="1"/>
-                                                </Image.GestureRecognizers>
-                                            </Image>
-                                        </StackLayout>
-                                        <StackLayout Padding="20,0,0,0">
-                                            <Label Text="Methodes de Payment:" FontSize="15" TextColor="Black"/>
-                                        </StackLayout>
-                                        <StackLayout Padding="40,0,0,0"></StackLayout>
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                <StackLayout Padding="0,0,0,0" x:Name="ContentLayout" IsVisible="False"></StackLayout>
+                <StackLayout x:Name="NoDeleveryMethoLayout" IsVisible="False">
+                    <Label Text="(Pas Encore de méthodes de livraison)" FontSize="20" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center"/>
                 </StackLayout>
+                <Label Text="Ajouter une" FontSize="25" TextColor="DodgerBlue" HorizontalOptions="Center" HorizontalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AddDeleveryMethoTapped"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
-            <StackLayout HorizontalOptions="End" Padding="0,60,0,0">
-                <Button x:Name="NextBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="30" FontAttributes="Bold" Clicked="NextBt_Clicked"/>
+            <StackLayout HorizontalOptions="End" VerticalOptions="FillAndExpand" Padding="0,60,20,30">
+                <Button x:Name="NextBt" VerticalOptions="EndAndExpand" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Suivant" WidthRequest="150" FontSize="30" FontAttributes="Bold" Clicked="NextBt_Clicked"/>
             </StackLayout>
         </StackLayout>
     </ScrollView>

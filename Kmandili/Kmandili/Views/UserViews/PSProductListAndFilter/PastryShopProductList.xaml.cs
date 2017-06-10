@@ -90,6 +90,7 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
+                BodyLayout.HeightRequest = (double) (displayedProducts.Count*105);
                 ListLayout.IsVisible = true;
             }
         }

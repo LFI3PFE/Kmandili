@@ -71,6 +71,14 @@
       <DependentUpon>PasswordResetPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\Charts\Doughnut.xaml.cs">
+      <DependentUpon>Doughnut.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\Charts\Line.xaml.cs">
+      <DependentUpon>Line.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\EditProfile\AddDeleveryMethodForm.xaml.cs">
       <DependentUpon>AddDeleveryMethodForm.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -126,6 +134,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\FilterPopupPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>FilterPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\AddDeleveryMethodForm.xaml.cs">
+      <DependentUpon>AddDeleveryMethodForm.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\EmailVerificationPopupPage.xaml.cs">
       <DependentUpon>EmailVerificationPopupPage.xaml</DependentUpon>
@@ -464,6 +476,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\WebViewTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\SignIn\AddDeleveryMethodForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\Charts\Doughnut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\Charts\Line.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

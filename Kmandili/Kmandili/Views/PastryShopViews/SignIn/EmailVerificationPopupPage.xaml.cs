@@ -25,10 +25,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             this.email = email;
             this.pastryShopSignUpForm = pastryShopSignUpForm;
-            SendEmail();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
+            SendEmail();
         }
 
         public EmailVerificationPopupPage(EditProfileInfo editProfileInfo, string email)
@@ -43,8 +43,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void SendEmail()
         {
+            Code.IsVisible = false;
+            LoadingLayout.IsVisible = true;
+            Loading.IsRunning = true;
             EmailRestClient emailRC = new EmailRestClient();
             code = await emailRC.SendEmailVerification(email);
+            Loading.IsRunning = false;
+            LoadingLayout.IsVisible = false;
+            Code.IsVisible = true;
         }
 
         private async void ComfirmTapped(object sender, EventArgs e)
@@ -60,7 +66,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 {
                     editProfileInfo.EmailVerified();
                 }
-                await PopupNavigation.PopAsync();
+                await PopupNavigation.PopAllAsync();
             }
             else
             {

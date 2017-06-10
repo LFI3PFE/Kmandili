@@ -66,12 +66,5 @@ namespace Kmandili.Views.UserViews
             if (userMasterDetailPage.Detail.GetType().Name == "Cart") return;
             await userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
         }
-
-        private async void ToWebView(object sender, EventArgs e)
-        {
-            userMasterDetailPage.IsPresented = false;
-            if (userMasterDetailPage.Detail.GetType().Name == "WebViewTest") return;
-            await userMasterDetailPage.Detail.Navigation.PushAsync(new WebViewTest());
-        }
     }
 }

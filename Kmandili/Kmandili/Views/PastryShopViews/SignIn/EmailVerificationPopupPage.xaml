@@ -16,12 +16,16 @@
       EasingOut="SinIn"
       HasBackgroundAnimation="True"/>
     </pages:PopupPage.Animation>
-    <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" VerticalOptions="Center" BackgroundColor="White">
+  <!--x:Name="LoadingLayout"-->
+    <StackLayout Padding="0,20,0,0" VerticalOptions="Center" BackgroundColor="White">
         <StackLayout Margin="40,20,40,20">
             <Label VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" FontSize="20"  VerticalTextAlignment="Center"
                HorizontalTextAlignment="Center"
                Text="Un email vous a été envoyer avec un code de verification, Collez le dans le champs si dessous"/>
-            <Entry x:Name="Code" TextChanged="Code_OnTextChanged" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="150" FontSize="20" Placeholder="Code"/>
+            <Entry IsVisible="False" x:Name="Code" TextChanged="Code_OnTextChanged" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="150" FontSize="20" Placeholder="Code"/>
+            <StackLayout x:Name="LoadingLayout">
+                <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="20" IsRunning="False"/>
+            </StackLayout>
             <StackLayout VerticalOptions="End" HorizontalOptions="End" Spacing="30" Margin="0,20,0,0" Orientation="Horizontal">
                 <Label Text="Comfirmer" x:Name="ComfirmLabel" TextColor="DodgerBlue" FontSize="20" HorizontalOptions="End">
                     <Label.GestureRecognizers>

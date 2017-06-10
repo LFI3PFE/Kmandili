@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kmandili.Views.UserViews.ProductListAndFilter.ProductList">
-    <ScrollView VerticalOptions="FillAndExpand">
-        <StackLayout BackgroundColor="Transparent" x:Name="BodyLayout" VerticalOptions="FillAndExpand">
+    <ScrollView x:Name="BodyScrollView" VerticalOptions="Fill">
+        <StackLayout x:Name="BodyLayout" VerticalOptions="FillAndExpand">
             <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                 <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
             </StackLayout>

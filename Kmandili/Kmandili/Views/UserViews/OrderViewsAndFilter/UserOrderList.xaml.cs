@@ -83,6 +83,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
+                BodyLayout.HeightRequest = (double) (displayedOrders.Count*105);
                 OrderList.IsVisible = true;
             }
         }

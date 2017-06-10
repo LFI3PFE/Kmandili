@@ -83,6 +83,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
+                BodyLayout.HeightRequest = (double) (displayedOrders.Count*105);
                 OrderList.IsVisible = true;
             }
         }
