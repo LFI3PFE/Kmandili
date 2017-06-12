@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
+using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,31 +14,41 @@ namespace Kmandili.Views.PastryShopViews.Charts
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Doughnut : ContentPage
 	{
+	    private ToolbarItem refreshToolbarItem;
+
         public Doughnut()
         {
             InitializeComponent();
-            Browser.Navigated += Browser_Navigated;
-            
-        }
-
-	    protected override void OnAppearing()
-        {
-            ShowLoadingScreen();
-            var urlWebView = new UrlWebViewSource
+            refreshToolbarItem = new ToolbarItem()
             {
-                Url = App.ServerURL + "api/GetDoughnutChartView/" + Settings.Id,
+                Text = "Rafraîchir",
+                Order = ToolbarItemOrder.Primary,
+                Icon = "refresh.png"
             };
-            Browser.Source = urlWebView;
+            refreshToolbarItem.Clicked += RefreshToolbarItem_Clicked;
+            ToolbarItems.Add(refreshToolbarItem);
+            Load();
         }
 
-	    private async void Browser_Navigated(object sender, WebNavigatedEventArgs e)
+        private void RefreshToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PopAllAsync();
+            Load();
         }
 
-        private async void ShowLoadingScreen()
-        {
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
+        private async void Load()
+	    {
+            BrowserLayout.IsVisible = false;
+            LoadingLayout.IsVisible = true;
+            Loading.IsRunning = true;
+            var chartRC = new ChartsRestClient();
+            var htmlWebSource = new HtmlWebViewSource()
+            {
+                Html = await chartRC.GetChartView(App.ServerURL + "api/GetDoughnutChartView/" + Settings.Id)
+            };
+            Browser.Source = htmlWebSource;
+            Loading.IsRunning = false;
+            LoadingLayout.IsVisible = false;
+            BrowserLayout.IsVisible = true;
         }
     }
 }

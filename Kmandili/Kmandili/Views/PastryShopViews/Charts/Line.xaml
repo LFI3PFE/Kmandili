@@ -2,5 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kmandili.Views.PastryShopViews.Charts.Line">
-  <WebView x:Name="Browser"></WebView>
+  <!--<WebView x:Name="Browser"></WebView>-->
+  <StackLayout>
+    <StackLayout x:Name="LoadingLayout" VerticalOptions="CenterAndExpand">
+      <ActivityIndicator x:Name="Loading" VerticalOptions="CenterAndExpand" Color="#3b4552" HeightRequest="50"/>
+    </StackLayout>
+    <StackLayout x:Name="BrowserLayout" VerticalOptions="FillAndExpand" IsVisible="False">
+      <WebView x:Name="Browser" VerticalOptions="FillAndExpand"></WebView>
+    </StackLayout>
+  </StackLayout>
 </ContentPage>

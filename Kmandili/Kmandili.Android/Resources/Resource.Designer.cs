@@ -4252,8 +4252,8 @@ namespace Kmandili.Droid
 			// aapt resource value: 0x7f0200bc
 			public const int mr_ic_play_light = 2130837692;
 			
-			// aapt resource value: 0x7f0200c8
-			public const int notification_template_icon_bg = 2130837704;
+			// aapt resource value: 0x7f0200c9
+			public const int notification_template_icon_bg = 2130837705;
 			
 			// aapt resource value: 0x7f0200bd
 			public const int orders = 2130837693;
@@ -4268,25 +4268,28 @@ namespace Kmandili.Droid
 			public const int RedNotificationDot = 2130837696;
 			
 			// aapt resource value: 0x7f0200c1
-			public const int search = 2130837697;
+			public const int refresh = 2130837697;
 			
 			// aapt resource value: 0x7f0200c2
-			public const int seek_thumb_disabled = 2130837698;
+			public const int search = 2130837698;
 			
 			// aapt resource value: 0x7f0200c3
-			public const int seek_thumb_normal = 2130837699;
+			public const int seek_thumb_disabled = 2130837699;
 			
 			// aapt resource value: 0x7f0200c4
-			public const int seek_thumb_pressed = 2130837700;
+			public const int seek_thumb_normal = 2130837700;
 			
 			// aapt resource value: 0x7f0200c5
-			public const int shop = 2130837701;
+			public const int seek_thumb_pressed = 2130837701;
 			
 			// aapt resource value: 0x7f0200c6
-			public const int sort = 2130837702;
+			public const int shop = 2130837702;
 			
 			// aapt resource value: 0x7f0200c7
-			public const int test = 2130837703;
+			public const int sort = 2130837703;
+			
+			// aapt resource value: 0x7f0200c8
+			public const int test = 2130837704;
 			
 			static Drawable()
 			{

@@ -19,14 +19,14 @@ namespace Kmandili.Models.RestClient
             return false;
         }
 
-        public async Task<string> GetChartView(int id)
+        public async Task<string> GetChartView(string url)
         {
             if (!(await CheckConnection()) || (App.TokenExpired())) return "";
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/GetChartsView/" + id);
+                var json = await httpClient.GetStringAsync(url);
                 return json;
             }
             catch (HttpRequestException)
