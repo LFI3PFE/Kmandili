@@ -3,6 +3,7 @@ using Kmandili.Models.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -276,7 +277,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
             PastryShop pastryShop = new PastryShop()
             {
-                Name = Name.Text,
+                Name = Name.Text.ToLower(),
                 Email = Email.Text.ToLower(),
                 Password = Password.Text,
                 Address = address,

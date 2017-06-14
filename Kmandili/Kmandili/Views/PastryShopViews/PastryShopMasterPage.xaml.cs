@@ -82,7 +82,7 @@ namespace Kmandili.Views.PastryShopViews
                 Icon = "",
                 Title = "Meilleurs produits"
 	        };
-	        var linePage = new Line()
+	        var linePage = new Line(pastryShop)
 	        {
 	            Icon = "",
 	            Title = "Graphe des commandes"

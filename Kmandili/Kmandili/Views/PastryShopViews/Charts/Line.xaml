@@ -2,13 +2,31 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kmandili.Views.PastryShopViews.Charts.Line">
-  <!--<WebView x:Name="Browser"></WebView>-->
   <StackLayout>
     <StackLayout x:Name="LoadingLayout" VerticalOptions="CenterAndExpand">
       <ActivityIndicator x:Name="Loading" VerticalOptions="CenterAndExpand" Color="#3b4552" HeightRequest="50"/>
     </StackLayout>
-    <StackLayout x:Name="BrowserLayout" VerticalOptions="FillAndExpand" IsVisible="False">
-      <WebView x:Name="Browser" VerticalOptions="FillAndExpand"></WebView>
+    <StackLayout Spacing="0" x:Name="BodyLayout" VerticalOptions="FillAndExpand" IsVisible="False">
+      <StackLayout Padding="0,30,0,0" Margin="0" Spacing="0" VerticalOptions="Center" BackgroundColor="White">
+        <Label Text="Evolution des commandes" FontSize="25" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" BackgroundColor="White" Padding="0,20,0,0">
+        <StackLayout HorizontalOptions="FillAndExpand" Padding="0,0,10,0">
+          <Label HorizontalOptions="Start" x:Name="PrecedentLabel" Text="Précedent" TextColor="DodgerBlue" FontSize="20"/>
+          <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="PrecedentTapped"/>
+          </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout HorizontalOptions="FillAndExpand" Padding="0,0,10,0">
+          <Label HorizontalOptions="End" x:Name="SuivantLabel" Text="Suivant" TextColor="DodgerBlue" FontSize="20"/>
+          <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="SuivantTapped"/>
+          </StackLayout.GestureRecognizers>
+        </StackLayout>
+      </StackLayout>
+      <StackLayout Padding="0,20,0,30" Margin="0" Spacing="0" x:Name="BrowserLayout" VerticalOptions="FillAndExpand">
+        <WebView x:Name="Browser" VerticalOptions="FillAndExpand"></WebView>
+      </StackLayout>
     </StackLayout>
   </StackLayout>
 </ContentPage>

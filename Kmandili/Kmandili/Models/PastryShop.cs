@@ -16,6 +16,7 @@ namespace Kmandili.Models
             this.Ratings = new HashSet<Rating>();
             this.Categories = new HashSet<Category>();
             this.PhoneNumbers = new HashSet<PhoneNumber>();
+            JoinDate = DateTime.Now;
         }
 
         public int ID { get; set; }
@@ -28,6 +29,7 @@ namespace Kmandili.Models
         public int Address_FK { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public System.DateTime JoinDate { get; set; }
         public double Rating
         {
             get { return Ratings.Count == 0 ? 0 : Math.Round(((double)Ratings.Sum(r => r.Value) / Ratings.Count), 1); }

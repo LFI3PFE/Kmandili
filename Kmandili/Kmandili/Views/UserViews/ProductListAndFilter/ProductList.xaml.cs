@@ -100,7 +100,14 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             products = await productRC.GetAsync();
-            if (products == null) return;
+            if (products == null || products.Count == 0)
+            {
+                Loading.IsRunning = false;
+                LoadingLayout.IsVisible = false;
+                EmptyLabel.IsVisible = true;
+                ListLayout.IsVisible = false;
+                return;
+            }
             products = products.OrderBy(p => p.Name).ToList();
             products.ForEach(p => displayedProducts.Add(p));
             selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = products.Max(p => p.Price);

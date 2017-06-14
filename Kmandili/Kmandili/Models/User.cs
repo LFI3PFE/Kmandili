@@ -11,6 +11,7 @@ namespace Kmandili.Models
             this.Orders = new HashSet<Order>();
             this.Ratings = new HashSet<Rating>();
             this.PhoneNumbers = new HashSet<PhoneNumber>();
+            JoinDate = DateTime.Now;
         }
 
         public int ID { get; set; }
@@ -18,7 +19,7 @@ namespace Kmandili.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public System.DateTime JoindDate { get; set; }
+        public System.DateTime JoinDate { get; set; }
         public int Address_FK { get; set; }
 
         public virtual Address Address { get; set; }

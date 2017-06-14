@@ -37,7 +37,7 @@ namespace Kmandili.Views.PastryShopViews.Charts
 
         private async void Load()
 	    {
-            BrowserLayout.IsVisible = false;
+            BodyLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             var chartRC = new ChartsRestClient();
@@ -48,7 +48,7 @@ namespace Kmandili.Views.PastryShopViews.Charts
             Browser.Source = htmlWebSource;
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
-            BrowserLayout.IsVisible = true;
+            BodyLayout.IsVisible = true;
         }
     }
 }
