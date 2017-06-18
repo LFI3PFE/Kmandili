@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.PastryShopViews.ProductListAndFilter.ProductDetail">
+  <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="White">
+    <StackLayout x:Name="LoadingLayout" VerticalOptions="CenterAndExpand">
+      <ActivityIndicator x:Name="Loading" VerticalOptions="CenterAndExpand" Color="#3b4552" HeightRequest="50"/>
+    </StackLayout>
+    <StackLayout x:Name="BodyLayout" VerticalOptions="FillAndExpand">
+      <StackLayout HorizontalOptions="FillAndExpand" Padding="0,20,0,20">
+        <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" Text="Détails" FontAttributes="Bold" FontSize="25"></Label>
+      </StackLayout>
+      <StackLayout x:Name="DetailsLayout" Padding="10,0,0,0">
+        <StackLayout Orientation="Horizontal" Spacing="20">
+          <Label Text="Nom du produit:" FontAttributes="Bold" TextColor="Black" FontSize="20"/>
+          <Label x:Name="Name" TextColor="Black" FontSize="20"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="20">
+          <Label Text="Déscription:" FontAttributes="Bold" TextColor="Black" FontSize="20"/>
+          <Label x:Name="Desc" TextColor="Black" FontSize="20"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="20">
+          <Label Text="Prix:" FontAttributes="Bold" TextColor="Black" FontSize="20"/>
+          <Label x:Name="Price" TextColor="Black" FontSize="20"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="20">
+          <Label Text="Unité de vente:" FontAttributes="Bold" TextColor="Black" FontSize="20"/>
+          <Label x:Name="SaleUnit" TextColor="Black" FontSize="20"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" Spacing="20">
+          <Label Text="Catégorie:" FontAttributes="Bold" TextColor="Black" FontSize="20"/>
+          <Label x:Name="Category" TextColor="Black" FontSize="20"/>
+        </StackLayout>
+      </StackLayout>
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" BackgroundColor="White" Padding="0,20,0,20">
+        <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,0,0">
+          <Label HorizontalOptions="Start" x:Name="PrecedentLabel" Text="Précedent" TextColor="DodgerBlue" FontSize="20"/>
+          <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="PrecedentTapped"/>
+          </StackLayout.GestureRecognizers>
+        </StackLayout>
+        <StackLayout HorizontalOptions="FillAndExpand" Padding="0,0,20,0">
+          <Label HorizontalOptions="End" x:Name="SuivantLabel" Text="Suivant" TextColor="DodgerBlue" FontSize="20"/>
+          <StackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="SuivantTapped"/>
+          </StackLayout.GestureRecognizers>
+        </StackLayout>
+      </StackLayout>
+      <StackLayout x:Name="ChartsLayout" VerticalOptions="FillAndExpand" Padding="0,0,0,10">
+        <WebView x:Name="ChartWebView" VerticalOptions="FillAndExpand"></WebView>
+      </StackLayout>
+    </StackLayout>
+  </StackLayout>
+</ContentPage>

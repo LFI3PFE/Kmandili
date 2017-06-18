@@ -118,7 +118,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     }
                     else
                     {
-                        ProductsList.load(true);
+                        ProductsList.Load(true);
                     }
                     await PopupNavigation.PopAsync();
                     await Navigation.PopAsync();

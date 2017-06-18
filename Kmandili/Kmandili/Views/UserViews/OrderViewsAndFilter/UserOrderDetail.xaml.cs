@@ -49,6 +49,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 	    private void updateView()
 	    {
             ProductsList.ItemsSource = order.OrderProducts;
+            ProductListViewLayout.HeightRequest = order.OrderProducts.Count * 100;
             OrderID.Text = order.ID.ToString();
             PastryShopName.Text = order.PastryShop.Name;
             Date.Text = order.Date.ToString("d");

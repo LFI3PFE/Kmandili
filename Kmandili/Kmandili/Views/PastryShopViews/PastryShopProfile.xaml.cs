@@ -174,7 +174,7 @@ namespace Kmandili.Views.PastryShopViews
 
         public async void ProductListOnClick(Object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PSProductList(pastryShop));
+            await Navigation.PushAsync(new PSProductList(pastryShop, this));
         }
 
     }

@@ -562,7 +562,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    private async Task<bool> Delete(string picURL)
 	    {
-            string fileName = picURL.Substring(44, (picURL.Length - 44));
+            string fileName = picURL.Substring(App.ServerURL.Count()+8, (picURL.Length - (App.ServerURL.Count() + 8)));
 	        fileName = fileName.Substring(0, (fileName.Length - 4));
             UploadRestClient uploadRC = new UploadRestClient();
             return (await uploadRC.Delete(fileName));

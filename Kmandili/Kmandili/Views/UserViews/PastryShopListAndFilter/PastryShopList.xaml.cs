@@ -129,7 +129,7 @@ namespace Kmandili.Views.UserViews.PastryShopListAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
-                BodyLayout.HeightRequest = (double) (displayedPastryShops.Count*105);
+                BodyLayout.HeightRequest = (double) (displayedPastryShops.Count*110);
                 ListLayout.IsVisible = true;
             }
         }

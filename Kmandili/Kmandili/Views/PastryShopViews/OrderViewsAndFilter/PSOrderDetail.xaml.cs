@@ -33,7 +33,8 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             this.order = order;
 		    this.pastryShopOrderList = pastryShopOrderList;
 		    ProductsList.ItemsSource = order.OrderProducts;
-		    OrderID.Text = order.ID.ToString();
+		    ProductListViewLayout.HeightRequest = order.OrderProducts.Count*100;
+            OrderID.Text = order.ID.ToString();
 		    ClientName.Text = order.User.Name + " " + order.User.LastName;
 		    Date.Text = order.Date.ToString("d");
 		    Delevery.Text = order.DeleveryMethod.DeleveryType;

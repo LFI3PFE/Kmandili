@@ -31,10 +31,14 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    private ToolbarItem searchToolbarItem;
 	    private ToolbarItem endSearchToolbarItem;
 
-        public PSProductList(PastryShop pastryShop)
+	    private PastryShopProfile pastryShopProfile;
+	    private bool updateParent = false;
+
+        public PSProductList(PastryShop pastryShop, PastryShopProfile pastryShopProfile)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;
+            this.pastryShopProfile = pastryShopProfile;
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
             
@@ -86,7 +90,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 
             displayedProducts.CollectionChanged += DisplayedProducts_CollectionChanged;
             List.ItemsSource = displayedProducts;
-            load(false);
+            Load(false);
         }
 
         private void DisplayedProducts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -99,7 +103,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
-                BodyLayout.HeightRequest = (double) (displayedProducts.Count*105);
+                BodyLayout.HeightRequest = (double) (displayedProducts.Count*110);
                 ListLayout.IsVisible = true;
             }
         }
@@ -205,7 +209,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 Loading.IsRunning = true;
                 RestClient<Product> productRC = new RestClient<Product>();
                 if(!(await productRC.DeleteAsync(ID))) return;
-                load(true);
+                Load(true);
             }
             else
             {
@@ -218,7 +222,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             await Navigation.PushAsync(new PastryShopProductForm(this, pastryShop));
         }
 
-        public async void load(bool reload)
+        public async void Load(bool reload)
         {
             if (reload)
             {
@@ -276,6 +280,22 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    protected override void OnDisappearing()
 	    {
             ResetSearch();
+	        if (updateParent)
+	        {
+	            pastryShopProfile.Reload();
+	        }
+	    }
+
+	    private async void ToProductDetails(object sender, ItemTappedEventArgs e)
+	    {
+	        var product = (Product)e.Item;
+	        await Navigation.PushAsync(new ProductDetail(product, this));
+	    }
+
+	    public void Reload()
+	    {
+	        Load(true);
+	        updateParent = true;
 	    }
     }
 }

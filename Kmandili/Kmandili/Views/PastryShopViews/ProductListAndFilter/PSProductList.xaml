@@ -16,7 +16,7 @@
                 <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
             </StackLayout>
             <StackLayout Padding="0,20,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
-                <ListView x:Name="List" HasUnevenRows="True" ItemSelected="SelectedNot" VerticalOptions="FillAndExpand">
+                <ListView x:Name="List" HasUnevenRows="True" ItemSelected="SelectedNot" ItemTapped="ToProductDetails" VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
