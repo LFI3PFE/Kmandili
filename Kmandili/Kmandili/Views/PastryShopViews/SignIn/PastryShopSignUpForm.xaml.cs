@@ -21,7 +21,6 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         private RestClient<PriceRange> priceRangeTypeRC = new RestClient<PriceRange>();
         private List<PhoneNumberType> phoneNumberTypes;
         private List<PriceRange> priceRanges;
-        private bool toUpload = false;
 
         public PastryShopSignUpForm()
         {

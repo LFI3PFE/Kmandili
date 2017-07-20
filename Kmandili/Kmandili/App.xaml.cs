@@ -14,7 +14,7 @@ namespace Kmandili
 {
 	public partial class App : Application
 	{
-        //public static string ServerURL = "http://192.168.1.5:300/";
+        //public static string ServerURL = "http://192.168.1.4:300/";
         public static string ServerURL = "http://seifiisexpress.sytes.net:300/";
         //public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();

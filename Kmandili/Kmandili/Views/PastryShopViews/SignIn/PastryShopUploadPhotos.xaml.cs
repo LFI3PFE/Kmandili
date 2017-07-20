@@ -95,12 +95,24 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         new List<PastryShopDeleveryMethod>(pastryShop.PastryShopDeleveryMethods);
                     pastryShop.PastryShopDeleveryMethods.Clear();
                     PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+                    string coverPath = pastryShop.CoverPic;
+                    string logoPath = pastryShop.ProfilePic;
                     pastryShop = await pastryShopRC.PostAsync(pastryShop);
-
+                    
                     if (pastryShop == null)
                     {
                         await PopupNavigation.PopAsync();
                         await DisplayAlert("Erreur", "Erreur lors de l'enregistrement des informations!", "Ok");
+                        if (!(await Delete(coverPath)))
+                        {
+                            await DisplayAlert("Erreur", "Erreur lors de la supression de la couverture!", "Ok");
+                            return;
+                        }
+                        if (!(await Delete(logoPath)))
+                        {
+                            await DisplayAlert("Erreur", "Erreur lors de la supression de la couverture!", "Ok");
+                            return;
+                        }
                         return;
                     }
                     else
@@ -162,6 +174,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return App.ServerURL + "Uploads/" + fileName + ".jpg";
             }
             return null;
+        }
+
+        private async Task<bool> Delete(string picURL)
+        {
+            string fileName = picURL.Substring(App.ServerURL.Count() + 8, (picURL.Length - (App.ServerURL.Count() + 8)));
+            fileName = fileName.Substring(0, (fileName.Length - 4));
+            UploadRestClient uploadRC = new UploadRestClient();
+            return (await uploadRC.Delete(fileName));
         }
     }
 }
