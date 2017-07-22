@@ -26,6 +26,9 @@ namespace Kmandili.Models.RestClient
                 return taskModels;
             }catch(HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return null;
             }
         }
@@ -44,6 +47,9 @@ namespace Kmandili.Models.RestClient
             }
             catch (HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return null;
             }
         }
@@ -59,10 +65,19 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            try
+            {
+                var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
 
-            var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
-
-            return result.IsSuccessStatusCode;
+                return result.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
     }
 }

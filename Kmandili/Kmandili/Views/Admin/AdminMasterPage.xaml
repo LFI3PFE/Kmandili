@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.Admin.AdminMasterPage"
+             Title="Menu">
+  <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="#f2f2f2">
+    <StackLayout x:Name="CoverLayout" HorizontalOptions="FillAndExpand" HeightRequest="155" BackgroundColor="Brown">
+      <Image Source="test.jpg"/>
+    </StackLayout>
+    <StackLayout Padding="0,30,0,0" Spacing="0">
+      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+        <!--<StackLayout.GestureRecognizers>
+          <TapGestureRecognizer Tapped="UpdateUser_OnTapped" NumberOfTapsRequired="1"/>
+        </StackLayout.GestureRecognizers>-->
+        <Grid VerticalOptions="Center">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+          </Grid.ColumnDefinitions>
+          <StackLayout Grid.Row="0" Grid.Column="0" Padding="20,11,0,0">
+            <Image Source="accountEdit.png" HeightRequest="25" VerticalOptions="Center"/>
+          </StackLayout>
+          <StackLayout Grid.Row="0" Grid.Column="1" Padding="0,10,0,0">
+            <Label Text="Modifier mes info." TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"></Label>
+          </StackLayout>
+        </Grid>
+      </StackLayout>
+      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+        <!--<StackLayout.GestureRecognizers>
+          <TapGestureRecognizer Tapped="ToOrderList" NumberOfTapsRequired="1"/>
+        </StackLayout.GestureRecognizers>-->
+        <Grid VerticalOptions="Center">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+          </Grid.ColumnDefinitions>
+          <StackLayout Grid.Row="0" Grid.Column="0" Padding="20,11,0,0">
+            <Image Source="orders.png" HeightRequest="25" VerticalOptions="Center"/>
+          </StackLayout>
+          <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Padding="0,10,0,0">
+            <Label Text="Commandes" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" Padding="0,5,20,0">
+              <Image x:Name="NorificationsNumber" Source="" HorizontalOptions="End" HeightRequest="18"/>
+            </StackLayout>
+          </StackLayout>
+        </Grid>
+      </StackLayout>
+      <StackLayout Margin="0,1,0,0" HeightRequest="230" HorizontalOptions="FillAndExpand" BackgroundColor="White"></StackLayout>
+      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+        <!--<StackLayout.GestureRecognizers>
+          <TapGestureRecognizer Tapped="ToCart" NumberOfTapsRequired="1"/>
+        </StackLayout.GestureRecognizers>-->
+        <Grid VerticalOptions="Center">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+          </Grid.ColumnDefinitions>
+          <StackLayout Grid.Row="0" Grid.Column="0" Padding="20,11,0,0">
+            <Image Source="cart.png" HeightRequest="25" VerticalOptions="Center"/>
+          </StackLayout>
+          <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Padding="0,10,0,0">
+            <Label Text="Chariot" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
+          </StackLayout>
+        </Grid>
+      </StackLayout>
+      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+        <StackLayout.GestureRecognizers>
+          <TapGestureRecognizer Tapped="Logout" NumberOfTapsRequired="1"/>
+        </StackLayout.GestureRecognizers>
+        <Grid VerticalOptions="Center">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5*"/>
+          </Grid.ColumnDefinitions>
+          <StackLayout Grid.Row="0" Grid.Column="0" Padding="20,11,0,0">
+            <Image Source="logout.png" HeightRequest="25" VerticalOptions="Center"/>
+          </StackLayout>
+          <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Padding="0,10,0,0">
+            <Label Text="Déconnexion" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
+          </StackLayout>
+        </Grid>
+      </StackLayout>
+      <StackLayout Margin="0,1,0,0" VerticalOptions="FillAndExpand" HeightRequest="20" HorizontalOptions="FillAndExpand" BackgroundColor="White"></StackLayout>
+    </StackLayout>
+  </StackLayout>
+</ContentPage>

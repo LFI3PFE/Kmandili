@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Kmandili.Views;
+using Kmandili.Views.Admin;
 using Newtonsoft.Json;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
@@ -27,22 +28,27 @@ namespace Kmandili
 
         public async Task<bool> valid()
         {
-            if (Email.Text == null || Email.Text.Length == 0)
+            if (String.IsNullOrEmpty(Email.Text))
             {
                 await DisplayAlert("Erreur Email", "L'adresse email est obligatoire", "OK");
                 return false;
+            }
+            if (String.IsNullOrEmpty(Password.Text))
+            {
+                await DisplayAlert("Erreur mot de passe", "Mot de passe obligatoir", "OK");
+                return false;
+            }
+            if (Email.Text == "Admin" && Password.Text == "AdminPass")
+            {
+                return true;
             }
             if (!App.isValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur Email", "Adresse email invalide", "OK");
                 return false;
             }
-            
-            if (Password.Text == null || Password.Text.Length == 0)
-            {
-                await DisplayAlert("Erreur mot de passe", "Mot de passe obligatoir", "OK");
-                return false;
-            }
+
+            Email.Text = Email.Text.ToLower();
             return true;
         }
 
@@ -74,7 +80,7 @@ namespace Kmandili
         {
             if (await valid())
             {
-                SignInAction(Email.Text.ToLower(), Password.Text);
+                SignInAction(Email.Text, Password.Text);
             }
         }
 
@@ -98,6 +104,10 @@ namespace Kmandili
             Password.Text = "";
             switch (Settings.Type)
             {
+                case "a":
+                    isLoading(false);
+                    App.setMainPage(new AdminMasterDetailPage());
+                    break;
                 case "u":
                     var userRestClient = new UserRestClient();
                     var u = await userRestClient.GetAsyncById(Settings.Id);

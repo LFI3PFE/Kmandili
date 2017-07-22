@@ -55,6 +55,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Status.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\User.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\WorkDay.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\AdminMasterDetailPage.xaml.cs">
+      <DependentUpon>AdminMasterDetailPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\AdminMasterPage.xaml.cs">
+      <DependentUpon>AdminMasterPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\ConnectionLostPopupPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>ConnectionLostPopupPage.xaml</DependentUpon>
@@ -514,6 +522,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\PastryShopViews\ProductListAndFilter\ProductEditForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\AdminMasterDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\AdminMasterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

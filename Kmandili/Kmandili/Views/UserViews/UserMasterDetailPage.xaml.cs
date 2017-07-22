@@ -17,20 +17,6 @@ namespace Kmandili.Views.UserViews
 	{
         private class MyTabbedPage : TabbedPage
         {
-            private UserMasterDetailPage userMasterDetailPage;
-            public MyTabbedPage(UserMasterDetailPage userMasterDetailPage)
-            {
-                this.userMasterDetailPage = userMasterDetailPage;
-            }
-
-            //protected async override void OnAppearing()
-            //{
-            //    OrderRestClient orderRC = new OrderRestClient();
-            //    var orders = await orderRC.GetAsyncByUserID(App.Connected.Id);
-            //    if (orders == null) return;
-            //    (userMasterDetailPage.Master as UserMasterPage)?.UpdateOrderNotificationNumber(orders);
-            //}
-
             protected override bool OnBackButtonPressed()
             {
                 return true;
@@ -57,7 +43,7 @@ namespace Kmandili.Views.UserViews
                 Title = "Liste des Produits"
             };
 #pragma warning restore 618
-            MyTabbedPage tab = new MyTabbedPage(this)
+            MyTabbedPage tab = new MyTabbedPage()
             {
                 Children =
                 {

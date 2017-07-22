@@ -26,6 +26,9 @@ namespace Kmandili.Models.RestClient
             }
             catch (HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return default(Rating);
             }
         }
@@ -41,10 +44,19 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            try
+            {
+                var result = await httpClient.PutAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/", httpContent);
 
-            var result = await httpClient.PutAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/", httpContent);
-
-            return result.IsSuccessStatusCode;
+                return result.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteAsync(int user_fk, int pastryShop_fk)
@@ -52,10 +64,18 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-
-            var response = await httpClient.DeleteAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
-
-            return response.IsSuccessStatusCode;
+            try
+            {
+                var response = await httpClient.DeleteAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
     }
 }

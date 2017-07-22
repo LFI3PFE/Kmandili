@@ -64,6 +64,9 @@ namespace Kmandili.Models.RestClient
             }
             catch (HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return null;
             }
         }
@@ -83,6 +86,9 @@ namespace Kmandili.Models.RestClient
             }
             catch (HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return default(T);
             }
         }
@@ -98,10 +104,19 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var result = await httpClient.PostAsync(WebServiceUrl, httpContent);
-            var taskModels = JsonConvert.DeserializeObject<T>(await result.Content.ReadAsStringAsync());
-            return taskModels;
+            try
+            {
+                var result = await httpClient.PostAsync(WebServiceUrl, httpContent);
+                var taskModels = JsonConvert.DeserializeObject<T>(await result.Content.ReadAsStringAsync());
+                return taskModels;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return default(T);
+            }
         }
 
         public async Task<bool> PutAsync(int id, T t)
@@ -115,10 +130,18 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            var result = await httpClient.PutAsync(WebServiceUrl + id, httpContent);
-
-            return result.IsSuccessStatusCode;
+            try
+            {
+                var result = await httpClient.PutAsync(WebServiceUrl + id, httpContent);
+                return result.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -127,9 +150,19 @@ namespace Kmandili.Models.RestClient
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
-            var response = await httpClient.DeleteAsync(WebServiceUrl + id);
+            try
+            {
+                var response = await httpClient.DeleteAsync(WebServiceUrl + id);
 
-            return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
     }
 }

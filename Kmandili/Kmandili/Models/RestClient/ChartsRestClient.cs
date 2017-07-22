@@ -31,6 +31,9 @@ namespace Kmandili.Models.RestClient
             }
             catch (HttpRequestException)
             {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
                 return "";
             }
         }

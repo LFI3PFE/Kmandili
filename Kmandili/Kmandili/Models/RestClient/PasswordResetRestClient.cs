@@ -25,10 +25,19 @@ namespace Kmandili.Models.RestClient
         {
             if (!(await CheckConnection())) return false;
             var httpClient = new HttpClient();
+            try
+            {
+                var result = await httpClient.PutAsync(App.ServerURL + "api/passwords/" + email + "/" + newPassword + "/", null);
 
-            var result = await httpClient.PutAsync(App.ServerURL + "api/passwords/" + email + "/" + newPassword + "/", null);
-
-            return result.IsSuccessStatusCode;
+                return result.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    App.Current.MainPage.DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+                return false;
+            }
         }
     }
 }
