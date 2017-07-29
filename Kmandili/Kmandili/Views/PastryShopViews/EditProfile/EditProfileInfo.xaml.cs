@@ -37,13 +37,12 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private ToolbarItem cancelChangeProfilePicToolbarItem;
         private ToolbarItem cancelChangeCoverPicToolbarItem;
 
-        private PastryShopMasterDetailPage pastryShopMasterDetailPage;
-	    public bool UpdateParent = false;
+	    private int ID;
 
-        public EditProfileInfo (PastryShopMasterDetailPage pastryShopMasterDetailPage)
+        public EditProfileInfo (int ID)
 		{
 			InitializeComponent ();
-            this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
+            this.ID = ID;
             changeProfilePicToolbarItem = new ToolbarItem()
             {
                 Text = "Changher la photo de profile",
@@ -158,7 +157,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+            pastryShop = await pastryShopRC.GetAsyncById(ID);
             if (pastryShop == null)
             {
                 await PopupNavigation.PopAsync();
@@ -513,7 +512,6 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             }
             await DisplayAlert("Succées", "Votre profil à été mis à jour!", "Ok");
             await PopupNavigation.PopAsync();
-            UpdateParent = true;
             await Navigation.PopAsync();
         }
 
@@ -531,7 +529,8 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                         Email.Text = "";
                         return;
                     }
-                    await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                    var x = new EmailVerificationPopupPage(this, Email.Text.ToLower());
+                    await PopupNavigation.PushAsync(x);
                 }
                 else
                 {
@@ -539,14 +538,6 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 }
             }
         }
-
-	    protected override void OnDisappearing()
-	    {
-	        if (UpdateParent)
-	        {
-                pastryShopMasterDetailPage.ReloadPastryShop();
-            }
-	    }
 
 	    private async Task<string> Upload(MediaFile upfile)
         {
@@ -578,13 +569,16 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	                    "Ok");
                 return;
 	        }
-            await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
-            var pastryShopRC = new PastryShopRestClient();
+            var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
+	        if (!choix) return;
+	        var pastryShopRC = new PastryShopRestClient();
 	        if (await pastryShopRC.DeleteAsync(pastryShop.ID))
 	        {
-	            await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
-                App.Logout();
+	            await DisplayAlert("Succées", "Votre Compte a été supprimer.", "Ok");
+	            App.Logout();
+                return;
 	        }
-	    }
+            await DisplayAlert("Erreur", "Une Erreur s'est produite lors de la suppression de votre compte, veuillez réessayer plus tard!.", "Ok");
+        }
 	}
 }

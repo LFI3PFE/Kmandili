@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Rg.Plugins.Popup.Services;
@@ -252,14 +253,23 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             UserRestClient userRC = new UserRestClient();
-            if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+            try
             {
-                await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                Email.Text = "";
-                return;
+                if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                {
+                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                    Email.Text = "";
+                    return;
+                }
+                await PopupNavigation.PopAllAsync();
+                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
             }
-            await PopupNavigation.PopAllAsync();
-            await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur","Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                await Navigation.PopAsync();
+            }
         }
 
 	    public async void EmailVerified()

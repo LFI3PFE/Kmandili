@@ -35,10 +35,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             this.email = email;
             this.editProfileInfo = editProfileInfo;
-            SendEmail();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
+            SendEmail();
         }
 
         private async void SendEmail()

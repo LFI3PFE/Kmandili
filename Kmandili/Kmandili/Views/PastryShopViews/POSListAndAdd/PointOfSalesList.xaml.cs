@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -40,9 +41,11 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
 	    {
 	        if (reload)
 	        {
+	            await PopupNavigation.PushAsync(new LoadingPopupPage());
 	            var pastryShopRC = new PastryShopRestClient();
 	            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
-	            if (pastryShop == null) return;
+	            await PopupNavigation.PopAsync();
+	            if (pastryShop == null)return;
 	        }
             CoreStackLayout.Children.Clear();
             pastryShop.PointOfSales.ToList().ForEach(p => CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p)));
@@ -170,11 +173,13 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
 	            await DisplayAlert("Erreur", "Il faut avoir au moins un point de vente!", "Ok");
                 return;
 	        }
+	        await PopupNavigation.PushAsync(new LoadingPopupPage());
             int ID = Int32.Parse(((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId);
             PointOfSale pointOfSale = pastryShop.PointOfSales.FirstOrDefault(p => p.ID == ID);
             if (pointOfSale != null)
             {
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
+                await PopupNavigation.PopAllAsync();
                 if(!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID))) return;
                 Load(true);
             }

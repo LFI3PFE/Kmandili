@@ -10,6 +10,7 @@ namespace Kmandili.Views.PastryShopViews
 	public partial class PastryShopMasterDetailPage : MasterDetailPage
 	{
         private PastryShopProfile pastryShopProfile;
+        public bool hasNavigatedToEdit = false;
 
 		public PastryShopMasterDetailPage (PastryShop pastryShop)
 		{

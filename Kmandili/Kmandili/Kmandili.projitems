@@ -63,6 +63,18 @@
       <DependentUpon>AdminMasterPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PastryShopListAndFilter\FilterPopupPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FilterPopupPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PastryShopListAndFilter\PastryShopList.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PastryShopList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PSProfile\PastryShopProfile.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>PastryShopProfile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\ConnectionLostPopupPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>ConnectionLostPopupPage.xaml</DependentUpon>
@@ -270,6 +282,18 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PastryShopListAndFilter\FilterPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PastryShopListAndFilter\PastryShopList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\PSProfile\PastryShopProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

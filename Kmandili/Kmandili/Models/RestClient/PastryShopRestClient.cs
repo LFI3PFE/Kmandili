@@ -11,27 +11,32 @@ namespace Kmandili.Models.RestClient
 {
     class PastryShopRestClient : RestClient<PastryShop>
     {
-        public async Task<PastryShop> GetAsyncByEmailAndPass(string email, string password)
-        {
-            if (!(await CheckConnection()))
-            {
-                throw new ConnectionLostException();
-            }
-            var httpClient = new HttpClient();
-            try
-            {
-                var json = await httpClient.GetStringAsync(WebServiceUrl + email + "/" + password);
-                var taskModels = JsonConvert.DeserializeObject<PastryShop>(json);
+        //public async Task<PastryShop> GetAsyncByEmailAndPass(string email, string password)
+        //{
+        //    if (!(await CheckConnection()))
+        //    {
+        //        throw new ConnectionLostException();
+        //    }
+        //    var httpClient = new HttpClient();
+        //    try
+        //    {
+        //        var json = await httpClient.GetStringAsync(WebServiceUrl + email + "/" + password);
+        //        var taskModels = JsonConvert.DeserializeObject<PastryShop>(json);
 
-                return taskModels;
-            }catch(HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
-            }
-        }
+        //        return taskModels;
+        //    }catch(HttpRequestException ex)
+        //    {
+        //        if (ex.Message == "404 (Not Found)")
+        //        {
+        //            return null;
+        //        }
+        //        throw;
+        //        //await
+        //        //    App.Current.MainPage.DisplayAlert("Erreur",
+        //        //        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
+        //        //return null;
+        //    }
+        //}
 
         public async Task<PastryShop> GetAsyncByEmail(string email)
         {
@@ -42,15 +47,15 @@ namespace Kmandili.Models.RestClient
             {
                 var json = await httpClient.GetStringAsync(WebServiceUrl + "byemail/" + email + "/");
                 var taskModels = JsonConvert.DeserializeObject<PastryShop>(json);
-
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return null;
+                }
+                throw;
             }
         }
 

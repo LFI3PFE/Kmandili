@@ -25,7 +25,7 @@
                         <TapGestureRecognizer Tapped="Dismiss"></TapGestureRecognizer>
                     </Label.GestureRecognizers>
                 </Label>
-                <Label Text="Ajouter" FontSize="18" TextColor="DodgerBlue">
+                <Label Text="Appliquer" FontSize="18" TextColor="DodgerBlue">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Apply"></TapGestureRecognizer>
                     </Label.GestureRecognizers>

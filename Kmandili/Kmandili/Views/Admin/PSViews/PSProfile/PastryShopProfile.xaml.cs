@@ -1,30 +1,39 @@
-﻿using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Kmandili.Models;
+using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews;
 using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
-using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 using Rg.Plugins.Popup.Services;
+using Kmandili.Views.PastryShopViews.ProductListAndFilter;
+using Kmandili.Views.PastryShopViews.EditProfile;
+using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
 
-namespace Kmandili.Views.PastryShopViews
+namespace Kmandili.Views.Admin.PSViews.PSProfile
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PastryShopProfile : ContentPage
 	{
         private ToolbarItem ProductList;
         private ToolbarItem pointOfSaleList;
+	    private ToolbarItem editToolbarItem;
         private PastryShop pastryShop;
-        private PastryShopMasterDetailPage pastryShopMasterDetailPage;
 
-        public PastryShopProfile(PastryShopMasterDetailPage pastryShopMasterDetailPage, PastryShop pastryShop)
+	    private bool hasNavigatedToEdit = false;
+	    private bool updateParent = false;
+
+	    private PastryShopList pastryShopList;
+
+        public PastryShopProfile(PastryShop pastryShop, PastryShopList pastryShopList)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;
-            this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
-            //ToolbarItems.Clear();
+            this.pastryShopList = pastryShopList;
             ProductList = new ToolbarItem
             {
                 Icon = "products.png",
@@ -41,10 +50,44 @@ namespace Kmandili.Views.PastryShopViews
             };
             pointOfSaleList.Clicked += PointOfSaleList_Clicked;
 
+            editToolbarItem = new ToolbarItem()
+            {
+                Text = "Modifier",
+                Order = ToolbarItemOrder.Primary,
+                Icon = "edit.png"
+            };
+            editToolbarItem.Clicked += EditToolbarItem_Clicked;
+
             ToolbarItems.Add(ProductList);
+            ToolbarItems.Add(editToolbarItem);
             ToolbarItems.Add(pointOfSaleList);
             Load();
         }
+
+        private async void EditToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            hasNavigatedToEdit = true;
+            await Navigation.PushAsync(new EditProfileInfo(pastryShop.ID));
+        }
+
+	    protected override void OnAppearing()
+	    {
+	        if (hasNavigatedToEdit)
+	        {
+	            Reload();
+	            hasNavigatedToEdit = false;
+	            updateParent = true;
+	        }
+	    }
+
+	    protected override void OnDisappearing()
+	    {
+	        if (updateParent)
+	        {
+	            pastryShopList.load();
+	            updateParent = false;
+	        }
+	    }
 
         private async void PointOfSaleList_Clicked(object sender, EventArgs e)
         {
@@ -57,13 +100,8 @@ namespace Kmandili.Views.PastryShopViews
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
             await PopupNavigation.PopAllAsync();
-            if(pastryShop == null) return;
+            if (pastryShop == null) return;
             Load();
-        }
-
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
         }
 
         private void Load()
@@ -82,7 +120,7 @@ namespace Kmandili.Views.PastryShopViews
             {
                 Grid grid = new Grid()
                 {
-                    RowDefinitions = {new RowDefinition() { Height = GridLength.Auto} },
+                    RowDefinitions = { new RowDefinition() { Height = GridLength.Auto } },
                     ColumnDefinitions =
                     {
                         new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) },
@@ -183,14 +221,5 @@ namespace Kmandili.Views.PastryShopViews
             await PopupNavigation.PopAllAsync();
             await Navigation.PushAsync(new PSProductList(pastryShop));
         }
-
-        protected override void OnAppearing()
-        {
-            if (pastryShopMasterDetailPage.hasNavigatedToEdit)
-            {
-                Reload();
-                pastryShopMasterDetailPage.hasNavigatedToEdit = false;
-            }
-        }
-	}
+    }
 }

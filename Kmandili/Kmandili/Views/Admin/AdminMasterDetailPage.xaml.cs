@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -34,7 +34,7 @@ namespace Kmandili.Views.Admin
                         Icon = Device.OnPlatform("shop.png", null, "shop.png"),
                         Title = "Users Dashboard"
                     },
-                    new ContentPage()
+                    new PastryShopList()
                     {
                         Icon = Device.OnPlatform("shop.png", null, "shop.png"),
                         Title = "PastryShops Dashboard"

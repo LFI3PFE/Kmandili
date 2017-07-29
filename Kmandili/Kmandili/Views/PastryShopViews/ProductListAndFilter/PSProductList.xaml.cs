@@ -31,14 +31,10 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    private ToolbarItem searchToolbarItem;
 	    private ToolbarItem endSearchToolbarItem;
 
-	    private PastryShopProfile pastryShopProfile;
-	    private bool updateParent = false;
-
-        public PSProductList(PastryShop pastryShop, PastryShopProfile pastryShopProfile)
+        public PSProductList(PastryShop pastryShop)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;
-            this.pastryShopProfile = pastryShopProfile;
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
             
@@ -280,10 +276,6 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    protected override void OnDisappearing()
 	    {
             ResetSearch();
-	        if (updateParent)
-	        {
-	            pastryShopProfile.Reload();
-	        }
 	    }
 
 	    private async void ToProductDetails(object sender, ItemTappedEventArgs e)
@@ -295,7 +287,6 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    public void Reload()
 	    {
 	        Load(true);
-	        updateParent = true;
-	    }
+        }
     }
 }

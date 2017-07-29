@@ -146,7 +146,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	        {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
-	            editProfileInfo.UpdateParent = true;
+	            //editProfileInfo.UpdateParent = true;
                 editProfileInfo.load();
 	        }
 	    }
