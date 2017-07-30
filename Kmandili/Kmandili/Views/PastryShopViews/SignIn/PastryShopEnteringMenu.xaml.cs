@@ -1,6 +1,7 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using System;
+using System.Net.Http;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -33,7 +34,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             AddBt.IsEnabled = false;
             ContinueBt.IsEnabled = false;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (pastryShop == null) return;
             ContinueBt.IsEnabled = true;
             if (pastryShop.Products.Count == 0)
@@ -59,9 +73,22 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             RestClient<Product> productRC = new RestClient<Product>();
-            if (!(await productRC.DeleteAsync(ID)))
+            try
             {
-                await PopupNavigation.PopAsync();
+                if (!(await productRC.DeleteAsync(ID)))
+                {
+                    await PopupNavigation.PopAsync();
+                    return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
             }
             await PopupNavigation.PopAsync();

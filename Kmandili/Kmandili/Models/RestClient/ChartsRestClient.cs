@@ -24,18 +24,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return "";
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var json = await httpClient.GetStringAsync(url);
-                return json;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return "";
-            }
+            var json = await httpClient.GetStringAsync(url);
+            return json;
         }
     }
 }

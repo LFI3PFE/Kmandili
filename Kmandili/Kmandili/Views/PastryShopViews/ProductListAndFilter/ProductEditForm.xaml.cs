@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -38,7 +39,20 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	        if (reload)
 	        {
 	            var productRC = new RestClient<Product>();
-	            this.product = await productRC.GetAsyncById(product.ID);
+	            try
+	            {
+                    this.product = await productRC.GetAsyncById(product.ID);
+                }
+	            catch (HttpRequestException)
+	            {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+	            }
 	            if (this.product == null)
 	            {
 	                await DisplayAlert("Erreur", "Erreur lors de la récupération des données.", "Ok");
@@ -48,13 +62,26 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	        }
 	        var saleUnitRC = new RestClient<SaleUnit>();
 	        var categorieRC = new RestClient<Category>();
-	        saleUnits = await saleUnitRC.GetAsync();
+	        try
+	        {
+                saleUnits = await saleUnitRC.GetAsync();
+                categories = await categorieRC.GetAsync();
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+	        }
             if (saleUnits == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            categories = await categorieRC.GetAsync();
             if (categories == null)
             {
                 await PopupNavigation.PopAsync();
@@ -115,10 +142,23 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 Price = double.Parse(Price.Text),
             };
             var productRC = new RestClient<Product>();
-            if (!(await productRC.PutAsync(product.ID, newProduct)))
+            try
             {
-                await PopupNavigation.PopAsync();
-                await DisplayAlert("Erreur", "Erreur lors de la mise à jour du produit.", "Ok");
+                if (!(await productRC.PutAsync(product.ID, newProduct)))
+                {
+                    await PopupNavigation.PopAsync();
+                    await DisplayAlert("Erreur", "Erreur lors de la mise à jour du produit.", "Ok");
+                    return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
             }
             await PopupNavigation.PopAsync();
@@ -138,12 +178,21 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
         {
             string fileName = Guid.NewGuid().ToString();
             var stream = upfile.GetStream();
-            var res = await new UploadRestClient().Upload(stream, fileName);
-            if (res)
-            {
-                return App.ServerURL + "Uploads/" + fileName + ".jpg";
+	        try
+	        {
+                var res = await new UploadRestClient().Upload(stream, fileName);
+                if (res)
+                {
+                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                }
+                return null;
             }
-            return null;
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return null;
+	        }
         }
 
         private async Task<bool> Delete(string picURL)
@@ -151,7 +200,16 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             string fileName = picURL.Substring(App.ServerURL.Count() + 8, (picURL.Length - (App.ServerURL.Count() + 8)));
             fileName = fileName.Substring(0, (fileName.Length - 4));
             UploadRestClient uploadRC = new UploadRestClient();
-            return (await uploadRC.Delete(fileName));
+            try
+            {
+                return (await uploadRC.Delete(fileName));
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return false;
+            }
         }
 
     }

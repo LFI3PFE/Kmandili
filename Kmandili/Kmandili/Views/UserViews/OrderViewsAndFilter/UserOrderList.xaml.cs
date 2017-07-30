@@ -147,7 +147,17 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = await orderRC.GetAsyncByUserID(Settings.Id);
+            try
+            {
+                orders = await orderRC.GetAsyncByUserID(Settings.Id);
+            }
+            catch (Exception)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (orders == null) return;
             orders = orders.OrderBy(o => o.SeenUser).ToList();
             displayedOrders.Clear();

@@ -24,14 +24,14 @@ namespace Kmandili.Models.RestClient
 
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return null;
+                }
+                throw;
             }
-
         }
 
         public async Task<List<Order>> GetAsyncByPastryShopID(int id)
@@ -47,12 +47,13 @@ namespace Kmandili.Models.RestClient
 
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return null;
+                }
+                throw;
             }
         }
 
@@ -61,20 +62,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-
-            try
-            {
-                var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
-
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
+            return result.IsSuccessStatusCode;
         }
 
         public async Task<bool> MarkAsSeenPastryShop(int id)
@@ -82,18 +71,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || App.TokenExpired()) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);
+            return result.IsSuccessStatusCode;
         }
     }
 }

@@ -5,6 +5,7 @@ using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -86,7 +87,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     return;
                 }
                 RestClient<Address> addressRC = new RestClient<Address>();
-                pastryShop.Address = await addressRC.PostAsync(pastryShop.Address);
+                try
+                {
+                    pastryShop.Address = await addressRC.PostAsync(pastryShop.Address);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (pastryShop.Address != null)
                 {
                     pastryShop.Address_FK = pastryShop.Address.ID;
@@ -97,7 +111,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                     string coverPath = pastryShop.CoverPic;
                     string logoPath = pastryShop.ProfilePic;
-                    pastryShop = await pastryShopRC.PostAsync(pastryShop);
+                    try
+                    {
+                        pastryShop = await pastryShopRC.PostAsync(pastryShop);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        await Navigation.PopAsync();
+                        return;
+                    }
                     
                     if (pastryShop == null)
                     {
@@ -132,7 +159,22 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                             pastryShopDM.PastryDeleveryPayments.Clear();
                             RestClient<PastryShopDeleveryMethod> pastryShopDeleveryMethodRC =
                                 new RestClient<PastryShopDeleveryMethod>();
-                            PastryShopDeleveryMethod PSDM = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDM);
+                            PastryShopDeleveryMethod PSDM;
+                            try
+                            {
+
+                                PSDM = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDM);
+                            }
+                            catch (HttpRequestException)
+                            {
+                                await PopupNavigation.PopAllAsync();
+                                await
+                                    DisplayAlert("Erreur",
+                                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                        "Ok");
+                                await Navigation.PopAsync();
+                                return;
+                            }
                             if (PSDM == null)
                             {
                                 await PopupNavigation.PopAsync();
@@ -145,20 +187,45 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                                 p.Payment = null;
                                 p.PastryShopDeleveryMethod = null;
                                 p.PastryShopDeleveryMethod_FK = PSDM.ID;
-                                if (await pastryDeleveryPaymentRC.PostAsync(p) == null)
+                                try
                                 {
-                                    await PopupNavigation.PopAsync();
+                                    if (await pastryDeleveryPaymentRC.PostAsync(p) == null)
+                                    {
+                                        await PopupNavigation.PopAsync();
+                                        return;
+                                    }
+                                }
+                                catch (HttpRequestException)
+                                {
+                                    await PopupNavigation.PopAllAsync();
+                                    await
+                                        DisplayAlert("Erreur",
+                                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                            "Ok");
+                                    await Navigation.PopAsync();
                                     return;
                                 }
                             }
                         }
                         var authorizationRestClient = new AuthorizationRestClient();
-                        var tokenResponse =
-                            await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
-                        Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID,
-                            tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
-                        await PopupNavigation.PopAsync();
-                        await Navigation.PushAsync(new PastryShopEnteringMenu(pastryShop));
+                        try
+                        {
+                            var tokenResponse =
+                                await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
+                            if(tokenResponse == null) return;
+                            Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID,
+                                tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                            await PopupNavigation.PopAsync();
+                            await Navigation.PushAsync(new PastryShopEnteringMenu(pastryShop));
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                        }
                     }
                 }
             }
@@ -168,12 +235,21 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             string fileName = Guid.NewGuid().ToString();
             var stream = upfile.GetStream();
-            var res = await new UploadRestClient().Upload(stream, fileName);
-            if (res)
+            try
             {
-                return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                var res = await new UploadRestClient().Upload(stream, fileName);
+                if (res)
+                {
+                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                }
+                return null;
             }
-            return null;
+            catch (Exception)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return null;
+            }
         }
 
         private async Task<bool> Delete(string picURL)
@@ -181,7 +257,16 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             string fileName = picURL.Substring(App.ServerURL.Count() + 8, (picURL.Length - (App.ServerURL.Count() + 8)));
             fileName = fileName.Substring(0, (fileName.Length - 4));
             UploadRestClient uploadRC = new UploadRestClient();
-            return (await uploadRC.Delete(fileName));
+            try
+            {
+                return (await uploadRC.Delete(fileName));
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return false;
+            }
         }
     }
 }

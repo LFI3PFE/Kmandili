@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -150,7 +151,19 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            pastryShops = await pastryShopRC.GetAsync();
+            try
+            {
+                pastryShops = await pastryShopRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             if (pastryShops == null || pastryShops.Count == 0)
             {
                 Loading.IsRunning = false;
@@ -258,7 +271,21 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
                 Int32.Parse(
                     (((((((sender as Image)?.Parent as StackLayout)?.Parent as StackLayout)?.Parent as StackLayout)?.Parent
                         as StackLayout)?.Parent as StackLayout)?.Children[0] as Label)?.Text);
-            var pastryShop = await pastryShopRc.GetAsyncById(id);
+            PastryShop pastryShop;
+            try
+            {
+                pastryShop = await pastryShopRc.GetAsyncById(id);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
+            
             await PopupNavigation.PopAllAsync();
             if (pastryShop.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
             {
@@ -271,10 +298,22 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette pâtisserie?", "Oui", "Annuler");
             if (!choix) return;
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+            try
+            {
+                if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+                {
+                    await PopupNavigation.PopAllAsync();
+                    load();
+                    return;
+                }
+            }
+            catch (HttpRequestException)
             {
                 await PopupNavigation.PopAllAsync();
-                load();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
                 return;
             }
             await PopupNavigation.PopAllAsync();

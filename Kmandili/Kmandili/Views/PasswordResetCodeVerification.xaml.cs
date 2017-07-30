@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,16 @@ namespace Kmandili.Views
 	    private async void SendCode()
 	    {
 	        EmailRestClient emailRC = new EmailRestClient();
-	        code = await emailRC.SendPasswordRestCode(email);
+	        try
+	        {
+                code = await emailRC.SendPasswordRestCode(email);
+            }
+	        catch (HttpRequestException)
+	        {
+	            await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return;
+	        }
             CodeTimeExceeded();
         }
 

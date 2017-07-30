@@ -37,21 +37,11 @@ namespace Kmandili.Models.RestClient
             };
 
             var client = new HttpClient();
-            try
-            {
-                var response = await client.SendAsync(request);
-                if (!response.IsSuccessStatusCode) return null;
-                var json = await response.Content.ReadAsStringAsync();
-                var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(json);
-                return tokenResponse;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
-            }
+            var response = await client.SendAsync(request);
+            if (!response.IsSuccessStatusCode) return null;
+            var json = await response.Content.ReadAsStringAsync();
+            var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(json);
+            return tokenResponse;
         }
     }
 }

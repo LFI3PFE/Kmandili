@@ -25,19 +25,9 @@ namespace Kmandili.Models.RestClient
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/SendPasswordRestCode/" + email + "/";
-            try
-            {
-                var result = await httpClient.PostAsync(WebServiceUrl, null);
-                var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
-                return taskModels;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return "";
-            }
+            var result = await httpClient.PostAsync(WebServiceUrl, null);
+            var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
+            return taskModels;
         }
 
         public async Task<string> SendEmailVerification(string email)
@@ -46,19 +36,9 @@ namespace Kmandili.Models.RestClient
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/sendEmailVerificationCode/" + email + "/";
-            try
-            {
-                var result = await httpClient.PostAsync(WebServiceUrl, null);
-                var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
-                return taskModels;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return "";
-            }
+            var result = await httpClient.PostAsync(WebServiceUrl, null);
+            var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
+            return taskModels;
         }
 
         public async Task<bool> SendOrderEmail(int id)
@@ -66,18 +46,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var result = await httpClient.GetAsync(App.ServerURL + "api/sendOrderEmail/" + id);
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var result = await httpClient.GetAsync(App.ServerURL + "api/sendOrderEmail/" + id);
+            return result.IsSuccessStatusCode;
         }
 
         public async Task<bool> SendCancelOrderEmail(int id)
@@ -85,18 +55,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
+            return result.IsSuccessStatusCode;
         }
     }
 }

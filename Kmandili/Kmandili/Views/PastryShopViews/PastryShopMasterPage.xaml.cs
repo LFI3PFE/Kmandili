@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -29,7 +30,18 @@ namespace Kmandili.Views.PastryShopViews
 	    protected async override void OnAppearing()
 	    {
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-	        pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+	        try
+	        {
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            }
+	        catch (HttpRequestException)
+	        {
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+	        }
 	    }
 
 	    public void Logout(object sender, EventArgs e)
@@ -40,7 +52,18 @@ namespace Kmandili.Views.PastryShopViews
         public async void UpdateOrderNotificationNumber()
         {
             PastryShopRestClient pastryShopRestClient = new PastryShopRestClient();
-            pastryShop = await pastryShopRestClient.GetAsyncById(pastryShop.ID);
+            try
+            {
+                pastryShop = await pastryShopRestClient.GetAsyncById(pastryShop.ID);
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             if (pastryShop == null) return;
             int number = pastryShop.Orders.Count(o => !o.SeenPastryShop);
             NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");

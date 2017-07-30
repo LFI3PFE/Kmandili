@@ -70,19 +70,9 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            try
-            {
-                var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
+            var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
 
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            return result.IsSuccessStatusCode;
         }
     }
 }

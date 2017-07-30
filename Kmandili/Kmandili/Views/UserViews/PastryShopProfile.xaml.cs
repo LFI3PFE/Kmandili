@@ -4,6 +4,7 @@ using Kmandili.Views.UserViews.PSProductListAndFilter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -90,7 +91,20 @@ namespace Kmandili.Views.UserViews
             {
                 App.updatePastryList = true;
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                try
+                {
+                    pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (pastryShop == null) return;
             }
             Rating.Text = pastryShop.Rating.ToString();
@@ -368,10 +382,21 @@ namespace Kmandili.Views.UserViews
                     rating.Value = starIndex;
                     var ratingRC = new RatingRestClient();
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (!(await ratingRC.PutAsync(rating.User_FK, rating.PastryShop_FK, rating)))
+                    try
                     {
-                        await DisplayAlert("Erreur", "Une erreur s'est produite pendant la mise à jours de votre avis.", "Ok");
+                        if (!(await ratingRC.PutAsync(rating.User_FK, rating.PastryShop_FK, rating)))
+                        {
+                            await DisplayAlert("Erreur", "Une erreur s'est produite pendant la mise à jours de votre avis.", "Ok");
+                        }
                     }
+                    catch (Exception)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                        await Navigation.PopAsync();
+                        return;
+                    }
+                    
                     await PopupNavigation.PopAsync();
                 }
                 else
@@ -382,9 +407,22 @@ namespace Kmandili.Views.UserViews
                     rating.Value = starIndex;
                     var ratingRC = new RatingRestClient();
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if ((await ratingRC.PostAsync(rating)) == null)
+                    try
                     {
-                        await DisplayAlert("Erreur", "Une erreur s'est produite pendant la ajout de votre avis.", "Ok");
+                        if ((await ratingRC.PostAsync(rating)) == null)
+                        {
+                            await DisplayAlert("Erreur", "Une erreur s'est produite pendant la ajout de votre avis.", "Ok");
+                        }
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        await Navigation.PopAsync();
+                        return;
                     }
                     await PopupNavigation.PopAsync();
                 }
@@ -401,14 +439,22 @@ namespace Kmandili.Views.UserViews
         public async void RateOnClick(Object sender, EventArgs e)
         {
             var ratingRC = new RatingRestClient();
-            var rating = await ratingRC.GetAsyncById(Settings.Id, pastryShop.ID);
-            if (rating != null)
+            try
             {
-                ReactionLabel.IsVisible = true;
-                for (var i = 0; i < rating.Value; i++)
+                var rating = await ratingRC.GetAsyncById(Settings.Id, pastryShop.ID);
+                if (rating != null)
                 {
-                    ((RatingStack.Children as IList<View>).ElementAt(i) as Image).Source = "fullStar.png";
+                    ReactionLabel.IsVisible = true;
+                    for (var i = 0; i < rating.Value; i++)
+                    {
+                        ((RatingStack.Children as IList<View>).ElementAt(i) as Image).Source = "fullStar.png";
+                    }
                 }
+            }
+            catch (HttpRequestException)
+            {
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                await Navigation.PopAsync();
             }
             this.ToolbarItems.Clear();
             this.ToolbarItems.Add(submitItem);
@@ -468,9 +514,19 @@ namespace Kmandili.Views.UserViews
 	    {
 	        await PopupNavigation.PushAsync(new LoadingPopupPage());
 	        var ratingRC = new RatingRestClient();
-	        if(!(await ratingRC.DeleteAsync(Settings.Id, pastryShop.ID)))
+	        try
 	        {
-	            await DisplayAlert("Erreur", "Une erreur s'est produite pendant la suppression de votre avis.", "Ok");
+                if (!(await ratingRC.DeleteAsync(Settings.Id, pastryShop.ID)))
+                {
+                    await DisplayAlert("Erreur", "Une erreur s'est produite pendant la suppression de votre avis.", "Ok");
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                await Navigation.PopAsync();
+                return;
 	        }
 	        await PopupNavigation.PopAsync();
             Load(true);

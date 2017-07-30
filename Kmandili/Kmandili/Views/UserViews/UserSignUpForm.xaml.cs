@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -41,7 +42,20 @@ namespace Kmandili.Views.UserViews
         private async void load()
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            try
+            {
+                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (phoneNumberTypes == null) return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
@@ -229,15 +243,23 @@ namespace Kmandili.Views.UserViews
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRC = new UserRestClient();
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+            try
             {
+                if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                {
+                    await PopupNavigation.PopAsync();
+                    await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                    Email.Text = "";
+                    return;
+                }
                 await PopupNavigation.PopAsync();
-                await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                Email.Text = "";
-                return;
+                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
             }
-            await PopupNavigation.PopAsync();
-            await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+            }
         }
 
 	    public async void EmailVerified()
@@ -256,7 +278,20 @@ namespace Kmandili.Views.UserViews
                 Country = Country.Text,
                 ZipCode = Int32.Parse(ZipCode.Text)
             };
-            address = await addressRC.PostAsync(address);
+	        try
+            {
+                address = await addressRC.PostAsync(address);
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
 	        if (address == null)
 	        {
 	            await PopupNavigation.PopAsync();
@@ -282,14 +317,39 @@ namespace Kmandili.Views.UserViews
                     user.PhoneNumbers.Add(p);
                 }
             }
-            user = await userRC.PostAsync(user);
+	        try
+            {
+                user = await userRC.PostAsync(user);
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (user != null)
             {
                 var authorizationRestClient = new AuthorizationRestClient();
-                var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(user.Email, user.Password);
-                Settings.SetSettings(user.Email, user.Password, user.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
-                await PopupNavigation.PopAsync();
-                App.Current.MainPage = new NavigationPage(new MainPage());
+                try
+                {
+                    var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(user.Email, user.Password);
+                    if(tokenResponse == null) return;
+                    Settings.SetSettings(user.Email, user.Password, user.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                    await PopupNavigation.PopAsync();
+                    App.Current.MainPage = new NavigationPage(new MainPage());
+                }
+                catch (Exception)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                }
             }
             else
             {

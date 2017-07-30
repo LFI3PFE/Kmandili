@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -45,14 +46,41 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             var deleveryMethodRC = new RestClient<DeleveryMethod>();
             var deleveryDelayRC = new RestClient<DeleveryDelay>();
 
-            deleveryMethods = await deleveryMethodRC.GetAsync();
+            try
+            {
+                deleveryMethods = await deleveryMethodRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
+            
             if (deleveryMethods == null)
             {
                 return;
             }
             DeleveryPicker.ItemsSource = deleveryMethods = deleveryMethods.Where(d => pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod_FK != d.ID)).ToList();
 	        DeleveryPicker.SelectedIndex = 0;
-            deleveryDelays = await deleveryDelayRC.GetAsync();
+            try
+            {
+                deleveryDelays = await deleveryDelayRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (deleveryDelays == null)
             {
                 return;
@@ -120,7 +148,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 DeleveryMethod_FK = selectedDeleveryMethod.ID
 	        };
             var pastryShopDeleveryMethodRC = new RestClient<PastryShopDeleveryMethod>();
-	        pastryShopDeleveryMethod = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDeleveryMethod);
+	        try
+            {
+                pastryShopDeleveryMethod = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDeleveryMethod);
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+	        }
             if(pastryShopDeleveryMethod == null) { await PopupNavigation.PopAsync(); return;}
             var pastryDeleveryPaymentRC = new RestClient<PastryDeleveryPayment>();
 	        foreach (var selectedPayment in selectedPayments)
@@ -130,7 +170,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	                PastryShopDeleveryMethod_FK = pastryShopDeleveryMethod.ID,
                     Payment_FK = selectedPayment.ID
 	            };
-	            if (await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment) == null) return;
+	            try
+	            {
+                    if (await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment) == null) return;
+                }
+	            catch (HttpRequestException)
+	            {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    return;
+	            }
 	        }
 	        await PopupNavigation.PopAsync();
 	        editDeleveryMethods.Load(true);

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Rg.Plugins.Popup.Services;
@@ -204,7 +205,20 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 LoadingLayout.IsVisible = true;
                 Loading.IsRunning = true;
                 RestClient<Product> productRC = new RestClient<Product>();
-                if(!(await productRC.DeleteAsync(ID))) return;
+                try
+                {
+                    if (!(await productRC.DeleteAsync(ID))) return;
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 Load(true);
             }
             else
@@ -226,7 +240,20 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 LoadingLayout.IsVisible = true;
                 Loading.IsRunning = true;
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                try
+                {
+                    pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (pastryShop == null) return;
                 Loading.IsRunning = false;
                 LoadingLayout.IsVisible = false;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -38,7 +39,19 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
         private async void Load()
         {
             RestClient<Category> categorieRC = new RestClient<Category>();
-            categories = await categorieRC.GetAsync();
+            try
+            {
+                categories = await categorieRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             if (categories == null) return;
             this.Content = MakeContent();
         }

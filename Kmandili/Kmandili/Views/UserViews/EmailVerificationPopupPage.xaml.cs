@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models.RestClient;
@@ -42,7 +43,15 @@ namespace Kmandili.Views.UserViews
         private async void SendEmail()
 	    {
             EmailRestClient emailRC = new EmailRestClient();
-            code = await emailRC.SendEmailVerification(email);
+            try
+            {
+                code = await emailRC.SendEmailVerification(email);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+            }
         }
 
 	    private async void ComfirmTapped(object sender, EventArgs e)

@@ -3,6 +3,7 @@ using Kmandili.Models.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -144,11 +145,25 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
             }
             RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-            if (!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID)))
+            try
             {
-                await PopupNavigation.PopAsync();
+                if (!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID)))
+                {
+                    await PopupNavigation.PopAsync();
+                    return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
             }
+            
             await PopupNavigation.PopAsync();
             load();
         }
@@ -189,7 +204,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             AddBt.IsEnabled = false;
             ContinueBt.IsEnabled = false;
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if(pastryShop == null) return;
             ContinueBt.IsEnabled = true;
             if (pastryShop == null || pastryShop.PointOfSales.Count == 0)
@@ -211,11 +239,25 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             int ID = Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text);
             RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
-            if (!(await pointOfSaleRC.DeleteAsync(ID)))
+            try
             {
-                await PopupNavigation.PopAsync();
+                if (!(await pointOfSaleRC.DeleteAsync(ID)))
+                {
+                    await PopupNavigation.PopAsync();
+                    return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
             }
+            
             await PopupNavigation.PopAsync();
             load();
         }
@@ -237,10 +279,19 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 //var page = new MainPage();
                 //page.SignInAction(pastryShop.Email, pastryShop.Password);
                 var authorizationRestClient = new AuthorizationRestClient();
-                var tokenResponse =
+                try
+                {
+                    var tokenResponse =
                     await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
-                Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
-                App.Current.MainPage = new NavigationPage(new MainPage());
+                    if (tokenResponse == null) return;
+                    Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                    App.Current.MainPage = new NavigationPage(new MainPage());
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                }
             }
             else
             {

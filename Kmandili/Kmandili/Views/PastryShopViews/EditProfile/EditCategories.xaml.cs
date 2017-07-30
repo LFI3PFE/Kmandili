@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -37,7 +38,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    {
             pastryShop.Categories.ToList().ForEach(c => allSelectedCategories.Add(c));
 	        var categoryRC = new RestClient<Category>();
-	        categories = await categoryRC.GetAsync();
+	        try
+	        {
+                categories = await categoryRC.GetAsync();
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+	        }
 	        if (categories == null) return;
             CategoriesLayout.Children.Clear();
             categories.ForEach(c => CategoriesLayout.Children.Add(MakeCategoryLayout(c)));
@@ -142,12 +155,20 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             toRemoveCategories.ForEach(rc => p.Categories.Remove(p.Categories.FirstOrDefault(c => c.ID == rc.ID)));
             newSelectedCategories.ForEach(sc => p.Categories.Add(sc));
             var pastryShopRC = new PastryShopRestClient();
-	        if (await pastryShopRC.PutAsyncCategories(p.ID, p))
+	        try
+	        {
+                if (await pastryShopRC.PutAsyncCategories(p.ID, p))
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
+                    //editProfileInfo.UpdateParent = true;
+                    editProfileInfo.load();
+                }
+            }
+	        catch (HttpRequestException)
 	        {
                 await PopupNavigation.PopAllAsync();
-                await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
-	            //editProfileInfo.UpdateParent = true;
-                editProfileInfo.load();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
 	        }
 	    }
     }

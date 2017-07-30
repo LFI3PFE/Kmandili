@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -60,15 +61,28 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
                 SeenPastryShop = true,
             };
             OrderRestClient orderRC = new OrderRestClient();
-            if (await orderRC.PutAsync(newOrder.ID, newOrder))
+            try
             {
-                order = await orderRC.GetAsyncById(order.ID);
-                if (order == null) return;
-                EmailRestClient emailRC = new EmailRestClient();
-                await emailRC.SendOrderEmail(order.ID);
-                updateParent = true;
-                load();
-                await PopupNavigation.PopAsync();
+                if (await orderRC.PutAsync(newOrder.ID, newOrder))
+                {
+                    order = await orderRC.GetAsyncById(order.ID);
+                    if (order == null) return;
+                    EmailRestClient emailRC = new EmailRestClient();
+                    await emailRC.SendOrderEmail(order.ID);
+                    updateParent = true;
+                    load();
+                    await PopupNavigation.PopAsync();
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
             }
         }
 
@@ -86,7 +100,20 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             if (status == null || status.Count == 0)
             {
                 RestClient<Status> statusRC = new RestClient<Status>();
-                status = await statusRC.GetAsync();
+                try
+                {
+                    status = await statusRC.GetAsync();
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if(status == null) return;
             }
             if (order.Status.StatusName == "En Attente")
@@ -113,8 +140,17 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             if (!order.SeenPastryShop)
             {
                 OrderRestClient orderRC = new OrderRestClient();
-                if (await orderRC.MarkAsSeenPastryShop(order.ID))
-                    updateParent = true;
+                try
+                {
+                    if (await orderRC.MarkAsSeenPastryShop(order.ID))
+                        updateParent = true;
+                }
+                catch (Exception)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                    await Navigation.PopAsync();
+                }
             }
         }
 

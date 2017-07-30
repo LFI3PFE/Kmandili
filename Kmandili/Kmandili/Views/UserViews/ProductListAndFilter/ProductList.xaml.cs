@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using Kmandili.Helpers;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -99,7 +100,19 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            products = await productRC.GetAsync();
+            try
+            {
+                products = await productRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             if (products == null || products.Count == 0)
             {
                 Loading.IsRunning = false;

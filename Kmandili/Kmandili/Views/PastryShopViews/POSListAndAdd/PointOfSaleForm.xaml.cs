@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.PastryShopViews.SignIn;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -43,13 +45,37 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
         {
             CreationDate.MaximumDate = DateTime.Now.Date;
             RestClient<Parking> parkingRC = new RestClient<Parking>();
-            parkings = await parkingRC.GetAsync();
+            try
+            {
+                parkings = await parkingRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (parkings == null) return;
             ParkingPicker.ItemsSource = parkings;
             ParkingPicker.SelectedIndex = 0;
 
             RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-            phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            try
+            {
+                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (phoneNumberTypes == null) return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
@@ -234,6 +260,7 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
         {
             if (await validAddress() && await validPhoneNumber())
             {
+                await PopupNavigation.PushAsync(new LoadingPopupPage());
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
                 RestClient<Address> addressRC = new RestClient<Address>();
                 Address address = new Address()
@@ -245,7 +272,20 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
                     Country = Country.Text,
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
-                address = await addressRC.PostAsync(address);
+                try
+                {
+                    address = await addressRC.PostAsync(address);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (address != null)
                 {
                     PointOfSale pointOfSale = new PointOfSale()
@@ -296,20 +336,36 @@ namespace Kmandili.Views.PastryShopViews.POSListAndAdd
                         pointOfSale.WorkDays.Add(new WorkDay() { Day = 7, OpenTime = DOpenTime.Time, CloseTime = DCloseTime.Time });
                     }
 
-                    pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
+                    try
+                    {
+                        pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        await Navigation.PopAsync();
+                        return;
+                    }
                     if (pointOfSale == null)
                     {
                         await DisplayAlert("Erreur", "Erreur dans l'ajout du point de vente!", "Ok");
+                        await PopupNavigation.PopAllAsync();
                         return;
                     }
                     else
                     {
                         pointOfSalesList.Load(true);
+                        await PopupNavigation.PopAllAsync();
                         await Navigation.PopAsync();
                     }
                 }
                 else
                 {
+                    await PopupNavigation.PopAllAsync();
                     await DisplayAlert("Erreur", "Erreur dans l'ajout de l'address!", "Ok");
                 }
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -157,14 +158,40 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(ID);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(ID);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (pastryShop == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-            priceRanges = await priceRangeTypeRC.GetAsync();
+            try
+            {
+                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+                priceRanges = await priceRangeTypeRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (phoneNumberTypes == null || priceRanges == null)
             {
                 await PopupNavigation.PopAsync();
@@ -449,7 +476,20 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 Country = Country.Text,
                 ZipCode = Int32.Parse(ZipCode.Text)
             };
-            if (!(await addressRC.PutAsync(address.ID, address))) return;
+	        try
+	        {
+                if (!(await addressRC.PutAsync(address.ID, address))) return;
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
 
             if (_mediaFileProfile != null)
             {
@@ -482,10 +522,36 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 ProfilePic = pastryShop.ProfilePic,
                 CoverPic = pastryShop.CoverPic,
             };
-            if (!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
-            foreach (var removedPhoneNumber in removedPhoneNumbers)
+	        try
             {
-                if (!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
+                if (!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+	        }
+	        try
+            {
+                foreach (var removedPhoneNumber in removedPhoneNumbers)
+                {
+                    if (!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
             }
             foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
             {
@@ -501,12 +567,38 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                     {
                         int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
                         p.ID = phoneNumberID;
-                        if (!(await phoneNumberRC.PutAsync(p.ID, p))) return;
+                        try
+                        {
+                            if (!(await phoneNumberRC.PutAsync(p.ID, p))) return;
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                            await Navigation.PopAsync();
+                            return;
+                        }
                     }
                     else
                     {
                         p.PastryShop = newPastryShop;
-                        if (await phoneNumberRC.PostAsync(p) == null) return;
+                        try
+                        {
+                            if (await phoneNumberRC.PostAsync(p) == null) return;
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                            await Navigation.PopAsync();
+                            return;
+                        }
                     }
                 }
             }
@@ -523,14 +615,22 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 UserRestClient userRC = new UserRestClient();
                 if (pastryShop.Email != Email.Text.ToLower())
                 {
-                    if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await  userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                    try
                     {
-                        await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                        Email.Text = "";
-                        return;
+                        if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                        {
+                            await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                            Email.Text = "";
+                            return;
+                        }
+                        var x = new EmailVerificationPopupPage(this, Email.Text.ToLower());
+                        await PopupNavigation.PushAsync(x);
                     }
-                    var x = new EmailVerificationPopupPage(this, Email.Text.ToLower());
-                    await PopupNavigation.PushAsync(x);
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                    }
                 }
                 else
                 {
@@ -543,12 +643,21 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             string fileName = Guid.NewGuid().ToString();
             var stream = upfile.GetStream();
-            var res = await new UploadRestClient().Upload(stream, fileName);
-            if (res)
-            {
-                return App.ServerURL + "Uploads/" + fileName + ".jpg";
+	        try
+	        {
+                var res = await new UploadRestClient().Upload(stream, fileName);
+                if (res)
+                {
+                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                }
+                return null;
             }
-            return null;
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+	            return null;
+	        }
         }
 
 	    private async Task<bool> Delete(string picURL)
@@ -556,7 +665,16 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             string fileName = picURL.Substring(App.ServerURL.Count()+8, (picURL.Length - (App.ServerURL.Count() + 8)));
 	        fileName = fileName.Substring(0, (fileName.Length - 4));
             UploadRestClient uploadRC = new UploadRestClient();
-            return (await uploadRC.Delete(fileName));
+	        try
+	        {
+                return (await uploadRC.Delete(fileName));
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return false;
+	        }
 	    }
 
 	    private async void DeleteBt_Clicked(object sender, EventArgs e)
@@ -572,12 +690,25 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
 	        if (!choix) return;
 	        var pastryShopRC = new PastryShopRestClient();
-	        if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+	        try
 	        {
-	            await DisplayAlert("Succées", "Votre Compte a été supprimer.", "Ok");
-	            App.Logout();
+                if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+                {
+                    await DisplayAlert("Succées", "Votre Compte a été supprimer.", "Ok");
+                    App.Logout();
+                    return;
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
-	        }
+            }
             await DisplayAlert("Erreur", "Une Erreur s'est produite lors de la suppression de votre compte, veuillez réessayer plus tard!.", "Ok");
         }
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models.RestClient;
@@ -33,19 +34,27 @@ namespace Kmandili.Views
 	            Password.Focus();
 	        }
             PasswordResetRestClient passwordRC = new PasswordResetRestClient();
-	        if (!(await passwordRC.PutAsync(email, Password.Text)))
+	        try
 	        {
-	            var choice = await
-	                DisplayAlert("Erreur", "Une erreur s'est produite lors de la mise à jours du mot de passe!", "Ressayer",
-	                    "Annuler");
-	            if (choice)
-	            {
-	                ComfirmTapped(sender, e);
-	            }
-	            else
-	            {
-	                await PopupNavigation.PopAllAsync();
-	            }
+                if (!(await passwordRC.PutAsync(email, Password.Text)))
+                {
+                    var choice = await
+                        DisplayAlert("Erreur", "Une erreur s'est produite lors de la mise à jours du mot de passe!", "Ressayer",
+                            "Annuler");
+                    if (choice)
+                    {
+                        ComfirmTapped(sender, e);
+                    }
+                    else
+                    {
+                        await PopupNavigation.PopAllAsync();
+                    }
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
 	        }
 	        await DisplayAlert("Succès", "Mot de passe mis à jours avec succés", "Ok");
 	        await PopupNavigation.PopAsync();

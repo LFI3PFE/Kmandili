@@ -6,6 +6,7 @@ using Kmandili.Views.PastryShopViews.SignIn;
 using Kmandili.Views.UserViews;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Kmandili.Views;
@@ -90,15 +91,25 @@ namespace Kmandili
             if (Settings.Id < 0 || App.TokenExpired())
             {
                 var authorizationRestClient = new AuthorizationRestClient();
-                var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
-                if (tokenResponse == null)
+                try
                 {
+                    var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
+                    if (tokenResponse == null)
+                    {
+                        isLoading(false);
+                        await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
+                        Email.Focus();
+                        return;
+                    }
+                    Settings.SetSettings(email, password, tokenResponse.UserId, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
                     isLoading(false);
-                    await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
-                    Email.Focus();
+                    await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                     return;
                 }
-                Settings.SetSettings(email, password, tokenResponse.UserId, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
             }
             Email.Text = "";
             Password.Text = "";
@@ -110,7 +121,21 @@ namespace Kmandili
                     break;
                 case "u":
                     var userRestClient = new UserRestClient();
-                    var u = await userRestClient.GetAsyncById(Settings.Id);
+                    User u;
+                    try
+                    {
+                        u = await userRestClient.GetAsyncById(Settings.Id);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        isLoading(false);
+                        return;
+                    }
                     isLoading(false);
                     if (u == null)
                     {
@@ -122,7 +147,21 @@ namespace Kmandili
                     break;
                 case "p":
                     var pastryShopRestClient = new PastryShopRestClient();
-                    var p = await pastryShopRestClient.GetAsyncById(Settings.Id);
+                    PastryShop p;
+                    try
+                    {
+                        p = await pastryShopRestClient.GetAsyncById(Settings.Id);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        isLoading(false);
+                        return;
+                    }
                     isLoading(false);
                     if (p == null)
                     {

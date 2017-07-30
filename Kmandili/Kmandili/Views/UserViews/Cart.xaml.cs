@@ -4,6 +4,7 @@ using Kmandili.Models.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -276,7 +277,20 @@ namespace Kmandili.Views.UserViews
                     SeenPastryShop = false,
                 };
                 RestClient<Order> orderRC = new RestClient<Order>();
-                order = await orderRC.PostAsync(order);
+                try
+                {
+                    order = await orderRC.PostAsync(order);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if(order != null)
                 {
                     RestClient<OrderProduct> orderProductRC = new RestClient<OrderProduct>();
@@ -288,7 +302,20 @@ namespace Kmandili.Views.UserViews
                             Order_FK = order.ID,
                             Quantity = cartProduct.Quantity
                         };
-                        orderProduct = await orderProductRC.PostAsync(orderProduct);
+                        try
+                        {
+                            orderProduct = await orderProductRC.PostAsync(orderProduct);
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                            await Navigation.PopAsync();
+                            return;
+                        }
                         if (orderProduct == null)
                         {
                             await DisplayAlert("Erreur", "Erreur lors de l'enregistrement de la commande!", "Ok");
@@ -297,7 +324,15 @@ namespace Kmandili.Views.UserViews
                         }
                     }
                     EmailRestClient emailRC = new EmailRestClient();
-                    await emailRC.SendOrderEmail(order.ID);
+                    try
+                    {
+                        await emailRC.SendOrderEmail(order.ID);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                    }
                 }
                 else
                 {

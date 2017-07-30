@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -152,7 +153,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             RestClient<Category> categoryRC = new RestClient<Category>();
-            categoryList = await categoryRC.GetAsync();
+            try
+            {
+                categoryList = await categoryRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (categoryList == null) return;
             CategoriesListView.HeightRequest = categoryList.Count * 30;
             CategoriesListView.ItemsSource = categoryList;

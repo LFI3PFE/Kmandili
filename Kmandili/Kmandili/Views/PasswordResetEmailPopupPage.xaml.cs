@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models.RestClient;
@@ -35,15 +36,23 @@ namespace Kmandili.Views
             Indicator.IsRunning = true;
             var userRC = new UserRestClient();
 	        var pastryShopRC = new PastryShopRestClient();
-	        if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) == null) &&
-	            (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) == null))
+	        try
 	        {
-                await DisplayAlert("Erreur", "Utilisateur inexistant!", "Ok");
+                if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) == null) &&
+                (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) == null))
+                {
+                    await DisplayAlert("Erreur", "Utilisateur inexistant!", "Ok");
+                    await PopupNavigation.PopAsync();
+                    return;
+                }
                 await PopupNavigation.PopAsync();
-	            return;
-	        }
-            await PopupNavigation.PopAsync();
-            await PopupNavigation.PushAsync(new PasswordResetCodeVerification(Email.Text.ToLower()));
+                await PopupNavigation.PushAsync(new PasswordResetCodeVerification(Email.Text.ToLower()));
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+            }
         }
 	}
 }

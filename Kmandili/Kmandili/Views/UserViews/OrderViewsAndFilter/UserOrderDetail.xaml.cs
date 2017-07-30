@@ -3,6 +3,7 @@ using Kmandili.Models.RestClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Rg.Plugins.Popup.Services;
@@ -72,8 +73,17 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 	        if (!order.SeenUser)
 	        {
                 OrderRestClient orderRC = new OrderRestClient();
-	            if(await orderRC.MarkAsSeenUser(order.ID))
-	                updateParent = true;
+	            try
+	            {
+                    if (await orderRC.MarkAsSeenUser(order.ID))
+                        updateParent = true;
+                }
+	            catch (Exception)
+	            {
+                    await PopupNavigation.PopAllAsync();
+                    await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                    await Navigation.PopAsync();
+	            }
 	        }
 	    }
 
@@ -102,16 +112,29 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                 SeenPastryShop = false,
             };
             OrderRestClient orderRC = new OrderRestClient();
-            if (await orderRC.PutAsync(newOrder.ID, newOrder))
-            {
-                order = await orderRC.GetAsyncById(order.ID);
-                if (order == null) return;
-                EmailRestClient emailRC = new EmailRestClient();
-                await emailRC.SendOrderEmail(order.ID);
-                updateParent = true;
-                ToolbarItems.Clear();
-                updateView();
-                await PopupNavigation.PopAsync();
+	        try
+	        {
+                if (await orderRC.PutAsync(newOrder.ID, newOrder))
+                {
+                    order = await orderRC.GetAsyncById(order.ID);
+                    if (order == null) return;
+                    EmailRestClient emailRC = new EmailRestClient();
+                    await emailRC.SendOrderEmail(order.ID);
+                    updateParent = true;
+                    ToolbarItems.Clear();
+                    updateView();
+                    await PopupNavigation.PopAsync();
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
             }
         }
 
@@ -121,13 +144,38 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             OrderRestClient orderRC = new OrderRestClient();
             EmailRestClient emailRC = new EmailRestClient();
-            if(!await emailRC.SendCancelOrderEmail(order.ID)) return;
-            if (await orderRC.DeleteAsync(order.ID))
+            try
             {
-                userOrderList.load();
-                await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
-                await PopupNavigation.PopAsync();
+                if (!await emailRC.SendCancelOrderEmail(order.ID)) return;
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
+            try
+            {
+                if (await orderRC.DeleteAsync(order.ID))
+                {
+                    userOrderList.load();
+                    await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
+                    await PopupNavigation.PopAsync();
+                    await Navigation.PopAsync();
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
                 await Navigation.PopAsync();
+                return;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -34,7 +35,18 @@ namespace Kmandili.Views.UserViews
         public async void UpdateOrderNotificationNumber()
         {
             UserRestClient userRC = new UserRestClient();
-            user = await userRC.GetAsyncById(Settings.Id);
+            try
+            {
+                user = await userRC.GetAsyncById(Settings.Id);
+            }
+            catch (HttpRequestException)
+            {
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             if(user == null) return;
             int number = user.Orders.Count(o => !o.SeenUser);
             NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");

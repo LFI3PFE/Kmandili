@@ -26,19 +26,8 @@ namespace Kmandili.Models.RestClient
             var imageStream = new StreamContent(stream);
             var multi = new MultipartContent();
             multi.Add(imageStream);
-            try
-            {
-
-                var response = await client.PostAsync(App.ServerURL + "api/Uploads/" + FileName, multi);
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var response = await client.PostAsync(App.ServerURL + "api/Uploads/" + FileName, multi);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> Delete(string fileName)
@@ -48,19 +37,8 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
             string URL = App.ServerURL + "api/Uploads/" + fileName;
-            try
-            {
-                var response = await httpClient.DeleteAsync(URL);
-
-                return response.IsSuccessStatusCode;
-            }
-            catch (Exception)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var response = await httpClient.DeleteAsync(URL);
+            return response.IsSuccessStatusCode;
         }
     }
 }

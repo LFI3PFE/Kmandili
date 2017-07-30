@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -41,11 +42,19 @@ namespace Kmandili.Views.PastryShopViews.Charts
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             var chartRC = new ChartsRestClient();
-            var htmlWebSource = new HtmlWebViewSource()
+            try
             {
-                Html = await chartRC.GetChartView(App.ServerURL + "api/GetDoughnutChartView/" + Settings.Id)
-            };
-            Browser.Source = htmlWebSource;
+                var htmlWebSource = new HtmlWebViewSource()
+                {
+                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetDoughnutChartView/" + Settings.Id)
+                };
+                Browser.Source = htmlWebSource;
+            }
+            catch (HttpRequestException)
+            {
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return;
+            }
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             BodyLayout.IsVisible = true;

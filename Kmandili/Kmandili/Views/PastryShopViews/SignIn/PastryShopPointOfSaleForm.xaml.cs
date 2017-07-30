@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Rg.Plugins.Popup.Services;
@@ -44,7 +45,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             CreationDate.MaximumDate = DateTime.Now.Date;
             RestClient<Parking> parkingRC = new RestClient<Parking>();
-            parkings = await parkingRC.GetAsync();
+            try
+            {
+                parkings = await parkingRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (parkings == null)
             {
                 await PopupNavigation.PopAsync();
@@ -54,7 +68,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             ParkingPicker.SelectedIndex = 0;
 
             RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-            phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            try
+            {
+                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (phoneNumberTypes == null)
             {
                 await PopupNavigation.PopAsync();
@@ -256,7 +283,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     Country = Country.Text,
                     ZipCode = Int32.Parse(ZipCode.Text)
                 };
-                address = await addressRC.PostAsync(address);
+                try
+                {
+                    address = await addressRC.PostAsync(address);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (address != null)
                 {
                     PointOfSale pointOfSale = new PointOfSale()
@@ -307,7 +347,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         pointOfSale.WorkDays.Add(new WorkDay() { Day = 7, OpenTime = DOpenTime.Time, CloseTime = DCloseTime.Time });
                     }
 
-                    pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
+                    try
+                    {
+                        pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await
+                            DisplayAlert("Erreur",
+                                "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                "Ok");
+                        await Navigation.PopAsync();
+                        return;
+                    }
                     if (pointOfSale == null)
                     {
                         await PopupNavigation.PopAsync();

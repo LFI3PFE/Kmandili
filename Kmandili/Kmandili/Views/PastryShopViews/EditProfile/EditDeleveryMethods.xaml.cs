@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -45,7 +46,20 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             this.reloadParent = reloadParentval;
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-	        pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (pastryShop == null)
             {
                 await PopupNavigation.PopAllAsync();
@@ -152,9 +166,22 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             }
             int ID = Int32.Parse((sender as StackLayout).ClassId);
             RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
-            if (!(await pastryShopDeleverMethodRC.DeleteAsync(ID)))
+            try
             {
-                await PopupNavigation.PopAsync();
+                if (!(await pastryShopDeleverMethodRC.DeleteAsync(ID)))
+                {
+                    await PopupNavigation.PopAsync();
+                    return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
                 return;
             }
             await PopupNavigation.PopAsync();

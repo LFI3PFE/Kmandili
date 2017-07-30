@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -47,7 +48,20 @@ namespace Kmandili.Views.UserViews
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRestClient = new UserRestClient();
-            user = await userRestClient.GetAsyncById(Settings.Id);
+            try
+            {
+                user = await userRestClient.GetAsyncById(Settings.Id);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (user == null)
             {
                 await PopupNavigation.PopAsync();
@@ -64,7 +78,20 @@ namespace Kmandili.Views.UserViews
             ZipCode.Text = user.Address.ZipCode.ToString();
             State.Text = user.Address.State;
             Country.Text = user.Address.Country;
-            phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            try
+            {
+                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (phoneNumberTypes == null)
             {
                 await PopupNavigation.PopAsync();
@@ -296,7 +323,20 @@ namespace Kmandili.Views.UserViews
                 Country = Country.Text,
                 ZipCode = Int32.Parse(ZipCode.Text)
             };
-            if (!(await addressRC.PutAsync(address.ID, address))) return;
+            try
+            {
+                if (!(await addressRC.PutAsync(address.ID, address))) return;
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
 
             User user = new User()
             {
@@ -307,12 +347,39 @@ namespace Kmandili.Views.UserViews
                 Password = Password.Text,
                 Address_FK = address.ID
             };
-            if (!(await userRC.PutAsync(user.ID, user))) return;
-            RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
-            foreach (var removedPhoneNumber in removedPhoneNumbers)
+            try
             {
-                if (!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
+                if (!(await userRC.PutAsync(user.ID, user))) return;
             }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
+            RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
+            try
+            {
+                foreach (var removedPhoneNumber in removedPhoneNumbers)
+                {
+                    if (!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
+                }
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
+            
             foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
             {
                 Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
@@ -327,12 +394,38 @@ namespace Kmandili.Views.UserViews
                     {
                         int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
                         p.ID = phoneNumberID;
-                        if (!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
+                        try
+                        {
+                            if (!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                            await Navigation.PopAsync();
+                            return;
+                        }
                     }
                     else
                     {
                         p.User = user;
-                        if (await phoneNumberRestClient.PostAsync(p) == null) return;
+                        try
+                        {
+                            if (await phoneNumberRestClient.PostAsync(p) == null) return;
+                        }
+                        catch (HttpRequestException)
+                        {
+                            await PopupNavigation.PopAllAsync();
+                            await
+                                DisplayAlert("Erreur",
+                                    "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                                    "Ok");
+                            await Navigation.PopAsync();
+                            return;
+                        }
                     }
                 }
             }
@@ -349,13 +442,21 @@ namespace Kmandili.Views.UserViews
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                 if (user.Email != Email.Text.ToLower())
                 {
-                    if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                    try
                     {
-                        await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
-                        Email.Text = "";
-                        return;
+                        if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                        {
+                            await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
+                            Email.Text = "";
+                            return;
+                        }
+                        await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
                     }
-                    await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                    catch (Exception)
+                    {
+                        await PopupNavigation.PopAllAsync();
+                        await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                    }
                 }
                 else
                 {
@@ -376,10 +477,23 @@ namespace Kmandili.Views.UserViews
             }
             await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
 	        var userRC = new RestClient<User>();
-            if (await userRC.DeleteAsync(user.ID))
-            {
-                await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
-                App.Logout();
+	        try
+	        {
+                if (await userRC.DeleteAsync(user.ID))
+                {
+                    await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
+                    App.Logout();
+                }
+            }
+	        catch (HttpRequestException)
+	        {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
             }
         }
 	}

@@ -24,12 +24,13 @@ namespace Kmandili.Models.RestClient
 
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return default(Rating);
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return null;
+                }
+                throw;
             }
         }
 
@@ -44,19 +45,9 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            try
-            {
-                var result = await httpClient.PutAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/", httpContent);
+            var result = await httpClient.PutAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/", httpContent);
 
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            return result.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int user_fk, int pastryShop_fk)
@@ -64,18 +55,8 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var response = await httpClient.DeleteAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var response = await httpClient.DeleteAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
+            return response.IsSuccessStatusCode;
         }
     }
 }

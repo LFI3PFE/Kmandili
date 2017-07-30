@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -70,7 +71,20 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             if (reload)
             {
                 var productRC = new RestClient<Product>();
-                product = await productRC.GetAsyncById(product.ID);
+                try
+                {
+                    product = await productRC.GetAsyncById(product.ID);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (product == null)
                 {
                     LoadingLayout.IsVisible = false;
@@ -86,11 +100,19 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             SaleUnit.Text = product.SaleUnit.Unit;
             Category.Text = product.Category.CategoryName;
             var chartRC = new ChartsRestClient();
-            var htmlWebView = new HtmlWebViewSource()
+            try
             {
-                Html = await chartRC.GetChartView(App.ServerURL + "api/GetProductChartView/" + product.ID + "/" + year + "/" + semester)
-            };
-            ChartWebView.Source = htmlWebView;
+                var htmlWebView = new HtmlWebViewSource()
+                {
+                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetProductChartView/" + product.ID + "/" + year + "/" + semester)
+                };
+                ChartWebView.Source = htmlWebView;
+            }
+            catch (HttpRequestException)
+            {
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return;
+            }
             if (max.Year == year && getSemester(max.Month) == semester)
             {
                 SuivantLabel.TextColor = Color.LightSkyBlue;

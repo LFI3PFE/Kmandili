@@ -62,12 +62,13 @@ namespace Kmandili.Models.RestClient
 
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return null;
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return null;
+                }
+                throw;
             }
         }
 
@@ -84,12 +85,13 @@ namespace Kmandili.Models.RestClient
 
                 return taskModels;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return default(T);
+                if (ex.Message == "404 (Not Found)")
+                {
+                    return default(T);
+                }
+                throw;
             }
         }
         
@@ -104,19 +106,9 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            try
-            {
-                var result = await httpClient.PostAsync(WebServiceUrl, httpContent);
-                var taskModels = JsonConvert.DeserializeObject<T>(await result.Content.ReadAsStringAsync());
-                return taskModels;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return default(T);
-            }
+            var result = await httpClient.PostAsync(WebServiceUrl, httpContent);
+            var taskModels = JsonConvert.DeserializeObject<T>(await result.Content.ReadAsStringAsync());
+            return taskModels;
         }
 
         public async Task<bool> PutAsync(int id, T t)
@@ -130,18 +122,8 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            try
-            {
-                var result = await httpClient.PutAsync(WebServiceUrl + id, httpContent);
-                return result.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            var result = await httpClient.PutAsync(WebServiceUrl + id, httpContent);
+            return result.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -149,20 +131,9 @@ namespace Kmandili.Models.RestClient
             if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
+            var response = await httpClient.DeleteAsync(WebServiceUrl + id);
 
-            try
-            {
-                var response = await httpClient.DeleteAsync(WebServiceUrl + id);
-
-                return response.IsSuccessStatusCode;
-            }
-            catch (HttpRequestException)
-            {
-                await
-                    App.Current.MainPage.DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-                return false;
-            }
+            return response.IsSuccessStatusCode;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -98,7 +99,20 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             await PopupNavigation.PopAllAsync();
             if (pastryShop == null) return;
             Load();
@@ -217,7 +231,20 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             var pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            try
+            {
+                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             await PopupNavigation.PopAllAsync();
             await Navigation.PushAsync(new PSProductList(pastryShop));
         }

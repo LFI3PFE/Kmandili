@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
@@ -53,7 +54,21 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             var deleveryMethodRC = new RestClient<DeleveryMethod>();
             var deleveryDelayRC = new RestClient<DeleveryDelay>();
 
-            deleveryMethods = await deleveryMethodRC.GetAsync();
+            try
+            {
+                deleveryMethods = await deleveryMethodRC.GetAsync();
+                deleveryDelays = await deleveryDelayRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (deleveryMethods == null)
             {
                 await PopupNavigation.PopAllAsync();
@@ -61,7 +76,6 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             DeleveryPicker.ItemsSource = deleveryMethods = deleveryMethods.Where(d => pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod.ID != d.ID)).ToList();
             DeleveryPicker.SelectedIndex = 0;
-            deleveryDelays = await deleveryDelayRC.GetAsync();
             if (deleveryDelays == null)
             {
                 await PopupNavigation.PopAllAsync();

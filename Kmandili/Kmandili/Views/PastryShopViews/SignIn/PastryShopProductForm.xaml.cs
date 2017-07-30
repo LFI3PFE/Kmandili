@@ -5,6 +5,7 @@ using Plugin.Media.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.PastryShopViews.ProductListAndFilter;
@@ -45,13 +46,39 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             RestClient<SaleUnit> saleUnitRC = new RestClient<SaleUnit>();
-            saleUnits = await saleUnitRC.GetAsync();
+            try
+            {
+                saleUnits = await saleUnitRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (saleUnits == null) return;
             PickerUnit.ItemsSource = saleUnits;
             PickerUnit.SelectedIndex = 0;
 
             RestClient<Category> categoryRC = new RestClient<Category>();
-            categories = await categoryRC.GetAsync();
+            try
+            {
+                categories = await categoryRC.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                await Navigation.PopAsync();
+                return;
+            }
             if (categories == null) return;
             CategoryPicker.ItemsSource = categories;
             CategoryPicker.SelectedIndex = 0;
@@ -103,7 +130,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     Pic = await Upload(_mediaFileProfil)
                 };
 
-                product = await productRC.PostAsync(product);
+                try
+                {
+                    product = await productRC.PostAsync(product);
+                }
+                catch (HttpRequestException)
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                            "Ok");
+                    await Navigation.PopAsync();
+                    return;
+                }
                 if (product == null)
                 {
                     await PopupNavigation.PopAsync();
@@ -130,12 +170,21 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             string fileName = Guid.NewGuid().ToString();
             var stream = upfile.GetStream();
-            var res = await new UploadRestClient().Upload(stream, fileName);
-            if (res)
+            try
             {
-                return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                var res = await new UploadRestClient().Upload(stream, fileName);
+                if (res)
+                {
+                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                }
+                return null;
             }
-            return null;
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return null;
+            }
         }
 
         public async void ImportImg_OnClick(Object seneder, EventArgs e)
