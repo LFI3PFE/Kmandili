@@ -37,7 +37,7 @@
                     </StackLayout>
                 </StackLayout>
                 <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,20,0">
-                    <Button x:Name="UpdateBt" HorizontalOptions="FillAndExpand" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Metre à jours" FontSize="20" FontAttributes="Bold" Clicked="UpdateBt_Clicked"/>
+                    <Button x:Name="UpdateBt" HorizontalOptions="FillAndExpand" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Mettre à jour" FontSize="20" FontAttributes="Bold" Clicked="UpdateBt_Clicked"/>
                 </StackLayout>
                 <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,20,0">
                     <Button x:Name="DeleteBt" BackgroundColor="IndianRed" Clicked="DeleteBt_Clicked" TextColor="#3b4552" Text="Supprimer Mon Compte" HorizontalOptions="FillAndExpand" FontSize="20" FontAttributes="Bold"/>

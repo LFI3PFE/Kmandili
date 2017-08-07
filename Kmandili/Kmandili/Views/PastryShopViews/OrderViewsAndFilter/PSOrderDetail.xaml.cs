@@ -159,7 +159,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             base.OnDisappearing();
             if (updateParent)
             {
-                pastryShopOrderList.load();
+                pastryShopOrderList.load(order.PastryShop_FK);
             }
         }
 

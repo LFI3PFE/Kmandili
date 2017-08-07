@@ -23,11 +23,11 @@ namespace Kmandili.Views.UserViews
 	    private User user;
 	    private List<PhoneNumber> removedPhoneNumbers = new List<PhoneNumber>(); 
 
-        public EditUserProfile ()
+        public EditUserProfile (int id)
 		{
 			InitializeComponent ();
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
-            load();
+            load(id);
         }
 
         private void PhoneNumberStackLayouts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -44,13 +44,13 @@ namespace Kmandili.Views.UserViews
             PhoneNumberStackLayouts.Last().Children[3].IsVisible = false;
         }
 
-        private async void load()
+        private async void load(int id)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRestClient = new UserRestClient();
             try
             {
-                user = await userRestClient.GetAsyncById(Settings.Id);
+                user = await userRestClient.GetAsyncById(id);
             }
             catch (HttpRequestException)
             {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.Admin.PSViews.Orders;
 using Kmandili.Views.PastryShopViews;
 using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
@@ -14,6 +15,7 @@ using Rg.Plugins.Popup.Services;
 using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 using Kmandili.Views.PastryShopViews.EditProfile;
 using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
+using Kmandili.Views.PastryShopViews.OrderViewsAndFilter;
 
 namespace Kmandili.Views.Admin.PSViews.PSProfile
 {
@@ -24,6 +26,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
         private ToolbarItem pointOfSaleList;
 	    private ToolbarItem editToolbarItem;
         private PastryShop pastryShop;
+	    private ToolbarItem orderToolbarItem;
 
 	    private bool hasNavigatedToEdit = false;
 	    private bool updateParent = false;
@@ -39,10 +42,18 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             {
                 Icon = "products.png",
                 Text = "Produits",
-                Order = ToolbarItemOrder.Primary,
+                Order = ToolbarItemOrder.Secondary,
                 Priority = 0
             };
             ProductList.Clicked += ProductListOnClick;
+
+            orderToolbarItem = new ToolbarItem()
+            {
+                Icon = "tbOrders.png",
+                Text = "Commandes",
+                Order = ToolbarItemOrder.Primary,
+            };
+            orderToolbarItem.Clicked += OrderToolbarItem_Clicked;
 
             pointOfSaleList = new ToolbarItem()
             {
@@ -62,13 +73,19 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             ToolbarItems.Add(ProductList);
             ToolbarItems.Add(editToolbarItem);
             ToolbarItems.Add(pointOfSaleList);
+            ToolbarItems.Add(orderToolbarItem);
             Load();
+        }
+
+        private async void OrderToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new OrderList(pastryShop.ID));
         }
 
         private async void EditToolbarItem_Clicked(object sender, EventArgs e)
         {
             hasNavigatedToEdit = true;
-            await Navigation.PushAsync(new EditProfileInfo(pastryShop.ID));
+            await Navigation.PushAsync(new EditProfileInfo(pastryShop.ID, false));
         }
 
 	    protected override void OnAppearing()

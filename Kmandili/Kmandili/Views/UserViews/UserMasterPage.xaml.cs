@@ -69,7 +69,7 @@ namespace Kmandili.Views.UserViews
 	    {
             userMasterDetailPage.IsPresented = false;
             if (userMasterDetailPage.Detail.GetType().Name == "EditUserProfile") return;
-            await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile());
+            await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile(Settings.Id));
 	    }
 
 	    private async void ToCart(object sender, EventArgs e)

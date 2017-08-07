@@ -58,5 +58,14 @@ namespace Kmandili.Models.RestClient
             var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
             return result.IsSuccessStatusCode;
         }
+        
+        public async Task<bool> SendCanelOrderEmailByAdmin(int id)
+        {
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
+            var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmailByAdmin/" + id);
+            return result.IsSuccessStatusCode;
+        }
     }
 }

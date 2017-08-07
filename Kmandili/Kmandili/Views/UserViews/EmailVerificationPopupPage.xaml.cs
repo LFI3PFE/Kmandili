@@ -24,20 +24,20 @@ namespace Kmandili.Views.UserViews
 		{
 		    this.email = email;
 		    this.userSignUpForm = userSignUpForm;
-            SendEmail();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent ();
-		}
+            SendEmail();
+        }
 
         public EmailVerificationPopupPage(EditUserProfile editUserProfile, string email)
         {
             this.email = email;
             this.editUserProfile = editUserProfile;
-            SendEmail();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
+            SendEmail();
         }
 
         private async void SendEmail()

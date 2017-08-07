@@ -141,24 +141,16 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 
         private async void CanceToolbarItem_Clicked(object sender, EventArgs e)
         {
+            var choix = await DisplayAlert("Confirmation",
+                "Etes-vous sur de vouloir annuler cette commande?",
+                "Confirmer", "Annuler");
+            if (!choix) return;
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             OrderRestClient orderRC = new OrderRestClient();
             EmailRestClient emailRC = new EmailRestClient();
             try
             {
                 if (!await emailRC.SendCancelOrderEmail(order.ID)) return;
-            }
-            catch (HttpRequestException)
-            {
-                await PopupNavigation.PopAllAsync();
-                await
-                    DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
-                        "Ok");
-                return;
-            }
-            try
-            {
                 if (await orderRC.DeleteAsync(order.ID))
                 {
                     userOrderList.load();

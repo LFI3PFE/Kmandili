@@ -132,6 +132,7 @@
     <Content Include="local.html" />
     <Content Include="Main.js" />
     <Content Include="refresh.png" />
+    <Content Include="tbOrders.png" />
     <Content Include="_1.png" />
     <Content Include="_2.png" />
     <Content Include="_3.png" />

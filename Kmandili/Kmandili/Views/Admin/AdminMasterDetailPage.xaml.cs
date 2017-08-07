@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
+using Kmandili.Views.Admin.UserViews.UserListAndFilter;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -28,7 +29,7 @@ namespace Kmandili.Views.Admin
             {
                 Children =
                 {
-                    new ContentPage()
+                    new UsersList()
                     {
 #pragma warning disable 618
                         Icon = Device.OnPlatform("shop.png", null, "shop.png"),

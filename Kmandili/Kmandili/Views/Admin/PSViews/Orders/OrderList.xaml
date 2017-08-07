@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kmandili.Converters"
+             x:Class="Kmandili.Views.Admin.PSViews.Orders.OrderList">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <local:BoolToNotConverter x:Key="BoolToNotConverter"></local:BoolToNotConverter>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ScrollView>
+    <StackLayout x:Name="BodyLayout" Padding="0,10,0,0">
+      <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+        <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+      </StackLayout>
+      <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
+        <StackLayout>
+          <Label Text="(Pas Commandes Trouvées)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+        </StackLayout>
+      </StackLayout>
+      <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" IsVisible="False">
+        <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
+      </StackLayout>
+      <ListView x:Name="OrderListView" HasUnevenRows="True" ItemSelected="SelectedNot" ItemTapped="ToOrderDetail">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                  <StackLayout Margin="30,0,0,0" Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
+                      <Grid HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="5*"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0" Grid.Column="0">
+                          <Label Text="{Binding User.Name}" FontSize="30" TextColor="Black"/>
+                          <Label Text="{Binding User.LastName}" FontSize="30" TextColor="Black"/>
+                          <!--<Image Source="RedNotificationDot.png" VerticalOptions="Center" IsVisible="{Binding SeenPastryShop, Converter={StaticResource BoolToNotConverter}}" WidthRequest="10"/>-->
+                        </StackLayout>
+                        <StackLayout Grid.Row="0" Grid.Column="1" Padding="0,10,10,0">
+                          <StackLayout Orientation="Horizontal">
+                            <Label Text="#REF " FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
+                            <Label Text="{Binding ID}" FontSize="10" FontAttributes="Bold"  TextColor="Gray"/>
+                          </StackLayout>
+                        </StackLayout>
+                      </Grid>
+                    </StackLayout>
+                    <StackLayout Padding="20,0,0,0">
+                      <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                        <StackLayout Orientation="Horizontal">
+                          <Label Text="Date: " FontSize="15" FontAttributes="Bold"  TextColor="Black"/>
+                          <StackLayout Orientation="Horizontal" Spacing="0">
+                            <Label Text="{Binding Date.Day}" FontSize="15" TextColor="Black"/>
+                            <Label Text="/" FontSize="15" TextColor="Black"/>
+                            <Label Text="{Binding Date.Month}" FontSize="15" TextColor="Black"/>
+                            <Label Text="/" FontSize="15" TextColor="Black"/>
+                            <Label Text="{Binding Date.Year}" FontSize="15" TextColor="Black"/>
+                          </StackLayout>
+                          <!--<Label Text="TND" FontSize="18" TextColor="Gray"/>
+                                                    <Label Text="/" FontSize="20" TextColor="Black"/>
+                                                    <Label Text="{Binding SaleUnit.Unit}" FontSize="20" TextColor="Black"/>-->
+                        </StackLayout>
+                      </StackLayout>
+                      <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Label Text="Status:" FontAttributes="Bold"  FontSize="20" TextColor="Black"/>
+                        <Label Text="{Binding Status.StatusName}" FontSize="20" TextColor="Black"/>
+                      </StackLayout>
+                    </StackLayout>
+                  </StackLayout>
+                </StackLayout>
+              </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>

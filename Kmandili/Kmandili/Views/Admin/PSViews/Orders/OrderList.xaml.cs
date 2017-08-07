@@ -5,18 +5,18 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.PastryShopViews.OrderViewsAndFilter;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
+namespace Kmandili.Views.Admin.PSViews.Orders
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PSOrderList : ContentPage
+	public partial class OrderList : ContentPage
 	{
         private List<Order> orders;
         private ObservableCollection<Order> displayedOrders = new ObservableCollection<Order>();
@@ -28,9 +28,9 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
         private ToolbarItem searchToolbarItem;
         private ToolbarItem endSearchToolbarItem;
 
-        public PSOrderList(int ID)
-		{
-			InitializeComponent ();
+        public OrderList(int ID)
+        {
+            InitializeComponent();
             BodyLayout.TranslateTo(0, -50);
 
             filterToolbarItem = new ToolbarItem()
@@ -70,22 +70,22 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             ToolbarItems.Add(sortToolbarItem);
 
             displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
-            OrderList.ItemsSource = displayedOrders;
+            OrderListView.ItemsSource = displayedOrders;
             load(ID);
-		}
+        }
 
         private void DisplayedProducts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (displayedOrders == null || displayedOrders.Count == 0)
             {
                 EmptyLabel.IsVisible = true;
-                OrderList.IsVisible = false;
+                OrderListView.IsVisible = false;
             }
             else
             {
                 EmptyLabel.IsVisible = false;
-                BodyLayout.HeightRequest = (double) (displayedOrders.Count*110);
-                OrderList.IsVisible = true;
+                BodyLayout.HeightRequest = (double)(displayedOrders.Count * 110);
+                OrderListView.IsVisible = true;
             }
         }
 
@@ -144,7 +144,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 
         public async void load(int ID)
         {
-            OrderList.IsVisible = false;
+            OrderListView.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
@@ -167,18 +167,18 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             selectedSortType.IsAsc = true;
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
-            OrderList.IsVisible = true;
+            OrderListView.IsVisible = true;
         }
 
         private void SelectedNot(object sender, EventArgs e)
-	    {
-	        (sender as ListView).SelectedItem = null;
-	    }
+        {
+            (sender as ListView).SelectedItem = null;
+        }
 
-	    private async void ToOrderDetail(object sender, ItemTappedEventArgs e)
-	    {
-	        await Navigation.PushAsync(new PSOrderDetail(this, e.Item as Order));
-	    }
+        private async void ToOrderDetail(object sender, ItemTappedEventArgs e)
+        {
+            await Navigation.PushAsync(new OrderDetail(this, e.Item as Order));
+        }
 
         public void AplyFilters()
         {

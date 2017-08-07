@@ -78,7 +78,7 @@ namespace Kmandili.Views.PastryShopViews
         private async void ToOrderList(object sender, EventArgs e)
         {
             pastryShopMasterDetailPage.IsPresented = false;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new PSOrderList());
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new PSOrderList(pastryShop.ID));
             //NavigationPage nav = new NavigationPage(new ContentPage());
             //await nav.PushAsync(new PastryShopOrderList());
             //await Navigation.PushModalAsync(nav);
@@ -96,7 +96,7 @@ namespace Kmandili.Views.PastryShopViews
 	    {
             pastryShopMasterDetailPage.IsPresented = false;
             pastryShopMasterDetailPage.hasNavigatedToEdit = true;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShop.ID));
+            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShop.ID, true));
         }
 
 	    private async void ToChart(object sender, EventArgs e)

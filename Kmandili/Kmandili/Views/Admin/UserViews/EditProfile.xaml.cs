@@ -5,139 +5,31 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.PastryShopViews.SignIn;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
+using Kmandili.Views.Admin.UserViews.UserListAndFilter;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.PastryShopViews.EditProfile
+namespace Kmandili.Views.Admin.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditProfileInfo : ContentPage
+	public partial class EditProfile : ContentPage
 	{
         private ObservableCollection<StackLayout> PhoneNumberStackLayouts = new ObservableCollection<StackLayout>();
         private RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-        private RestClient<PriceRange> priceRangeTypeRC = new RestClient<PriceRange>();
         private List<PhoneNumberType> phoneNumberTypes;
-        private List<PriceRange> priceRanges;
-	    private PastryShop pastryShop;
+        private User user;
         private List<PhoneNumber> removedPhoneNumbers = new List<PhoneNumber>();
-	    private MediaFile _mediaFileCover;
-	    private MediaFile _mediaFileProfile;
+	    private UsersList usersList;
 
-
-        private ToolbarItem changeProfilePicToolbarItem;
-	    private ToolbarItem changeCoverPicToolbarItem;
-	    private ToolbarItem categoriesToolbarItem;
-
-        private ToolbarItem cancelChangeProfilePicToolbarItem;
-        private ToolbarItem cancelChangeCoverPicToolbarItem;
-
-	    private int ID;
-
-        public EditProfileInfo (int ID, bool showDelete)
-		{
-			InitializeComponent ();
-            this.ID = ID;
-            DeleteBt.IsVisible = showDelete;
-            changeProfilePicToolbarItem = new ToolbarItem()
-            {
-                Text = "Changher la photo de profile",
-                Order = ToolbarItemOrder.Secondary,
-                Priority = 0,
-            };
-            changeProfilePicToolbarItem.Clicked += ChangeProfilePicToolbarItem_Clicked;
-
-            changeCoverPicToolbarItem = new ToolbarItem()
-            {
-                Text = "Changher la photo de couverture",
-                Order = ToolbarItemOrder.Secondary,
-                Priority = 1,
-            };
-            changeCoverPicToolbarItem.Clicked += ChangeCoverPicToolbarItem_Clicked;
-
-            cancelChangeProfilePicToolbarItem = new ToolbarItem()
-            {
-                Text = "Annuler le changement de la photo de profile",
-                Order = ToolbarItemOrder.Secondary,
-                Priority = 0,
-            };
-            cancelChangeProfilePicToolbarItem.Clicked += CancelChangeProfilePicToolbarItem_Clicked;
-
-            cancelChangeCoverPicToolbarItem = new ToolbarItem()
-            {
-                Text = "Annuler le changement de la photo de couverture",
-                Order = ToolbarItemOrder.Secondary,
-                Priority = 1
-            };
-            cancelChangeCoverPicToolbarItem.Clicked += CancelChangeCoverPicToolbarItem_Clicked;
-
-            categoriesToolbarItem = new ToolbarItem()
-            {
-                Text = "Categories",
-                Order = ToolbarItemOrder.Primary,
-                Priority = 1,
-                Icon = "categories.png"
-            };
-            categoriesToolbarItem.Clicked += CategoriesToolbarItem_Clicked;
-
-            ToolbarItems.Add(changeProfilePicToolbarItem);
-            ToolbarItems.Add(changeCoverPicToolbarItem);
-            ToolbarItems.Add(categoriesToolbarItem);
+        public EditProfile(int id, UsersList usersList)
+        {
+            InitializeComponent();
+            this.usersList = usersList;
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
-            load();
-        }
-
-        private async void CategoriesToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            await PopupNavigation.PushAsync(new EditCategories(this, pastryShop));
-        }
-
-        private void CancelChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            _mediaFileCover = null;
-            ToolbarItems.Remove(cancelChangeCoverPicToolbarItem);
-            ToolbarItems.Add(changeCoverPicToolbarItem);
-        }
-
-        private void CancelChangeProfilePicToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            _mediaFileProfile = null;
-            ToolbarItems.Remove(cancelChangeProfilePicToolbarItem);
-            ToolbarItems.Add(changeProfilePicToolbarItem);
-        }
-
-        private async void ChangeCoverPicToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            App.galleryIsOpent = true;
-            await CrossMedia.Current.Initialize();
-
-            _mediaFileCover = await CrossMedia.Current.PickPhotoAsync();
-
-            if (_mediaFileCover == null)
-                return;
-            ToolbarItems.Remove(changeCoverPicToolbarItem);
-            ToolbarItems.Add(cancelChangeCoverPicToolbarItem);
-            App.galleryIsOpent = false;
-        }
-
-        private async void ChangeProfilePicToolbarItem_Clicked(object sender, EventArgs e)
-        {
-            App.galleryIsOpent = true;
-            await CrossMedia.Current.Initialize();
-
-            _mediaFileProfile = await CrossMedia.Current.PickPhotoAsync();
-
-            if (_mediaFileProfile == null)
-                return;
-            ToolbarItems.Remove(changeProfilePicToolbarItem);
-            ToolbarItems.Add(cancelChangeProfilePicToolbarItem);
-            App.galleryIsOpent = false;
+            load(id);
         }
 
         private void PhoneNumberStackLayouts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -150,18 +42,17 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 s.ClassId = PhoneNumberStackLayouts.IndexOf(s).ToString();
                 PhoneNumbersLayout.Children.Add(s);
             }
-            if(!PhoneNumberStackLayouts.Any()) return;
             PhoneNumberStackLayouts.Last().Children[2].IsVisible = true;
             PhoneNumberStackLayouts.Last().Children[3].IsVisible = false;
         }
 
-        public async void load()
+        private async void load(int id)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            UserRestClient userRestClient = new UserRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(ID);
+                user = await userRestClient.GetAsyncById(id);
             }
             catch (HttpRequestException)
             {
@@ -173,15 +64,25 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 await Navigation.PopAsync();
                 return;
             }
-            if (pastryShop == null)
+            if (user == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
+            Name.Text = user.Name;
+            LastName.Text = user.LastName;
+            Email.Text = user.Email;
+            Password.Text = user.Password;
+            Address.ClassId = user.Address_FK.ToString();
+            Number.Text = user.Address.Number.ToString();
+            Street.Text = user.Address.Street;
+            City.Text = user.Address.City;
+            ZipCode.Text = user.Address.ZipCode.ToString();
+            State.Text = user.Address.State;
+            Country.Text = user.Address.Country;
             try
             {
                 phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-                priceRanges = await priceRangeTypeRC.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -193,30 +94,12 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 await Navigation.PopAsync();
                 return;
             }
-            if (phoneNumberTypes == null || priceRanges == null)
+            if (phoneNumberTypes == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            PriceRange.ItemsSource = priceRanges;
-
-            Name.Text = pastryShop.Name;
-            Email.Text = pastryShop.Email;
-            Password.Text = pastryShop.Password;
-            ShortDesc.Text = pastryShop.ShortDesc;
-            LongDesc.Text = pastryShop.LongDesc;
-            LongDesc.TextColor = Color.Black;
-            PriceRange.SelectedIndex = priceRanges.IndexOf(priceRanges.FirstOrDefault(pr => pr.ID == pastryShop.PriceRange_FK));
-            Address.ClassId = pastryShop.Address_FK.ToString();
-            Number.Text = pastryShop.Address.Number.ToString();
-            Street.Text = pastryShop.Address.Street;
-            City.Text = pastryShop.Address.City;
-            ZipCode.Text = pastryShop.Address.ZipCode.ToString();
-            State.Text = pastryShop.Address.State;
-            Country.Text = pastryShop.Address.Country;
-
-            PhoneNumberStackLayouts.Clear();
-            foreach (var phoneNumber in pastryShop.PhoneNumbers)
+            foreach (var phoneNumber in user.PhoneNumbers)
             {
                 StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(phoneNumber);
                 PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
@@ -284,7 +167,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             PhoneNumberStackLayouts.RemoveAt(index);
             string removedClassId = (((sender as Image).Parent as StackLayout).Children[0] as Entry).ClassId;
             int removedID = removedClassId == "" ? -1 : Int32.Parse(removedClassId);
-            var phoneNumber = pastryShop.PhoneNumbers.FirstOrDefault(p => p.ID == removedID);
+            var phoneNumber = user.PhoneNumbers.FirstOrDefault(p => p.ID == removedID);
             if (phoneNumber != null)
             {
                 removedPhoneNumbers.Add(phoneNumber);
@@ -298,44 +181,6 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             (PhoneNumberStackLayouts.Last().Children[3] as Image).IsVisible = true;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
-        }
-
-        private void ShortDesc_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string _text = ShortDesc.Text;
-            if (_text.Length > 30)
-            {
-                _text = _text.Remove(_text.Length - 1);
-                ShortDesc.Text = _text;
-            }
-        }
-
-        private void LongDesc_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string _text = LongDesc.Text;
-            if (_text.Length > 100)
-            {
-                _text = _text.Remove(_text.Length - 1);
-                LongDesc.Text = _text;
-            }
-        }
-
-        private void editorFocused(object sender, EventArgs e)
-        {
-            if (LongDesc.Text == "Longue Description...")
-            {
-                LongDesc.Text = "";
-                LongDesc.TextColor = Color.Black;
-            }
-        }
-
-        private void editorUnFocused(object sender, EventArgs e)
-        {
-            if (LongDesc.Text == "")
-            {
-                LongDesc.Text = "Longue Description...";
-                LongDesc.TextColor = Color.Gray;
-            }
         }
 
         private async Task<bool> validAddress()
@@ -432,6 +277,11 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
                 return false;
             }
+            else if (LastName.Text == null || LastName.Text == "")
+            {
+                await DisplayAlert("Erreur", "Le champ Prenom est obligateur!", "Ok");
+                return false;
+            }
             else if (Email.Text == null || Email.Text == "")
             {
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
@@ -459,14 +309,12 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             return true;
         }
 
-	    public async void EmailVerified()
-	    {
-            UpdateBt.IsEnabled = false;
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            RestClient<Address> addressRC = new RestClient<Address>();
-            RestClient<PhoneNumber> phoneNumberRC = new RestClient<PhoneNumber>();
 
+        public async void EmailVerified()
+        {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            UserRestClient userRC = new UserRestClient();
+            RestClient<Address> addressRC = new RestClient<Address>();
             Address address = new Address()
             {
                 ID = Int32.Parse(Address.ClassId),
@@ -477,83 +325,66 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 Country = Country.Text,
                 ZipCode = Int32.Parse(ZipCode.Text)
             };
-	        try
-	        {
+            try
+            {
                 if (!(await addressRC.PutAsync(address.ID, address))) return;
             }
-	        catch (HttpRequestException)
-	        {
+            catch (HttpRequestException)
+            {
                 await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
+                usersList.load();
                 await Navigation.PopAsync();
                 return;
             }
 
-            if (_mediaFileProfile != null)
+            User user = new User()
             {
-                string newURL = await Upload(_mediaFileProfile);
-                if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.ProfilePic)))
-                {
-                    pastryShop.ProfilePic = newURL;
-                }
-            }
-
-            if (_mediaFileCover != null)
-            {
-                string newURL = await Upload(_mediaFileProfile);
-                if (!string.IsNullOrEmpty(newURL) && (await Delete(pastryShop.CoverPic)))
-                {
-                    pastryShop.CoverPic = newURL;
-                }
-            }
-
-            PastryShop newPastryShop = new PastryShop()
-            {
-                ID = pastryShop.ID,
-                Name = Name.Text,
+                ID = this.user.ID,
+                Name = Name.Text.ToLower(),
+                LastName = LastName.Text.ToLower(),
                 Email = Email.Text.ToLower(),
                 Password = Password.Text,
-                Address_FK = address.ID,
-                LongDesc = LongDesc.Text,
-                ShortDesc = ShortDesc.Text,
-                PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID,
-                ProfilePic = pastryShop.ProfilePic,
-                CoverPic = pastryShop.CoverPic,
+                Address_FK = address.ID
             };
-	        try
+            try
             {
-                if (!(await pastryShopRC.PutAsync(newPastryShop.ID, newPastryShop))) return;
+                if (!(await userRC.PutAsync(user.ID, user))) return;
             }
-	        catch (HttpRequestException)
-	        {
+            catch (HttpRequestException)
+            {
                 await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
+                usersList.load();
                 await Navigation.PopAsync();
                 return;
-	        }
-	        try
+            }
+            RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
+            try
             {
                 foreach (var removedPhoneNumber in removedPhoneNumbers)
                 {
-                    if (!(await phoneNumberRC.DeleteAsync(removedPhoneNumber.ID))) return;
+                    if (!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
                 }
             }
-	        catch (HttpRequestException)
-	        {
+            catch (HttpRequestException)
+            {
                 await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
+                usersList.load();
                 await Navigation.PopAsync();
                 return;
             }
+
             foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
             {
                 Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
@@ -570,7 +401,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                         p.ID = phoneNumberID;
                         try
                         {
-                            if (!(await phoneNumberRC.PutAsync(p.ID, p))) return;
+                            if (!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
                         }
                         catch (HttpRequestException)
                         {
@@ -579,16 +410,17 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                                 DisplayAlert("Erreur",
                                     "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                     "Ok");
+                            usersList.load();
                             await Navigation.PopAsync();
                             return;
                         }
                     }
                     else
                     {
-                        p.PastryShop = newPastryShop;
+                        p.User = user;
                         try
                         {
-                            if (await phoneNumberRC.PostAsync(p) == null) return;
+                            if (await phoneNumberRestClient.PostAsync(p) == null) return;
                         }
                         catch (HttpRequestException)
                         {
@@ -597,37 +429,38 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                                 DisplayAlert("Erreur",
                                     "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                     "Ok");
+                            usersList.load();
                             await Navigation.PopAsync();
                             return;
                         }
                     }
                 }
             }
-            await DisplayAlert("Succées", "Compte mis à jour!", "Ok");
-            await PopupNavigation.PopAsync();
+            await DisplayAlert("Succées", "Informations mise à jour!", "Ok");
+            await PopupNavigation.PopAllAsync();
+            usersList.load();
             await Navigation.PopAsync();
         }
 
-        private async void UpdateBt_Clicked(object sender, EventArgs e)
+        public async void UpdateBt_Clicked(object sender, EventArgs e)
         {
             if (await valid())
             {
-                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                 UserRestClient userRC = new UserRestClient();
-                if (pastryShop.Email != Email.Text.ToLower())
+                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+                if (user.Email != Email.Text.ToLower())
                 {
                     try
                     {
-                        if ((await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                        if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
                         {
                             await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
                             Email.Text = "";
                             return;
                         }
-                        var x = new EmailVerificationPopupPage(this, Email.Text.ToLower());
-                        await PopupNavigation.PushAsync(x);
+                        await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
                     }
-                    catch (HttpRequestException)
+                    catch (Exception)
                     {
                         await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
@@ -639,78 +472,5 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 }
             }
         }
-
-	    private async Task<string> Upload(MediaFile upfile)
-        {
-            string fileName = Guid.NewGuid().ToString();
-            var stream = upfile.GetStream();
-	        try
-	        {
-                var res = await new UploadRestClient().Upload(stream, fileName);
-                if (res)
-                {
-                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
-                }
-                return null;
-            }
-	        catch (HttpRequestException)
-	        {
-                await PopupNavigation.PopAllAsync();
-                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
-	            return null;
-	        }
-        }
-
-	    private async Task<bool> Delete(string picURL)
-	    {
-            string fileName = picURL.Substring(App.ServerURL.Count()+8, (picURL.Length - (App.ServerURL.Count() + 8)));
-	        fileName = fileName.Substring(0, (fileName.Length - 4));
-            UploadRestClient uploadRC = new UploadRestClient();
-	        try
-	        {
-                return (await uploadRC.Delete(fileName));
-            }
-	        catch (HttpRequestException)
-	        {
-                await PopupNavigation.PopAllAsync();
-                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
-                return false;
-	        }
-	    }
-
-	    private async void DeleteBt_Clicked(object sender, EventArgs e)
-	    {
-	        if (pastryShop.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
-	        {
-	            await
-	                DisplayAlert("Erreur",
-	                    "Impossible de supprimer votre compte, une ou plusieurs commandes ne sont pas encore réglées!",
-	                    "Ok");
-                return;
-	        }
-            var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
-	        if (!choix) return;
-	        var pastryShopRC = new PastryShopRestClient();
-	        try
-	        {
-                if (await pastryShopRC.DeleteAsync(pastryShop.ID))
-                {
-                    await DisplayAlert("Succées", "Votre Compte a été supprimer.", "Ok");
-                    App.Logout();
-                    return;
-                }
-            }
-	        catch (HttpRequestException)
-	        {
-                await PopupNavigation.PopAllAsync();
-                await
-                    DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
-                        "Ok");
-                await Navigation.PopAsync();
-                return;
-            }
-            await DisplayAlert("Erreur", "Une Erreur s'est produite lors de la suppression de votre compte, veuillez réessayer plus tard!.", "Ok");
-        }
-	}
+    }
 }

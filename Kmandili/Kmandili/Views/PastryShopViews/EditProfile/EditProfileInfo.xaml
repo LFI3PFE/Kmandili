@@ -6,7 +6,7 @@
         <StackLayout VerticalOptions="Center">
             <StackLayout>
                 <StackLayout HorizontalOptions="Center" Padding="0,20,0,0">
-                    <Label Text="Profile" FontSize="30" TextColor="Black" HorizontalTextAlignment="Center"/>
+                    <Label Text="Profil" FontSize="30" TextColor="Black" HorizontalTextAlignment="Center"/>
                 </StackLayout>
                 <StackLayout Spacing="20" Padding="30">
                     <Entry x:Name="Name" PlaceholderColor="Gray" Placeholder="Nom" TextColor="Black" WidthRequest="150" FontSize="25" />
@@ -40,8 +40,8 @@
                         <StackLayout x:Name="PhoneNumbersLayout" Padding="20,0,0,0"></StackLayout>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout HorizontalOptions="End" Padding="0,20,30,20">
-                    <Button x:Name="UpdateBt" BackgroundColor="#2b78c1" Clicked="UpdateBt_Clicked" TextColor="#3b4552" Text="Confirmer" WidthRequest="150" FontSize="20" FontAttributes="Bold"/>
+                <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,20,0">
+                    <Button x:Name="UpdateBt" HorizontalOptions="FillAndExpand" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="Mettre à jour" FontSize="20" FontAttributes="Bold" Clicked="UpdateBt_Clicked"/>
                 </StackLayout>
                 <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,20,0">
                     <Button x:Name="DeleteBt" BackgroundColor="IndianRed" Clicked="DeleteBt_Clicked" TextColor="#3b4552" Text="Supprimer Mon Compte" HorizontalOptions="FillAndExpand" FontSize="20" FontAttributes="Bold"/>
