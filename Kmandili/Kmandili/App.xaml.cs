@@ -20,6 +20,7 @@ namespace Kmandili
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
 	    public static bool updatePastryList = false;
+	    public static bool updateClientList = false;
         public App ()
 		{
 			InitializeComponent();
@@ -28,6 +29,11 @@ namespace Kmandili
             MainPage = new NavigationPage(new MainPage());
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
 		}
+
+	    public static string ToTitleCase(string s)
+	    {
+	        return s.Substring(0, 1).ToUpper() + s.Substring(1, s.Length - 1);
+        }
 
         public static bool TokenExpired()
         {

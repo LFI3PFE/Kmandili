@@ -34,6 +34,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private ToolbarItem changeProfilePicToolbarItem;
 	    private ToolbarItem changeCoverPicToolbarItem;
 	    private ToolbarItem categoriesToolbarItem;
+	    private ToolbarItem methodeToolbarItem;
 
         private ToolbarItem cancelChangeProfilePicToolbarItem;
         private ToolbarItem cancelChangeCoverPicToolbarItem;
@@ -45,9 +46,10 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 			InitializeComponent ();
             this.ID = ID;
             DeleteBt.IsVisible = showDelete;
+
             changeProfilePicToolbarItem = new ToolbarItem()
             {
-                Text = "Changher la photo de profile",
+                Text = "Changer la photo de profile",
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0,
             };
@@ -55,7 +57,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
             changeCoverPicToolbarItem = new ToolbarItem()
             {
-                Text = "Changher la photo de couverture",
+                Text = "Changer la photo de couverture",
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 1,
             };

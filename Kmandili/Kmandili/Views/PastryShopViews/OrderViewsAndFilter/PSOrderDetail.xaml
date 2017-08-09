@@ -10,7 +10,7 @@
                     <Label x:Name="OrderID" FontSize="20" TextColor="Black"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Label Text="Pâtisserie:" FontSize="20" FontAttributes="Bold" TextColor="Black" />
+                    <Label Text="Client:" FontSize="20" FontAttributes="Bold" TextColor="Black" />
                     <Label x:Name="ClientName" FontSize="20" TextColor="Black" />
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10">

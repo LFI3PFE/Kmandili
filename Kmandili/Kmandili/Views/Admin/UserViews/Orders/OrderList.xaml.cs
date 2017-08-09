@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.PastryShopViews.OrderViewsAndFilter;
+using Kmandili.Views.UserViews.OrderViewsAndFilter;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Kmandili.Views.Admin.PSViews.Orders
+namespace Kmandili.Views.Admin.UserViews.Orders
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class OrderList : ContentPage
@@ -27,17 +27,19 @@ namespace Kmandili.Views.Admin.PSViews.Orders
         private ToolbarItem sortToolbarItem;
         private ToolbarItem searchToolbarItem;
         private ToolbarItem endSearchToolbarItem;
+	    private int ID;
 
         public OrderList(int ID)
         {
             InitializeComponent();
+            this.ID = ID;
             BodyLayout.TranslateTo(0, -50);
 
             filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = "filter.png"
+                Icon = "filter.png",
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
@@ -61,7 +63,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
-                Icon = "close.png"
+                Icon = "close.png",
             };
             endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
@@ -71,7 +73,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
 
             displayedOrders.CollectionChanged += DisplayedProducts_CollectionChanged;
             OrderListView.ItemsSource = displayedOrders;
-            load(ID);
+            load();
         }
 
         private void DisplayedProducts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -124,7 +126,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
             AplyFilters();
         }
 
-        public async void load(int ID)
+        public async void load()
         {
             OrderListView.IsVisible = false;
             LoadingLayout.IsVisible = true;
@@ -132,9 +134,9 @@ namespace Kmandili.Views.Admin.PSViews.Orders
             OrderRestClient orderRC = new OrderRestClient();
             try
             {
-                orders = await orderRC.GetAsyncByPastryShopID(ID);
+                orders = await orderRC.GetAsyncByUserID(ID);
             }
-            catch (HttpRequestException)
+            catch (Exception)
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
@@ -142,7 +144,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
                 return;
             }
             if (orders == null) return;
-            orders = orders.OrderBy(p => p.SeenPastryShop).ToList();
+            orders = orders.OrderBy(o => o.SeenUser).ToList();
             displayedOrders.Clear();
             orders.ForEach(o => displayedOrders.Add(o));
             selectedSortType.SortTypeIndex = 1;
@@ -166,12 +168,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
         {
             if (orders == null || displayedOrders == null) return;
             var res =
-                orders.Where(
-                    o =>
-                        (string.IsNullOrEmpty(SearchBar.Text) ||
-                         o.User.Name.ToLower().StartsWith(SearchBar.Text.ToLower()) ||
-                         o.User.LastName.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
-                        (selectedStatuses.Count == 0 || selectedStatuses.Any(s => s.ID == o.Status_FK))).ToList();
+                orders.Where(o => (string.IsNullOrEmpty(SearchBar.Text) || o.PastryShop.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) && (selectedStatuses.Count == 0 || selectedStatuses.Any(s => s.ID == o.Status_FK))).ToList();
             if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
             {
                 res = res.OrderBy(o => o.Date).ToList();
@@ -182,11 +179,11 @@ namespace Kmandili.Views.Admin.PSViews.Orders
             }
             else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
             {
-                res = res.OrderBy(o => o.SeenPastryShop).ToList();
+                res = res.OrderBy(o => o.SeenUser).ToList();
             }
             else
             {
-                res = res.OrderByDescending(o => o.SeenPastryShop).ToList();
+                res = res.OrderByDescending(o => o.SeenUser).ToList();
             }
             displayedOrders.Clear();
             res.ForEach(p => displayedOrders.Add(p));

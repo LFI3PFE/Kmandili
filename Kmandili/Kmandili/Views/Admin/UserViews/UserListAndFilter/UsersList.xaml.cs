@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.Admin.UserViews.Orders;
 using Kmandili.Views.UserViews;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -141,15 +142,16 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
 
         private async void SelectedNot(Object sender, ItemTappedEventArgs e)
         {
-            User u = (User)e.Item;
+            var u = (User)e.Item;
             (sender as ListView).SelectedItem = null;
             var choice = await DisplayActionSheet("Choisir une action", "Annuler", null, "Consulter liste des commandes", "Editer le profile");
             switch (choice)
             {
                 case "Consulter liste des commandes":
+                    await Navigation.PushAsync(new OrderList(u.ID));
                     break;
                 case "Editer le profile":
-                    await Navigation.PushAsync(new EditProfile((e.Item as User).ID, this));
+                    await Navigation.PushAsync(new EditProfile(u.ID, this));
                     break;
             }
         }
@@ -192,10 +194,10 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
 
         protected override void OnAppearing()
         {
-            if (App.updatePastryList)
+            if (App.updateClientList)
             {
                 load();
-                App.updatePastryList = false;
+                App.updateClientList = false;
             }
         }
 

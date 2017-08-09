@@ -1,13 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Kmandili.Converters"
-             x:Class="Kmandili.Views.Admin.PSViews.Orders.OrderList">
-  <ContentPage.Resources>
-    <ResourceDictionary>
-      <local:StringToTitleCaseConverter x:Key="StringToTitleCaseConverter"></local:StringToTitleCaseConverter>
-    </ResourceDictionary>
-  </ContentPage.Resources>
+             x:Class="Kmandili.Views.Admin.UserViews.Orders.OrderList">
   <ScrollView>
     <StackLayout x:Name="BodyLayout" Padding="0,10,0,0">
       <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
@@ -28,20 +22,23 @@
               <StackLayout HorizontalOptions="FillAndExpand" BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
                 <Label x:Name="ProductId" Text="{Binding ID}" IsVisible="False"/>
                 <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
-                  <StackLayout Margin="30,0,0,0" Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                  <StackLayout Padding="5" VerticalOptions="Center">
+                    <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
+                      <Image Source="{Binding PastryShop.ProfilePic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                    </StackLayout>
+                  </StackLayout>
+                  <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
                     <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="10">
                       <Grid HorizontalOptions="FillAndExpand">
                         <Grid.RowDefinitions>
                           <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                          <ColumnDefinition Width="5*"/>
+                          <ColumnDefinition Width="3*"/>
                           <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0" Grid.Column="0">
-                          <Label Text="{Binding User.Name, Converter={StaticResource StringToTitleCaseConverter}}" FontSize="30" TextColor="Black"/>
-                          <Label Text="{Binding User.LastName, Converter={StaticResource StringToTitleCaseConverter}}" FontSize="30" TextColor="Black"/>
-                          <!--<Image Source="RedNotificationDot.png" VerticalOptions="Center" IsVisible="{Binding SeenPastryShop, Converter={StaticResource BoolToNotConverter}}" WidthRequest="10"/>-->
+                          <Label Text="{Binding PastryShop.Name}" FontSize="30" TextColor="Black"/>
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="1" Padding="0,10,10,0">
                           <StackLayout Orientation="Horizontal">
