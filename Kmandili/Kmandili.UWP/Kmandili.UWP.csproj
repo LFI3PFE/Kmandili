@@ -125,6 +125,7 @@
     <Content Include="confirm.png" />
     <Content Include="cubeSend.png" />
     <Content Include="delete.png" />
+    <Content Include="delevery.png" />
     <Content Include="edit.png" />
     <Content Include="emptyCart.png" />
     <Content Include="emptyStar.png" />

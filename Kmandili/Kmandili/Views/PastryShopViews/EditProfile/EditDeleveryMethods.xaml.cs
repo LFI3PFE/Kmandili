@@ -16,15 +16,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class EditDeleveryMethods : ContentPage
 	{
-	    private PastryShopMasterDetailPage pastryShopMasterDetailPage;
-	    private PastryShop pastryShop;
+	    //private PastryShopMasterDetailPage pastryShopMasterDetailPage;
+	    private EditProfileInfo editProfileInfo;
+        private PastryShop pastryShop;
 	    private ToolbarItem addToolbarItem;
 	    private bool reloadParent = false;
+	    private int ID;
 
-		public EditDeleveryMethods (PastryShopMasterDetailPage pastryShopMasterDetailPage)
+		public EditDeleveryMethods (EditProfileInfo editProfileInfo, int ID)
 		{
-		    this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
-			InitializeComponent ();
+		    this.editProfileInfo = editProfileInfo;
+		    this.ID = ID;
+            //this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
+            InitializeComponent ();
             addToolbarItem = new ToolbarItem()
             {
                 Text = "Ajouter",
@@ -48,7 +52,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+                pastryShop = await pastryShopRC.GetAsyncById(ID);
             }
             catch (HttpRequestException)
             {
@@ -192,7 +196,8 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	    {
 	        if (reloadParent)
 	        {
-                pastryShopMasterDetailPage.ReloadPastryShop();
+                //pastryShopMasterDetailPage.ReloadPastryShop();
+                editProfileInfo.load();
             }
 	    }
 	}

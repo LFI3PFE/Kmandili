@@ -8,7 +8,7 @@
             <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source=""/>
         </StackLayout>
         <StackLayout Padding="0,30,0,0" Spacing="0">
-            <StackLayout HeightRequest="50" BackgroundColor="White">
+            <!--<StackLayout HeightRequest="50" BackgroundColor="White">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToEditDeleveryMethod" NumberOfTapsRequired="1"/>
                 </StackLayout.GestureRecognizers>
@@ -27,7 +27,7 @@
                         <Label Text="Methodes de livraison" TextColor="#737373" FontSize="20"/>
                     </StackLayout>
                 </Grid>
-            </StackLayout>
+            </StackLayout>-->
             <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToEditProfile" NumberOfTapsRequired="1"/>

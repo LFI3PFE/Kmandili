@@ -84,12 +84,12 @@ namespace Kmandili.Views.PastryShopViews
             //await Navigation.PushModalAsync(nav);
         }
 
-	    private async void ToEditDeleveryMethod(object sender, EventArgs e)
-	    {
-            pastryShopMasterDetailPage.IsPresented = false;
-            pastryShopMasterDetailPage.hasNavigatedToEdit = true;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditDeleveryMethods(pastryShopMasterDetailPage));
-        }
+	    //private async void ToEditDeleveryMethod(object sender, EventArgs e)
+	    //{
+     //       pastryShopMasterDetailPage.IsPresented = false;
+     //       pastryShopMasterDetailPage.hasNavigatedToEdit = true;
+     //       await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditDeleveryMethods(pastryShopMasterDetailPage));
+     //   }
 
 
         private async void ToEditProfile(object sender, EventArgs e)

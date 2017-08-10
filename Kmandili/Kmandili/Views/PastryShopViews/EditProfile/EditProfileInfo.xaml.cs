@@ -47,6 +47,16 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             this.ID = ID;
             DeleteBt.IsVisible = showDelete;
 
+            methodeToolbarItem = new ToolbarItem()
+            {
+                Icon = "delevery.png",
+                Text = "Methodes de livraisons",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 0
+            };
+
+            methodeToolbarItem.Clicked += MethodeToolbarItem_Clicked;
+
             changeProfilePicToolbarItem = new ToolbarItem()
             {
                 Text = "Changer la photo de profile",
@@ -91,8 +101,14 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             ToolbarItems.Add(changeProfilePicToolbarItem);
             ToolbarItems.Add(changeCoverPicToolbarItem);
             ToolbarItems.Add(categoriesToolbarItem);
+            ToolbarItems.Add(methodeToolbarItem);
             PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
             load();
+        }
+
+        private async void MethodeToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new EditDeleveryMethods(this, pastryShop.ID));
         }
 
         private async void CategoriesToolbarItem_Clicked(object sender, EventArgs e)
