@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
+using Kmandili.Views.Admin.PSViews.Charts;
 using Kmandili.Views.Admin.PSViews.Orders;
 using Kmandili.Views.PastryShopViews;
 using Kmandili.Views.PastryShopViews.POSListAndAdd;
@@ -27,6 +28,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
 	    private ToolbarItem editToolbarItem;
         private PastryShop pastryShop;
 	    private ToolbarItem orderToolbarItem;
+	    private ToolbarItem chartsToolbarItem;
 
 	    private bool hasNavigatedToEdit = false;
 	    private bool updateParent = false;
@@ -62,6 +64,13 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             };
             pointOfSaleList.Clicked += PointOfSaleList_Clicked;
 
+            chartsToolbarItem = new ToolbarItem()
+            {
+                Text = "Graphiques",
+                Order = ToolbarItemOrder.Secondary
+            };
+            chartsToolbarItem.Clicked += ChartsToolbarItem_Clicked;
+
             editToolbarItem = new ToolbarItem()
             {
                 Text = "Modifier",
@@ -74,7 +83,30 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             ToolbarItems.Add(editToolbarItem);
             ToolbarItems.Add(pointOfSaleList);
             ToolbarItems.Add(orderToolbarItem);
+            ToolbarItems.Add(chartsToolbarItem);
             Load();
+        }
+
+        private async void ChartsToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            var ordersChart = new OrdersChart(pastryShop)
+            {
+                Title = "Commandes"
+            };
+
+            var incomsChart = new IncomsChart(pastryShop)
+            {
+                Title = "Revenues"
+            };
+            var tabbedPage = new TabbedPage()
+            {
+                Children =
+                {
+                    ordersChart,
+                    incomsChart
+                }
+            };
+            await Navigation.PushAsync(tabbedPage);
         }
 
         private async void OrderToolbarItem_Clicked(object sender, EventArgs e)
