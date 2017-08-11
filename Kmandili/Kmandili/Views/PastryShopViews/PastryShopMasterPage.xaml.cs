@@ -101,6 +101,14 @@ namespace Kmandili.Views.PastryShopViews
 
 	    private async void ToChart(object sender, EventArgs e)
 	    {
+	        //var x =
+	        //    ((((App.Current.MainPage as NavigationPage).CurrentPage as PastryShopMasterDetailPage).Detail) as
+	        //        NavigationPage).CurrentPage;
+	        //if (x.Title == "ChartsPage")
+	        //{
+	        //    ((App.Current.MainPage as NavigationPage).CurrentPage as MasterDetailPage).IsPresented = false;
+         //       return;
+	        //}
             pastryShopMasterDetailPage.IsPresented = false;
 	        var doughnutPage = new Doughnut()
 	        {
@@ -110,15 +118,20 @@ namespace Kmandili.Views.PastryShopViews
 	        var linePage = new Line(pastryShop)
 	        {
 	            Icon = "",
-	            Title = "Graphe des commandes"
+	            Title = "Commandes"
+	        };
+	        var earningsPage = new EarningsChart(pastryShop)
+	        {
+	            Title = "Revenus"
 	        };
             TabbedPage chartsPage = new TabbedPage()
             {
                 Children =
                 {
-                    linePage,
+                    earningsPage,
                     doughnutPage,
-                }
+                    linePage,
+                },
             };
             await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(chartsPage);
         }

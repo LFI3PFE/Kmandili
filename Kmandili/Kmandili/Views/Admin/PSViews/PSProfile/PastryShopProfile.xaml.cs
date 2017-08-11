@@ -94,9 +94,9 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
                 Title = "Commandes"
             };
 
-            var incomsChart = new IncomsChart(pastryShop)
+            var incomsChart = new EarningsChart(pastryShop)
             {
-                Title = "Revenues"
+                Title = "Revenus"
             };
             var tabbedPage = new TabbedPage()
             {

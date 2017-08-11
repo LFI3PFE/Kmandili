@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.PSViews.Charts
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class IncomsChart : ContentPage
+	public partial class EarningsChart : ContentPage
 	{
         private ToolbarItem refreshToolbarItem;
         private int year;
@@ -20,7 +20,7 @@ namespace Kmandili.Views.Admin.PSViews.Charts
         private DateTime max, min;
         private PastryShop pastryShop;
 
-        public IncomsChart(PastryShop pastryShop)
+        public EarningsChart(PastryShop pastryShop)
         {
             InitializeComponent();
             this.pastryShop = pastryShop;

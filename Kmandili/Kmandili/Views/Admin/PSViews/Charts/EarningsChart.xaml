@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kmandili.Views.Admin.PSViews.Charts.IncomsChart">
+             x:Class="Kmandili.Views.Admin.PSViews.Charts.EarningsChart">
   <StackLayout BackgroundColor="White">
     <StackLayout x:Name="LoadingLayout" VerticalOptions="CenterAndExpand">
       <ActivityIndicator x:Name="Loading" VerticalOptions="CenterAndExpand" Color="#3b4552" HeightRequest="50"/>
     </StackLayout>
     <StackLayout Spacing="0" x:Name="BodyLayout" VerticalOptions="FillAndExpand" IsVisible="False">
       <StackLayout Padding="0,25,0,0" Margin="0" Spacing="0" VerticalOptions="Center" BackgroundColor="White">
-        <Label Text="Evolution des commandes" FontSize="25" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+        <Label Text="Evolution des revenus" FontSize="25" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
       </StackLayout>
       <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" BackgroundColor="White" Padding="0,20,0,0">
         <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,0,0">

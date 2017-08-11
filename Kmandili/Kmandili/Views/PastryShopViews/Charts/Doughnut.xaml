@@ -13,6 +13,10 @@
       <StackLayout Padding="0,20,0,30" Margin="0" Spacing="0" x:Name="BrowserLayout" VerticalOptions="FillAndExpand">
         <WebView x:Name="Browser" VerticalOptions="FillAndExpand"></WebView>
       </StackLayout>
+      <StackLayout VerticalOptions="End" HorizontalOptions="End" Padding="0,0,10,20" Orientation="Horizontal" Spacing="5">
+        <Label Text="cde." TextColor="Black" FontSize="15"/>
+        <Label Text="= Commande" TextColor="Black" FontSize="15"/>
+      </StackLayout>
     </StackLayout>
   </StackLayout>
 </ContentPage>
