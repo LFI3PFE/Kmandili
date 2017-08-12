@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,14 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Charts
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class NewUserChart : ContentPage
+	public partial class UsersChart : ContentPage
 	{
         private ToolbarItem refreshToolbarItem;
         private int year;
         private int semester;
         private DateTime max, min;
 
-        public NewUserChart()
+        public UsersChart()
         {
             InitializeComponent();
             refreshToolbarItem = new ToolbarItem()
@@ -30,7 +29,7 @@ namespace Kmandili.Views.Admin.Charts
             };
             refreshToolbarItem.Clicked += RefreshToolbarItem_Clicked;
             ToolbarItems.Add(refreshToolbarItem);
-            min = new DateTime(2017,1,1);
+            min = new DateTime(2017, 1, 1);
             max = DateTime.Now;
             year = max.Year;
             semester = getSemester(max.Month);
@@ -78,8 +77,7 @@ namespace Kmandili.Views.Admin.Charts
             {
                 var htmlWebView = new HtmlWebViewSource()
                 {
-                    Html =
-                        await chartRC.GetChartView(App.ServerURL + "api/GetNewUsersChartView/" + year + "/" + semester)
+                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetUsersChartView/ " + year + "/" + semester)
                 };
                 Browser.Source = htmlWebView;
             }

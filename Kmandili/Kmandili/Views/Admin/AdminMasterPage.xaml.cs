@@ -27,7 +27,26 @@ namespace Kmandili.Views.Admin
 
 	    private async void ToChart(object sender, EventArgs e)
 	    {
-	        await Navigation.PushAsync(new NewUserChart());
+            adminMasterDetailPage.IsPresented = false;
+            var newUsersChart = new NewUserChart()
+            {
+                Icon = "",
+                Title = "Nouveaux Utilisateurs"
+            };
+            var usersChart = new UsersChart()
+            {
+                Icon = "",
+                Title = "Evolutions des Utilisateurs"
+            };
+            TabbedPage chartsPage = new TabbedPage()
+            {
+                Children =
+                {
+                    newUsersChart,
+                    usersChart,
+                },
+            };
+            await Navigation.PushAsync(chartsPage);
 	    }
 
     }
