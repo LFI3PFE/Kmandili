@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Views.Admin.Charts;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,6 +23,11 @@ namespace Kmandili.Views.Admin
 	    private void Logout(object sender, EventArgs e)
 	    {
 	        App.Logout();
+	    }
+
+	    private async void ToChart(object sender, EventArgs e)
+	    {
+	        await Navigation.PushAsync(new NewUserChart());
 	    }
 
     }
