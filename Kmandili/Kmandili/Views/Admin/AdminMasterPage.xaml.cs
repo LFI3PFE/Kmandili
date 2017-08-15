@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.Admin.Charts;
+using Kmandili.Views.Admin.Edit.EditCategories;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -47,6 +48,12 @@ namespace Kmandili.Views.Admin
                 },
             };
             await Navigation.PushAsync(chartsPage);
+	    }
+
+	    private async void ManageCategories_OnTapped(object sender, EventArgs e)
+	    {
+	        adminMasterDetailPage.IsPresented = false;
+	        await Navigation.PushAsync(new CategoriesList());
 	    }
 
     }
