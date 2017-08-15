@@ -18,7 +18,7 @@
       </StackLayout>
       <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
         <StackLayout>
-          <Label Text="(Aucune Pâtisserie Trouvée)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+          <Label Text="(Aucun Client Trouvé)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
       </StackLayout>
       <StackLayout Margin="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">

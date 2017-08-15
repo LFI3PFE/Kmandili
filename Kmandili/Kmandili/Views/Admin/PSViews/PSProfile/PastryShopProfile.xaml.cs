@@ -84,7 +84,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             ToolbarItems.Add(pointOfSaleList);
             ToolbarItems.Add(orderToolbarItem);
             ToolbarItems.Add(chartsToolbarItem);
-            Load();
+            Reload();
         }
 
         private async void ChartsToolbarItem_Clicked(object sender, EventArgs e)

@@ -9,7 +9,7 @@
       </StackLayout>
       <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
         <StackLayout>
-          <Label Text="(Pas Commandes Trouvées)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+          <Label Text="(Pas De Commandes Trouvées)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
         </StackLayout>
       </StackLayout>
       <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" IsVisible="False">

@@ -18,6 +18,7 @@
                       <Label Text="{Binding CategoryName}" FontSize="20" TextColor="Black" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Center"></Label>
                     </StackLayout>
                     <StackLayout HorizontalOptions="End" VerticalOptions="CenterAndExpand" Padding="0,0,10,0">
+                      <Label Text="{Binding ID}" IsVisible="False"/>
                       <Image Source="delete.png" WidthRequest="20" VerticalOptions="Center">
                         <Image.GestureRecognizers>
                           <TapGestureRecognizer Tapped="RemoveCategory"/>

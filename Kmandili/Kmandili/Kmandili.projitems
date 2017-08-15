@@ -72,6 +72,10 @@
       <DependentUpon>UsersChart.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\AddCategoryPopupPage.xaml.cs">
+      <DependentUpon>AddCategoryPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\CategoriesList.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>CategoriesList.xaml</DependentUpon>
@@ -717,6 +721,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\EditCategoryPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\AddCategoryPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
