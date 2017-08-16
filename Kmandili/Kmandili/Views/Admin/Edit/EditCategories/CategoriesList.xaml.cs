@@ -44,7 +44,19 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             var categoriesRestClient = new RestClient<Category>();
-	        List.ItemsSource = categories = await categoriesRestClient.GetAsync();
+            try
+            {
+                List.ItemsSource = categories = await categoriesRestClient.GetAsync();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
             ListLayout.IsVisible = true;
             LoadingLayout.IsVisible = false;
             Loading.IsRunning = false;

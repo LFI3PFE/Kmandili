@@ -84,6 +84,30 @@
       <DependentUpon>EditCategoryPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\AddDeleveryPopupPage.xaml.cs">
+      <DependentUpon>AddDeleveryPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\DeleveryList.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>DeleveryList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryMethod.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditDeleveryMethod.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryPayments.xaml.cs">
+      <DependentUpon>EditDeleveryPayments.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\EditPayment.xaml.cs">
+      <DependentUpon>EditPayment.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\PaymentList.xaml.cs">
+      <DependentUpon>PaymentList.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\Charts\EarningsChart.xaml.cs">
       <DependentUpon>EarningsChart.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -355,6 +379,14 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\CategoriesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\DeleveryList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryMethod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -727,6 +759,30 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\AddCategoryPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryPayments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\AddDeleveryPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\PaymentList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\EditPayment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

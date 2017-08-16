@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.Admin.Charts;
 using Kmandili.Views.Admin.Edit.EditCategories;
+using Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery;
+using Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -54,6 +56,26 @@ namespace Kmandili.Views.Admin
 	    {
 	        adminMasterDetailPage.IsPresented = false;
 	        await Navigation.PushAsync(new CategoriesList());
+	    }
+
+	    private async void ManageDelevery_OnTapped(object sender, EventArgs e)
+	    {
+	        adminMasterDetailPage.IsPresented = false;
+	        var tabbedPage = new TabbedPage()
+	        {
+                Children =
+                {
+                    new DeleveryList()
+                    {
+                        Title = "Méthodes de livraison"
+                    },
+                    new PaymentList()
+                    {
+                        Title = "Méthodes de paiement"
+                    }
+                }
+            };
+	        await Navigation.PushAsync(tabbedPage);
 	    }
 
     }

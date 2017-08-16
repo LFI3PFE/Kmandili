@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery.DeleveryList">
+  <ScrollView VerticalOptions="FillAndExpand">
+    <StackLayout>
+      <StackLayout x:Name="LoadingLayout" VerticalOptions="Start" Padding="0,20,0,0" IsVisible="False">
+        <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
+      </StackLayout>
+      <StackLayout Padding="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
+        <ListView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="List" ItemTapped="SelectedNot" RowHeight="70">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                <StackLayout BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="0,0,0,10">
+                  <StackLayout Padding="20,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                      <Label Text="{Binding DeleveryType}" FontSize="20" TextColor="Black" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" VerticalTextAlignment="Center"></Label>
+                    </StackLayout>
+                    <StackLayout HorizontalOptions="End" VerticalOptions="CenterAndExpand" Padding="0,0,10,0">
+                      <Label Text="{Binding ID}" IsVisible="False"/>
+                      <Image Source="delete.png" WidthRequest="20" VerticalOptions="Center">
+                        <Image.GestureRecognizers>
+                          <TapGestureRecognizer Tapped="RemoveDeleveryMethod"/>
+                        </Image.GestureRecognizers>
+                      </Image>
+                    </StackLayout>
+                  </StackLayout>
+                </StackLayout>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>
