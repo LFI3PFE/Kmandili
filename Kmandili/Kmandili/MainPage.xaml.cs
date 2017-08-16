@@ -39,10 +39,6 @@ namespace Kmandili
                 await DisplayAlert("Erreur mot de passe", "Mot de passe obligatoir", "OK");
                 return false;
             }
-            if (Email.Text == "Admin" && Password.Text == "AdminPass")
-            {
-                return true;
-            }
             if (!App.isValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur Email", "Adresse email invalide", "OK");

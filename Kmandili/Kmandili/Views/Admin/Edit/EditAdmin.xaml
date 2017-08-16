@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.Admin.Edit.EditAdmin">
+  <StackLayout BackgroundColor="White" VerticalOptions="FillAndExpand">
+    <StackLayout Spacing="40" VerticalOptions="FillAndExpand">
+      <Entry x:Name="Email" TextColor="Black" PlaceholderColor="Gray" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
+      <Entry x:Name="Password" TextColor="Black" PlaceholderColor="Gray" Placeholder="Mot de Passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
+    </StackLayout>
+    <StackLayout VerticalOptions="End">
+      <Button x:Name="JoinUsBt" BackgroundColor="#2b78c1" TextColor="#3b4552" Text="S'Inscrire" FontAttributes="Bold" FontSize="30" Clicked="Update"/>
+    </StackLayout>
+  </StackLayout>
+</ContentPage>

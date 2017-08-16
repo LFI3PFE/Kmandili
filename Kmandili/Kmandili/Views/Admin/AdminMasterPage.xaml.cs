@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.Admin.Charts;
+using Kmandili.Views.Admin.Edit;
 using Kmandili.Views.Admin.Edit.EditCategories;
 using Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery;
 using Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment;
@@ -76,6 +77,12 @@ namespace Kmandili.Views.Admin
                 }
             };
 	        await Navigation.PushAsync(tabbedPage);
+	    }
+
+	    private async void UpdateAdmin_OnTapped(object sender, EventArgs e)
+	    {
+	        adminMasterDetailPage.IsPresented = false;
+	        await Navigation.PushAsync(new EditAdmin());
 	    }
 
     }

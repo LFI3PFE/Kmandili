@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Category.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DeleveryDelay.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DeleveryMethod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\Admin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\CartPastry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\CartProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\LocalModels\Connected.cs" />
@@ -41,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\PriceRange.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Product.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Rating.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AdminRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AuthorizationRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ChartsRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
@@ -71,6 +73,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Charts\UsersChart.xaml.cs">
       <DependentUpon>UsersChart.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditAdmin.xaml.cs">
+      <DependentUpon>EditAdmin.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditCategories\AddCategoryPopupPage.xaml.cs">
@@ -784,6 +790,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\AddPaymentPopupPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditAdmin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
