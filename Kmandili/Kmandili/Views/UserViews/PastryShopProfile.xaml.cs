@@ -42,7 +42,6 @@ namespace Kmandili.Views.UserViews
 
             ProductList = new ToolbarItem
             {
-                Icon = "products.png",
                 Text = "Produits",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0

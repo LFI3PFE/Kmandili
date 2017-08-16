@@ -28,7 +28,6 @@ namespace Kmandili.Views.PastryShopViews
             //ToolbarItems.Clear();
             ProductList = new ToolbarItem
             {
-                Icon = "products.png",
                 Text = "Produits",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0

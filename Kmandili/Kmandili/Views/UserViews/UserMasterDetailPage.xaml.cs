@@ -31,18 +31,14 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 
             NavigationPage.SetHasNavigationBar(this, false);
-#pragma warning disable 618
             pastryShopList = new PastryShopList()
             {
-                Icon = Device.OnPlatform("shop.png", null, "shop.png"),
                 Title = "Liste des pâtisseries"
             };
             productList = new ProductList()
             {
-                Icon = Device.OnPlatform("products.png", null, "products.png"),
                 Title = "Liste des Produits"
             };
-#pragma warning restore 618
             MyTabbedPage tab = new MyTabbedPage()
             {
                 Children =

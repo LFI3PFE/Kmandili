@@ -42,7 +42,6 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             this.pastryShopList = pastryShopList;
             ProductList = new ToolbarItem
             {
-                Icon = "products.png",
                 Text = "Produits",
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0

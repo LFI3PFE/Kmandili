@@ -119,6 +119,7 @@
     <Content Include="cancel.png" />
     <Content Include="cart.png" />
     <Content Include="categories.png" />
+    <Content Include="categories_left_menu.png" />
     <Content Include="Chart.js" />
     <Content Include="chart.png" />
     <Content Include="close.png" />
