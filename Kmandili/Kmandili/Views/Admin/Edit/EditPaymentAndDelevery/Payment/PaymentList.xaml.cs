@@ -15,15 +15,29 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PaymentList : ContentPage
 	{
-	    private List<Models.Payment> payments; 
+	    private ToolbarItem addToolbarItem;
 
 		public PaymentList ()
 		{
 			InitializeComponent ();
-		    Load();
+            addToolbarItem = new ToolbarItem()
+            {
+                Icon = "plus.png",
+                Text = "Ajouter",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 0
+            };
+            addToolbarItem.Clicked += AddToolbarItem_Clicked;
+            ToolbarItems.Add(addToolbarItem);
+            Load();
 		}
 
-	    public async void Load()
+        private async void AddToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.PushAsync(new AddPaymentPopupPage(this));
+        }
+
+        public async void Load()
 	    {
 	        ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
@@ -31,7 +45,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
             var paymentMethodRestClient = new RestClient<Models.Payment>();
             try
             {
-                List.ItemsSource = payments = await paymentMethodRestClient.GetAsync();
+                List.ItemsSource = await paymentMethodRestClient.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -53,10 +67,48 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 	        await PopupNavigation.PushAsync(new EditPayment((e.Item as Models.Payment), this));
 	    }
 
-	    private void RemovePaymentMethod(object sender, EventArgs e)
+	    private async void RemovePaymentMethod(object sender, EventArgs e)
 	    {
-	        
-	    }
+            var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette méthode de paiement?", "Oui", "Annuler");
+            if (!choix) return;
+            var id = (Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text));
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            var paymentRC = new RestClient<Models.Payment>();
+            var cat = await paymentRC.GetAsyncById(id);
+            if (cat.Orders.Any() ||
+                cat.PastryDeleveryPayments.Any())
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                        DisplayAlert("Erreur",
+                            "Impossible de supprimer cette méthode de paiement, une ou plusieurs méthodes de livraison et / ou commandes l'utilisent",
+                            "Ok");
+                return;
+            }
+            try
+            {
+                if (!(await paymentRC.DeleteAsync(id)))
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la suppression de la méthode de paiement, veuillez réessayer plus tard.",
+                            "Ok");
+                    return;
+                }
+                Load();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
+            await PopupNavigation.PopAllAsync();
+        }
 
     }
 }

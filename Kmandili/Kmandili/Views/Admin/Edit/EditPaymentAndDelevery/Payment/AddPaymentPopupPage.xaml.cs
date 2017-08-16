@@ -4,9 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -15,38 +13,34 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditPayment : PopupPage
+	public partial class AddPaymentPopupPage : PopupPage
 	{
         private PaymentList paymentList;
-        private Models.Payment paymentMethod;
 
-        public EditPayment(Models.Payment paymentMethod, PaymentList paymentList)
+        public AddPaymentPopupPage(PaymentList paymentList)
         {
             InitializeComponent();
-            this.paymentMethod = paymentMethod;
             this.paymentList = paymentList;
-            PaymentName.Text = paymentMethod.PaymentMethod;
         }
 
         private async void ComfirmTapped(object sender, EventArgs e)
         {
-            if (PaymentName.Text != paymentMethod.PaymentMethod)
+            if (!string.IsNullOrEmpty(CategoryName.Text))
             {
-                var newPayement = new Models.Payment()
+                var payment = new Models.Payment()
                 {
-                    ID = paymentMethod.ID,
-                    PaymentMethod = PaymentName.Text,
+                    PaymentMethod = CategoryName.Text
                 };
                 var paymentRC = new RestClient<Models.Payment>();
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (!(await paymentRC.PutAsync(newPayement.ID, newPayement)))
+                    if (await paymentRC.PostAsync(payment) == null)
                     {
                         await PopupNavigation.PopAllAsync();
                         await
                         DisplayAlert("Erreur",
-                            "Une erreur s'est produite lors de la mise à jour de la méthode de paiement, veuillez réessayer plus tard.",
+                            "Une erreur s'est produite lors de l'ajout de la nouvelle méthode de paiement, veuillez réessayer plus tard.",
                             "Ok");
                         return;
                     }
@@ -64,6 +58,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
             }
             await PopupNavigation.PopAllAsync();
         }
+
 
         private async void DismissTapped(object sender, EventArgs e)
         {

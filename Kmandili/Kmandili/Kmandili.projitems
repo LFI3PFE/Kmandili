@@ -44,6 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\AuthorizationRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ChartsRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\ConnectionLostException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\DeleveryMethodRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\EmailRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\OrderRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\RestClient\PasswordResetRestClient.cs" />
@@ -96,8 +97,8 @@
       <SubType>Code</SubType>
       <DependentUpon>EditDeleveryMethod.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryPayments.xaml.cs">
-      <DependentUpon>EditDeleveryPayments.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\AddPaymentPopupPage.xaml.cs">
+      <DependentUpon>AddPaymentPopupPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\EditPayment.xaml.cs">
@@ -764,12 +765,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\EditDeleveryPayments.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Delevery\AddDeleveryPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
@@ -783,6 +778,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\EditPayment.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditPaymentAndDelevery\Payment\AddPaymentPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

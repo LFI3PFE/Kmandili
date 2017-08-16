@@ -19,7 +19,7 @@
   <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" VerticalOptions="Center" BackgroundColor="White">
     <StackLayout Margin="40,20,40,20">
       <StackLayout Spacing="20">
-        <Label Text="Renommer la catégorie" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
+        <Label Text="Renommer la méthode de paiement" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
         <Entry x:Name="PaymentName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la categorie"/>
       </StackLayout>
       <StackLayout VerticalOptions="End" HorizontalOptions="End" Spacing="30" Margin="0,20,0,0" Orientation="Horizontal">

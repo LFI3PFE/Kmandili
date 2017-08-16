@@ -16,7 +16,6 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
 	public partial class CategoriesList : ContentPage
 	{
 	    private ToolbarItem addToolbarItem;
-	    private List<Category> categories; 
 
 		public CategoriesList()
 		{
@@ -46,7 +45,7 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
             var categoriesRestClient = new RestClient<Category>();
             try
             {
-                List.ItemsSource = categories = await categoriesRestClient.GetAsync();
+                List.ItemsSource = await categoriesRestClient.GetAsync();
             }
             catch (HttpRequestException)
             {

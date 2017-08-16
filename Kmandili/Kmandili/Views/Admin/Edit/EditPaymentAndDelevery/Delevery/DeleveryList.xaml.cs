@@ -15,15 +15,29 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DeleveryList : ContentPage
 	{
-	    private List<DeleveryMethod> deleveryMethods; 
+	    private ToolbarItem addToolbarItem;
 
 		public DeleveryList ()
 		{
 			InitializeComponent ();
+            addToolbarItem = new ToolbarItem()
+            {
+                Icon = "plus.png",
+                Text = "Ajouter",
+                Order = ToolbarItemOrder.Primary,
+                Priority = 0
+            };
+            addToolbarItem.Clicked += AddToolbarItem_Clicked;
+            ToolbarItems.Add(addToolbarItem);
             Load();
 		}
 
-	    public async void Load()
+        private async void AddToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await PopupNavigation.PushAsync(new AddDeleveryPopupPage(this));
+        }
+
+        public async void Load()
 	    {
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
@@ -31,7 +45,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
             var deleveryMethodRestClient = new RestClient<DeleveryMethod>();
             try
             {
-                List.ItemsSource = deleveryMethods = await deleveryMethodRestClient.GetAsync();
+                List.ItemsSource = await deleveryMethodRestClient.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -50,23 +64,50 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 	    private async void SelectedNot(object sender, ItemTappedEventArgs e)
 	    {
 	        List.SelectedItem = null;
-	        var choix = await
-	            DisplayActionSheet("Choisir une action", "Annuler", null, "Renomer la methode",
-	                "Changer les méthodes de paiement");
-	        switch (choix)
-	        {
-                case "Renomer la methode":
-	                await PopupNavigation.PushAsync(new EditDeleveryMethod(((e.Item) as DeleveryMethod), this));
-	                break;
-                case "Changer les méthodes de paiement":
-	                break;
-	        }
+            await PopupNavigation.PushAsync(new EditDeleveryMethod(((e.Item) as DeleveryMethod), this));
+        }
 
-	    }
-
-	    private void RemoveDeleveryMethod(object sender, EventArgs e)
+	    private async void RemoveDeleveryMethod(object sender, EventArgs e)
 	    {
-	        
-	    }
+            var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette méthode de livraison?", "Oui", "Annuler");
+            if (!choix) return;
+            var id = (Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text));
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            var deleveryRC = new DeleveryMethodRestClient();
+            var cat = await deleveryRC.GetAsyncById(id);
+            if (cat.Orders.Any() ||
+                cat.PastryShopDeleveryMethods.Any())
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                        DisplayAlert("Erreur",
+                            "Impossible de supprimer cette méthode de paiement, une ou plusieurs pâtisseries et / ou commandes l'utilisent",
+                            "Ok");
+                return;
+            }
+            try
+            {
+                if (!(await deleveryRC.DeleteAsync(id)))
+                {
+                    await PopupNavigation.PopAllAsync();
+                    await
+                        DisplayAlert("Erreur",
+                            "Une erreur s'est produite lors de la suppression de la méthode de livraison, veuillez réessayer plus tard.",
+                            "Ok");
+                    return;
+                }
+                Load();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await
+                    DisplayAlert("Erreur",
+                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+                        "Ok");
+                return;
+            }
+            await PopupNavigation.PopAllAsync();
+        }
     }
 }

@@ -31,18 +31,12 @@ namespace Kmandili.Views.Admin
                 {
                     new UsersList()
                     {
-#pragma warning disable 618
-                        Icon = Device.OnPlatform("shop.png", null, "shop.png"),
-                        Title = "Users Dashboard"
+                        Title = "Clients"
                     },
                     new PastryShopList()
                     {
-                        Icon = Device.OnPlatform("shop.png", null, "shop.png"),
-                        Title = "PastryShops Dashboard"
+                        Title = "Pâtisseries"
                     }
-#pragma warning restore 618
-                    //pastryShopList,
-                    //productList
                 }
             };
             Master = new AdminMasterPage(this);

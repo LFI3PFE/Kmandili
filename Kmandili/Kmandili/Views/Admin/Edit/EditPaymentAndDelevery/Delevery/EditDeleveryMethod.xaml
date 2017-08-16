@@ -19,8 +19,23 @@
   <StackLayout x:Name="LoadingLayout" Padding="0,20,0,0" VerticalOptions="Center" BackgroundColor="White">
     <StackLayout Margin="40,20,40,20">
       <StackLayout Spacing="20">
-        <Label Text="Renommer la catégorie" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
+        <Label Text="Editer la méthode de livraison" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
         <Entry x:Name="DeleveryName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la categorie"/>
+        <StackLayout>
+          <Label Text="Méthodes de paiement:" FontSize="18" FontAttributes="Bold" VerticalOptions="Start"/>
+          <ListView HorizontalOptions="FillAndExpand" x:Name="List" HasUnevenRows="True" ItemTapped="SelectedNot">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <StackLayout Padding="10,0,0,0" Orientation="Horizontal" HeightRequest="30" HorizontalOptions="FillAndExpand">
+                    <Label Text="{Binding payment.PaymentMethod}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" TextColor="Black" FontSize="18"/>
+                    <Switch ClassId="{Binding payment.ID}" HorizontalOptions="End" IsToggled="{Binding exist}"/>
+                  </StackLayout>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </StackLayout>
       </StackLayout>
       <StackLayout VerticalOptions="End" HorizontalOptions="End" Spacing="30" Margin="0,20,0,0" Orientation="Horizontal">
         <Label Text="Annuler" x:Name="CancelLabel" TextColor="DodgerBlue" FontSize="20" HorizontalOptions="End">
@@ -28,7 +43,7 @@
             <TapGestureRecognizer Tapped="DismissTapped"></TapGestureRecognizer>
           </Label.GestureRecognizers>
         </Label>
-        <Label Text="Renommer" x:Name="ComfirmLabel" TextColor="DodgerBlue" FontSize="20" HorizontalOptions="End">
+        <Label Text="Mettre À Jour" x:Name="ComfirmLabel" TextColor="DodgerBlue" FontSize="20" HorizontalOptions="End">
           <Label.GestureRecognizers>
             <TapGestureRecognizer Tapped="ComfirmTapped"></TapGestureRecognizer>
           </Label.GestureRecognizers>
