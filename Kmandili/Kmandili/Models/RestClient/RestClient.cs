@@ -39,19 +39,9 @@ namespace Kmandili.Models.RestClient
             WebServiceUrl = App.ServerURL + "api/" + controllerName + "/";
         }
 
-        protected async Task<bool> CheckConnection()
-        {
-            while (!CrossConnectivity.Current.IsConnected)
-            {
-                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
-                return (await CheckConnection());
-            }
-            return true;
-        }
-
         public async Task<List<T>> GetAsync()
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -74,7 +64,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<T> GetAsyncById(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return default(T);
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return default(T);
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -97,7 +87,7 @@ namespace Kmandili.Models.RestClient
         
         public async Task<T> PostAsync(T t)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return default(T);
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return default(T);
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
@@ -113,7 +103,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> PutAsync(int id, T t)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
@@ -128,7 +118,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> DeleteAsync(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var response = await httpClient.DeleteAsync(WebServiceUrl + id);

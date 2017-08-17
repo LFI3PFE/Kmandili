@@ -11,19 +11,10 @@ namespace Kmandili.Models.RestClient
 {
     public class AuthorizationRestClient
     {
-        protected async Task<bool> CheckConnection()
-        {
-            while (!CrossConnectivity.Current.IsConnected)
-            {
-                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
-                return (await CheckConnection());
-            }
-            return true;
-        }
 
         public async Task<TokenResponse> AuthorizationLoginAsync(string email, string password)
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await App.CheckConnection())) return null;
             var keyValues = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("UserName", email),

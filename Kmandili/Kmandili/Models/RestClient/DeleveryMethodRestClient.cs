@@ -13,7 +13,7 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<bool> PutAsyncPayments(int id, DeleveryMethod deleveryMethod)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 

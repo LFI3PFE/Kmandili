@@ -4,11 +4,11 @@
              x:Class="Kmandili.Views.Admin.AdminMasterPage"
              Title="Menu">
   <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="#f2f2f2">
-    <StackLayout x:Name="CoverLayout" HorizontalOptions="FillAndExpand" HeightRequest="155" BackgroundColor="Brown">
-      <Image Source="test.jpg"/>
+    <StackLayout x:Name="CoverLayout" HorizontalOptions="FillAndExpand" HeightRequest="155">
+      <Image Source="Cover_Pic.jpg" HeightRequest="155" Aspect="AspectFill"/>
     </StackLayout>
-    <StackLayout Padding="0,5,0,0" Spacing="0">
-      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+    <StackLayout Padding="0,0,0,0" Margin="0" Spacing="0">
+      <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,0,0,0" Padding="0">
         <StackLayout.GestureRecognizers>
           <TapGestureRecognizer Tapped="UpdateAdmin_OnTapped" NumberOfTapsRequired="1"/>
         </StackLayout.GestureRecognizers>
@@ -88,7 +88,7 @@
           </StackLayout>
         </Grid>
       </StackLayout>
-      <StackLayout Margin="0,1,0,0" HeightRequest="214" HorizontalOptions="FillAndExpand" BackgroundColor="White"></StackLayout>
+      <StackLayout Margin="0,1,0,0" HeightRequest="224" HorizontalOptions="FillAndExpand" BackgroundColor="White"></StackLayout>
       <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
         <StackLayout.GestureRecognizers>
           <TapGestureRecognizer Tapped="Logout" NumberOfTapsRequired="1"/>

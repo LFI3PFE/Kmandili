@@ -11,36 +11,10 @@ namespace Kmandili.Models.RestClient
 {
     class PastryShopRestClient : RestClient<PastryShop>
     {
-        //public async Task<PastryShop> GetAsyncByEmailAndPass(string email, string password)
-        //{
-        //    if (!(await CheckConnection()))
-        //    {
-        //        throw new ConnectionLostException();
-        //    }
-        //    var httpClient = new HttpClient();
-        //    try
-        //    {
-        //        var json = await httpClient.GetStringAsync(WebServiceUrl + email + "/" + password);
-        //        var taskModels = JsonConvert.DeserializeObject<PastryShop>(json);
-
-        //        return taskModels;
-        //    }catch(HttpRequestException ex)
-        //    {
-        //        if (ex.Message == "404 (Not Found)")
-        //        {
-        //            return null;
-        //        }
-        //        throw;
-        //        //await
-        //        //    App.Current.MainPage.DisplayAlert("Erreur",
-        //        //        "Une erreur s'est produite lors de la communication avec le serveur", "Ok");
-        //        //return null;
-        //    }
-        //}
 
         public async Task<PastryShop> GetAsyncByEmail(string email)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -61,7 +35,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> PutAsyncCategories(int id, PastryShop pastryShop)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 

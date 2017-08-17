@@ -12,16 +12,10 @@ namespace Kmandili.Models.RestClient
 {
     class EmailRestClient
     {
-        protected async Task<bool> CheckConnection()
-        {
-            if (CrossConnectivity.Current.IsConnected) return true;
-            await App.Current.MainPage.DisplayAlert("Erreur", "Email not sent due to connection error", "Ok");
-            return false;
-        }
 
         public async Task<string> SendPasswordRestCode(string email)
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/SendPasswordRestCode/" + email + "/";
@@ -32,7 +26,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<string> SendEmailVerification(string email)
         {
-            if (!(await CheckConnection())) return null;
+            if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/sendEmailVerificationCode/" + email + "/";
@@ -43,7 +37,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> SendOrderEmail(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.GetAsync(App.ServerURL + "api/sendOrderEmail/" + id);
@@ -52,7 +46,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> SendCancelOrderEmail(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
@@ -61,7 +55,7 @@ namespace Kmandili.Models.RestClient
         
         public async Task<bool> SendCanelOrderEmailByAdmin(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmailByAdmin/" + id);

@@ -241,11 +241,9 @@ namespace Kmandili.Views.UserViews
         {
             if (!await valid()) return;
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            UserRestClient userRC = new UserRestClient();
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
             try
             {
-                if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                if ((await App.GetEmailExist(Email.Text.ToLower())))
                 {
                     await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");

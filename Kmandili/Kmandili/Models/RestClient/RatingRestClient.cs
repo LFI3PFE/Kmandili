@@ -13,7 +13,7 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<Rating> GetAsyncById(int user_fk, int pastryShop_fk)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return default(Rating);
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return default(Rating);
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -36,7 +36,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> PutAsync(int user_fk, int pastryShop_fk, Rating rating)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
@@ -52,7 +52,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> DeleteAsync(int user_fk, int pastryShop_fk)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var response = await httpClient.DeleteAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");

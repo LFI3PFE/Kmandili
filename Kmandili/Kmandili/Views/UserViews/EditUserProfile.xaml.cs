@@ -350,6 +350,8 @@ namespace Kmandili.Views.UserViews
             try
             {
                 if (!(await userRC.PutAsync(user.ID, user))) return;
+                Settings.Email = Email.Text.ToLower();
+                Settings.Password = Password.Text;
             }
             catch (HttpRequestException)
             {
@@ -438,13 +440,11 @@ namespace Kmandili.Views.UserViews
         {
             if (await valid())
             {
-                UserRestClient userRC = new UserRestClient();
-                PastryShopRestClient pastryShopRC = new PastryShopRestClient();
                 if (user.Email != Email.Text.ToLower())
                 {
                     try
                     {
-                        if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) != null) || (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) != null))
+                        if ((await App.GetEmailExist(Email.Text.ToLower())))
                         {
                             await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
                             Email.Text = "";

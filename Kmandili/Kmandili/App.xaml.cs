@@ -2,10 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Kmandili.Views;
+using Newtonsoft.Json;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -21,6 +25,7 @@ namespace Kmandili
         public static bool galleryIsOpent = false;
 	    public static bool updatePastryList = false;
 	    public static bool updateClientList = false;
+	    public static bool isConnected = false;
         public App ()
 		{
 			InitializeComponent();
@@ -89,6 +94,7 @@ namespace Kmandili
             Cart.Clear();
             galleryIsOpent = false;
             Current.MainPage = new NavigationPage(new MainPage());
+            isConnected = false;
             //await Main.Navigation.PopModalAsync();
         }
 
@@ -102,6 +108,32 @@ namespace Kmandili
                 return (true);
             else
                 return (false);
+        }
+
+        public static async Task<bool> CheckConnection()
+        {
+            while (!CrossConnectivity.Current.IsConnected)
+            {
+                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
+                return (await CheckConnection());
+            }
+            return true;
+        }
+
+        public static async Task<bool> GetEmailExist(string email)
+        {
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
+            try
+            {
+                var json = await httpClient.GetStringAsync(App.ServerURL + "api/GetEmailExist/" + email + "/");
+                return JsonConvert.DeserializeObject<bool>(json);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw;
+            }
         }
 
         protected async override void OnStart ()

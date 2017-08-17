@@ -4,11 +4,11 @@
              x:Class="Kmandili.Views.PastryShopViews.PastryShopMasterPage"
              Title="Menu">
     <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="#f2f2f2">
-        <StackLayout HorizontalOptions="FillAndExpand" HeightRequest="155" BackgroundColor="Brown">
-            <Image Aspect="AspectFill" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Source=""/>
-        </StackLayout>
-        <StackLayout Padding="0,5,0,0" Spacing="0">
-            <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,1,0,0">
+      <StackLayout x:Name="CoverLayout" HorizontalOptions="FillAndExpand" HeightRequest="155">
+        <Image Source="Cover_Pic.jpg" HeightRequest="155" Aspect="AspectFill"/>
+      </StackLayout>
+        <StackLayout Padding="0,0,0,0" Spacing="0">
+            <StackLayout HeightRequest="50" VerticalOptions="Center" BackgroundColor="White" Margin="0,0,0,0">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="ToEditProfile" NumberOfTapsRequired="1"/>
                 </StackLayout.GestureRecognizers>

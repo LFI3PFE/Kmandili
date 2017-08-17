@@ -94,6 +94,7 @@ namespace Kmandili
                     {
                         isLoading(false);
                         await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
+                        App.isConnected = false;
                         Email.Focus();
                         return;
                     }
@@ -103,10 +104,12 @@ namespace Kmandili
                 {
                     await PopupNavigation.PopAllAsync();
                     isLoading(false);
+                    App.isConnected = false;
                     await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                     return;
                 }
             }
+            App.isConnected = true;
             Email.Text = "";
             Password.Text = "";
             switch (Settings.Type)
@@ -177,10 +180,9 @@ namespace Kmandili
 
         protected override void OnAppearing()
         {
-            if (Settings.Id > -1)
+            if (Settings.Id > -1 && !App.isConnected)
             {
                 SignInAction(Settings.Email, Settings.Password);
-                //App.Cart = Settings.Cart;
             }
         }
     }

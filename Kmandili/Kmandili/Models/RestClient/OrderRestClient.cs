@@ -13,7 +13,7 @@ namespace Kmandili.Models.RestClient
     {
         public async Task<List<Order>> GetAsyncByUserID(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -36,7 +36,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<List<Order>> GetAsyncByPastryShopID(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return null;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -59,7 +59,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> MarkAsSeenUser(int id)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
@@ -68,7 +68,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> MarkAsSeenPastryShop(int id)
         {
-            if (!(await CheckConnection()) || App.TokenExpired()) return false;
+            if (!(await App.CheckConnection()) || App.TokenExpired()) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);

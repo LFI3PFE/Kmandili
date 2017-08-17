@@ -235,7 +235,16 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            //AplyFilters();
+            AplyFilters();
+        }
+
+	    private void AplyFilters()
+	    {
+            if (users == null || displayedUsers == null || SearchBar == null) return;
+
+            users = users.Where(u => (string.IsNullOrEmpty(SearchBar.Text) || u.Name.ToLower().StartsWith(SearchBar.Text.ToLower()))).OrderBy(p => p.Name).ToList();
+            displayedUsers.Clear();
+            users.ForEach(p => displayedUsers.Add(p));
         }
 
         //public void AplyFilters()

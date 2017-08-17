@@ -13,19 +13,9 @@ namespace Kmandili.Models.RestClient
 {
     class AdminRestClient
     {
-        protected async Task<bool> CheckConnection()
-        {
-            while (!CrossConnectivity.Current.IsConnected)
-            {
-                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
-                return (await CheckConnection());
-            }
-            return true;
-        }
-
         public async Task<Admin> GetAdmin()
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return default(Admin);
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return default(Admin);
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
@@ -46,7 +36,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> UpdateAdmin(string userName, string password)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.PutAsync(App.ServerURL + "api/Admin/" + userName + "/" + password, null);
