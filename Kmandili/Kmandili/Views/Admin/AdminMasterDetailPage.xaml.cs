@@ -59,7 +59,12 @@ namespace Kmandili.Views.Admin
             //IsPresentedChanged += UserMasterDetailPage_IsPresentedChanged;
         }
 
-        //private void UserMasterDetailPage_IsPresentedChanged(object sender, EventArgs e)
+	    protected override bool OnBackButtonPressed()
+	    {
+	        return true;
+	    }
+
+	    //private void UserMasterDetailPage_IsPresentedChanged(object sender, EventArgs e)
         //{
         //    if (IsPresented)
         //        (Master as AdminMasterPage).UpdateOrderNotificationNumber();

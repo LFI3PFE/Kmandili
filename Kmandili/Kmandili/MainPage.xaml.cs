@@ -116,7 +116,8 @@ namespace Kmandili
             {
                 case "a":
                     isLoading(false);
-                    App.setMainPage(new AdminMasterDetailPage());
+                    await Navigation.PushAsync(new AdminMasterDetailPage());
+                    //App.setMainPage(new AdminMasterDetailPage());
                     break;
                 case "u":
                     var userRestClient = new UserRestClient();

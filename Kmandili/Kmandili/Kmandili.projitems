@@ -115,6 +115,10 @@
       <DependentUpon>PaymentList.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EmailVerificationPopupPage.xaml.cs">
+      <DependentUpon>EmailVerificationPopupPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Admin\PSViews\Charts\EarningsChart.xaml.cs">
       <DependentUpon>EarningsChart.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -786,6 +790,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EditAdmin.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Views\Admin\Edit\EmailVerificationPopupPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

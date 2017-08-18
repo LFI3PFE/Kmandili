@@ -62,7 +62,23 @@ namespace Kmandili.Views.Admin.Edit
                             "Cette adresse email existe déjas", "Ok");
                     return;
                 }
+                await PopupNavigation.PopAllAsync();
+                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                //EmailVerified();
+            }
+            catch (HttpRequestException)
+            {
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
+                return;
+            }
+	    }
 
+	    public async void EmailVerified()
+	    {
+            try
+            {
+                await PopupNavigation.PushAsync(new LoadingPopupPage());
                 var adminRC = new AdminRestClient();
                 if (!(await adminRC.UpdateAdmin(Email.Text.ToLower(), Password.Text)))
                 {
@@ -74,6 +90,7 @@ namespace Kmandili.Views.Admin.Edit
                 }
                 Settings.Email = Email.Text.ToLower();
                 Settings.Password = Password.Text;
+                await PopupNavigation.PopAllAsync();
                 await Navigation.PopAsync();
             }
             catch (HttpRequestException)
@@ -82,8 +99,7 @@ namespace Kmandili.Views.Admin.Edit
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                 return;
             }
-	        await PopupNavigation.PopAllAsync();
-	    }
+        }
 
     }
 }

@@ -89,13 +89,15 @@ namespace Kmandili
 
         public async static void Logout()
         {
+            if(Settings.Type == "a")
+                await Current.MainPage.Navigation.PopToRootAsync();
+            else
+                Current.MainPage = new NavigationPage(new MainPage());
             Settings.ClearSettings();
-            //Connected = null;
             Cart.Clear();
             galleryIsOpent = false;
-            Current.MainPage = new NavigationPage(new MainPage());
             isConnected = false;
-            //await Main.Navigation.PopModalAsync();
+            
         }
 
         public static bool isValidEmail(string inputEmail)

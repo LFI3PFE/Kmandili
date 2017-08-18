@@ -34,12 +34,9 @@ namespace Kmandili.Views
             ComfirmLabel.TextColor = Color.DarkGray;
 	        Indicator.IsVisible = true;
             Indicator.IsRunning = true;
-            var userRC = new UserRestClient();
-	        var pastryShopRC = new PastryShopRestClient();
 	        try
 	        {
-                if ((await userRC.GetAsyncByEmail(Email.Text.ToLower()) == null) &&
-                (await pastryShopRC.GetAsyncByEmail(Email.Text.ToLower()) == null))
+                if (!(await App.GetEmailExist(Email.Text.ToLower())))
                 {
                     await DisplayAlert("Erreur", "Utilisateur inexistant!", "Ok");
                     await PopupNavigation.PopAsync();

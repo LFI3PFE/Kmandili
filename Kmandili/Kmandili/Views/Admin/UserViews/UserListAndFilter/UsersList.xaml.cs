@@ -148,10 +148,10 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
             switch (choice)
             {
                 case "Consulter liste des commandes":
-                    await Navigation.PushAsync(new OrderList(u.ID));
+                    await App.Current.MainPage.Navigation.PushAsync(new OrderList(u.ID));
                     break;
                 case "Editer le profile":
-                    await Navigation.PushAsync(new EditProfile(u.ID, this));
+                    await App.Current.MainPage.Navigation.PushAsync(new EditProfile(u.ID, this));
                     break;
             }
         }
@@ -217,8 +217,6 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
             SearchBar.Unfocus();
             ToolbarItems.Clear();
             ToolbarItems.Add(searchToolbarItem);
-            //ToolbarItems.Add(filterToolbarItem);
-            //ToolbarItems.Add(sortToolbarItem);
             await BodyLayout.TranslateTo(0, -50);
         }
 
@@ -238,44 +236,14 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
             AplyFilters();
         }
 
-	    private void AplyFilters()
-	    {
+        private void AplyFilters()
+        {
             if (users == null || displayedUsers == null || SearchBar == null) return;
 
             users = users.Where(u => (string.IsNullOrEmpty(SearchBar.Text) || u.Name.ToLower().StartsWith(SearchBar.Text.ToLower()))).OrderBy(p => p.Name).ToList();
             displayedUsers.Clear();
             users.ForEach(p => displayedUsers.Add(p));
         }
-
-        //public void AplyFilters()
-        //{
-        //    if (pastryShops == null || displayedPastryShops == null) return;
-
-        //    var res =
-        //        pastryShops.Where(
-        //            p =>
-        //                (string.IsNullOrEmpty(SearchBar.Text) || p.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
-        //                (selectedCategories.Count == 0 ||
-        //                 p.Categories.Any(c => selectedCategories.Any(sc => sc.CategoryName == c.CategoryName)))).ToList();
-        //    if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
-        //    {
-        //        res = res.OrderBy(p => p.Name).ToList();
-        //    }
-        //    else if (selectedSortType.SortTypeIndex == 0 && !selectedSortType.IsAsc)
-        //    {
-        //        res = res.OrderByDescending(p => p.Name).ToList();
-        //    }
-        //    else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
-        //    {
-        //        res = res.OrderBy(p => p.Ratings.Sum(r => r.Value)).ToList();
-        //    }
-        //    else
-        //    {
-        //        res = res.OrderByDescending(p => p.Ratings.Sum(r => r.Value)).ToList();
-        //    }
-        //    displayedPastryShops.Clear();
-        //    res.ForEach(p => displayedPastryShops.Add(p));
-        //}
 
         protected override void OnDisappearing()
         {

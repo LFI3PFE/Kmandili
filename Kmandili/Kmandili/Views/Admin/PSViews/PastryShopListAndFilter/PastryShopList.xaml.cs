@@ -139,11 +139,11 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             }
         }
 
-        private void SelectedNot(Object sender, ItemTappedEventArgs e)
+        private async void SelectedNot(Object sender, ItemTappedEventArgs e)
         {
             PastryShop p = (PastryShop)e.Item;
             (sender as ListView).SelectedItem = null;
-            Navigation.PushAsync(new PastryShopProfile(p, this));
+            await App.Current.MainPage.Navigation.PushAsync(new PastryShopProfile(p, this));
         }
 
         public async void load()
