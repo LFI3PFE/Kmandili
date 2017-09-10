@@ -20,6 +20,7 @@ namespace Kmandili
 	{
         //public static string ServerURL = "http://192.168.1.4:300/";
         public static string ServerURL = "http://seifiisexpress.sytes.net:300/";
+        //public static string ServerURL = "http://kmandili.azurewebsites.net/";
         //public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
