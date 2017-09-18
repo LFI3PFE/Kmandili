@@ -1,17 +1,17 @@
 ﻿{
   "dependencies": {
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
-    "Newtonsoft.Json": "10.0.2",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
+    "Newtonsoft.Json": "10.0.3",
     "Rg.Plugins.Popup": "1.0.4",
-    "System.Net.Http": "4.3.0",
-    "Xam.Plugin.Connectivity": "2.3.0",
-    "Xam.Plugin.Media": "2.6.2",
-    "Xam.Plugins.Settings": "2.5.8",
-    "Xamarin.Forms": "2.3.4.224",
-    "Xamarin.Forms.RangeSlider": "0.6.17"
+    "System.Net.Http": "4.3.2",
+    "Xam.Plugin.Connectivity": "3.0.2",
+    "Xam.Plugin.Media": "3.0.1",
+    "Xam.Plugins.Settings": "3.0.1",
+    "Xamarin.Forms": "2.3.4.270",
+    "Xamarin.Forms.RangeSlider": "0.6.18"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.10240": {}
   },
   "runtimes": {
     "win10-arm": {},

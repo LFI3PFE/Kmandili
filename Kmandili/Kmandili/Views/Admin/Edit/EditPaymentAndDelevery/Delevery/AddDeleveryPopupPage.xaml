@@ -20,7 +20,7 @@
     <StackLayout Margin="40,20,40,20">
       <StackLayout Spacing="20">
         <Label Text="Editer la méthode de livraison" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
-        <Entry x:Name="DeleveryName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la categorie"/>
+        <Entry x:Name="DeleveryName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la méthode de livraison"/>
         <StackLayout>
           <Label Text="Méthodes de paiement:" FontSize="18" FontAttributes="Bold" VerticalOptions="Start"/>
           <ListView HorizontalOptions="FillAndExpand" x:Name="List" HasUnevenRows="True" ItemTapped="SelectedNot">

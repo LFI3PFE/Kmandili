@@ -48,17 +48,17 @@ namespace Kmandili
                     System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern,
                     System.Globalization.CultureInfo.CurrentCulture);
             var b = expireDate < DateTime.Now;
-            string s = App.Current.MainPage.GetType().Name;
-            string ss = (App.Current.MainPage as NavigationPage).CurrentPage.GetType().Name;
-            if (b && ((App.Current.MainPage.GetType().Name != "NavigationPage") || ((App.Current.MainPage as NavigationPage).CurrentPage.GetType().Name != "MainPage")))
+            if (b)
             {
-                App.Current.MainPage = new NavigationPage(new MainPage());
+                App.Current.MainPage.DisplayAlert("Erreur", "Session Experiée", "Ok");
+                Logout();
             }
             return b;
         }
 
         public static void setMainPage(MasterDetailPage newMainPage)
 	    {
+            //App.Current.MainPage = new NavigationPage(newMainPage);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:

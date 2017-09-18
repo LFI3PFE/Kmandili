@@ -273,7 +273,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     return;
                 }
                 await PopupNavigation.PopAllAsync();
-                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                await PopupNavigation.PushAsync(new PEmailVerificationPopupPage(this, Email.Text.ToLower()));
             }
             catch (HttpRequestException)
             {

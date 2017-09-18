@@ -97,7 +97,7 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new UPSProducFilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
         }
 
         private void SearchToolbarItem_Clicked(object sender, EventArgs e)

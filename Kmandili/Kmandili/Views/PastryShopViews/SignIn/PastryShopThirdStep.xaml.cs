@@ -125,7 +125,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void AddDeleveryMethoTapped(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new AddDeleveryMethodForm(this, pastry));
+            await PopupNavigation.PushAsync(new PSignAddDeleveryMethodForm(this, pastry));
         }
 
 	    public void RefreshDeleveryMethods()

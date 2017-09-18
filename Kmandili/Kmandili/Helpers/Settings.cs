@@ -22,11 +22,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<string>("Email", "");
+                return AppSettings.GetValueOrDefault("Email", "");
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>("Email", value);
+                AppSettings.AddOrUpdateValue("Email", value);
             }
         }
 
@@ -34,11 +34,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<string>("Password", "");
+                return AppSettings.GetValueOrDefault("Password", "");
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>("Password", value);
+                AppSettings.AddOrUpdateValue("Password", value);
             }
         }
 
@@ -46,11 +46,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<int>("Id", -1);
+                return AppSettings.GetValueOrDefault("Id", -1);
             }
             set
             {
-                AppSettings.AddOrUpdateValue<int>("Id", value);
+                AppSettings.AddOrUpdateValue("Id", value);
             }
         }
 
@@ -58,11 +58,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<string>("Token", "");
+                return AppSettings.GetValueOrDefault("Token", "");
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>("Token", value);
+                AppSettings.AddOrUpdateValue("Token", value);
             }
         }
 
@@ -70,11 +70,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<string>("Type", "");
+                return AppSettings.GetValueOrDefault("Type", "");
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>("Type", value);
+                AppSettings.AddOrUpdateValue("Type", value);
             }
         }
 
@@ -82,11 +82,11 @@ namespace Kmandili.Helpers
         {
             get
             {
-                return AppSettings.GetValueOrDefault<string>("ExpireDate", "");
+                return AppSettings.GetValueOrDefault("ExpireDate", "");
             }
             set
             {
-                AppSettings.AddOrUpdateValue<string>("ExpireDate", value);
+                AppSettings.AddOrUpdateValue("ExpireDate", value);
             }
         }
 

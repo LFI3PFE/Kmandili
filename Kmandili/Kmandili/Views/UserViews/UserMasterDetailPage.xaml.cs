@@ -23,7 +23,7 @@ namespace Kmandili.Views.UserViews
             }
         }
 
-        private PastryShopList pastryShopList;
+        private UPastryShopList pastryShopList;
         private ProductList productList;
         
         public UserMasterDetailPage (User user)
@@ -31,7 +31,7 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 
             NavigationPage.SetHasNavigationBar(this, false);
-            pastryShopList = new PastryShopList()
+            pastryShopList = new UPastryShopList()
             {
                 Title = "Liste des pâtisseries"
             };
@@ -48,6 +48,7 @@ namespace Kmandili.Views.UserViews
                 }
             };
             Master = new UserMasterPage(this, user);
+            //Detail = new NavigationPage(tab);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:

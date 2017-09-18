@@ -90,7 +90,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
 	    {
-	        await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedStatuses));
+	        await PopupNavigation.PushAsync(new UOrderFilterPopupPage(this, selectedStatuses));
 	    }
 
 	    private async void SortToolbarItem_Clicked(object sender, EventArgs e)

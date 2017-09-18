@@ -107,7 +107,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
 	    {
-            await PopupNavigation.PushAsync(new FilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new PProductFilterPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
         }
 
 	    private void SearchToolbarItem_Clicked(object sender, EventArgs e)

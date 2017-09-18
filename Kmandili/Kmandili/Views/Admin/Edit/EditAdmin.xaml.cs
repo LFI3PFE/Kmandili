@@ -63,7 +63,7 @@ namespace Kmandili.Views.Admin.Edit
                     return;
                 }
                 await PopupNavigation.PopAllAsync();
-                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                await PopupNavigation.PushAsync(new AEmailVerificationPopupPage(this, Email.Text.ToLower()));
                 //EmailVerified();
             }
             catch (HttpRequestException)

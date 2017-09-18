@@ -9,7 +9,7 @@ namespace Kmandili.Views.PastryShopViews
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PastryShopMasterDetailPage : MasterDetailPage
 	{
-        private PastryShopProfile pastryShopProfile;
+        private PPastryShopProfile pastryShopProfile;
         public bool hasNavigatedToEdit = false;
 
 		public PastryShopMasterDetailPage (PastryShop pastryShop)
@@ -17,7 +17,8 @@ namespace Kmandili.Views.PastryShopViews
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
             Master = new PastryShopMasterPage(this, pastryShop);
-		    pastryShopProfile = new PastryShopProfile(this, pastryShop);
+		    pastryShopProfile = new PPastryShopProfile(this, pastryShop);
+            //Detail = new NavigationPage(pastryShopProfile);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
@@ -39,13 +40,9 @@ namespace Kmandili.Views.PastryShopViews
 
         private void PastryShopMasterDetailPage_IsPresentedChanged(object sender, System.EventArgs e)
         {
+            var x = Master;
             if(IsPresented)
                 (Master as PastryShopMasterPage).UpdateOrderNotificationNumber();
-        }
-
-        public void ReloadPastryShop()
-        {
-            pastryShopProfile.Reload();
         }
 	}
 }

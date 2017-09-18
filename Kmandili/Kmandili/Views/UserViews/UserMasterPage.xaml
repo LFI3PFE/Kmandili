@@ -46,7 +46,7 @@
                     <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Padding="0,1,0,0">
                         <Label Text="Commandes" TextColor="#737373" FontSize="20" VerticalTextAlignment="Center"/>
                         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="Center" Padding="0,5,20,0">
-                            <Image x:Name="NorificationsNumber" Source="" HorizontalOptions="End" HeightRequest="18"/>
+                            <Image x:Name="NotificationsNumber" Source="" HorizontalOptions="End" HeightRequest="18"/>
                         </StackLayout>
                     </StackLayout>
                 </Grid>

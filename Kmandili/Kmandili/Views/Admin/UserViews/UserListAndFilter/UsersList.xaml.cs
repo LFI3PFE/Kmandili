@@ -148,7 +148,7 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
             switch (choice)
             {
                 case "Consulter liste des commandes":
-                    await App.Current.MainPage.Navigation.PushAsync(new OrderList(u.ID));
+                    await App.Current.MainPage.Navigation.PushAsync(new AUOrderList(u.ID));
                     break;
                 case "Editer le profile":
                     await App.Current.MainPage.Navigation.PushAsync(new EditProfile(u.ID, this));

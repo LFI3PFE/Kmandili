@@ -251,7 +251,7 @@ namespace Kmandili.Views.UserViews
                     return;
                 }
                 await PopupNavigation.PopAsync();
-                await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                await PopupNavigation.PushAsync(new UEmailVerificationPopupPage(this, Email.Text.ToLower()));
             }
             catch (HttpRequestException)
             {

@@ -225,13 +225,13 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             }
             else if (action == "Consulter pâtisserie")
             {
-                await Navigation.PushAsync(new PastryShopProfile(product.PastryShop));
+                await Navigation.PushAsync(new UPastryShopProfile(product.PastryShop));
             }
         }
         
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new FilerPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new UProductFilerPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
         }
 
         private void EndSearchToolbarItem_Clicked(object sender, EventArgs e)

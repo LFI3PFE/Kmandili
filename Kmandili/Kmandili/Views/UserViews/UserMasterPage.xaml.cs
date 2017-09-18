@@ -49,13 +49,15 @@ namespace Kmandili.Views.UserViews
             }
             if(user == null) return;
             int number = user.Orders.Count(o => !o.SeenUser);
-            NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
+            var x = NotificationsNumber;
+            NotificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         public void UpdateOrderNotificationNumber(List<Order> orders)
 	    {
             int number = orders.Count(o => !o.SeenUser);
-	        NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
+            var x = NotificationsNumber;
+            NotificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)

@@ -456,7 +456,7 @@ namespace Kmandili.Views.Admin.UserViews
                             Email.Text = "";
                             return;
                         }
-                        await PopupNavigation.PushAsync(new EmailVerificationPopupPage(this, Email.Text.ToLower()));
+                        await PopupNavigation.PushAsync(new AUEmailVerificationPopupPage(this, Email.Text.ToLower()));
                     }
                     catch (Exception)
                     {

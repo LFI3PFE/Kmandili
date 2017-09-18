@@ -27,23 +27,6 @@ namespace Kmandili.Views.PastryShopViews
             UpdateOrderNotificationNumber(pastryShop.Orders.ToList());
         }
 
-	    protected async override void OnAppearing()
-	    {
-	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-	        try
-	        {
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
-            }
-	        catch (HttpRequestException)
-	        {
-                await
-                    DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
-                        "Ok");
-                return;
-	        }
-	    }
-
 	    public void Logout(object sender, EventArgs e)
         {
             App.Logout();
@@ -55,6 +38,9 @@ namespace Kmandili.Views.PastryShopViews
             try
             {
                 pastryShop = await pastryShopRestClient.GetAsyncById(pastryShop.ID);
+                if (pastryShop == null) return;
+                int number = pastryShop.Orders.Count(o => !o.SeenPastryShop);
+                NotificationsNumber.Source = (number != 0 ? (number > 9 ? "_9plus.png" : "_" + number + ".png") : "");
             }
             catch (HttpRequestException)
             {
@@ -64,15 +50,13 @@ namespace Kmandili.Views.PastryShopViews
                         "Ok");
                 return;
             }
-            if (pastryShop == null) return;
-            int number = pastryShop.Orders.Count(o => !o.SeenPastryShop);
-            NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         public void UpdateOrderNotificationNumber(List<Order> orders)
         {
             int number = orders.Count(o => !o.SeenPastryShop);
-            NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
+            var x = NotificationsNumber;
+            NotificationsNumber.Source = (number != 0 ? (number > 9 ? "_9plus.png" : "_" + number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)
@@ -120,7 +104,7 @@ namespace Kmandili.Views.PastryShopViews
 	            Icon = "",
 	            Title = "Commandes"
 	        };
-	        var earningsPage = new EarningsChart(pastryShop)
+	        var earningsPage = new PEarningsChart(pastryShop)
 	        {
 	            Title = "Revenus"
 	        };

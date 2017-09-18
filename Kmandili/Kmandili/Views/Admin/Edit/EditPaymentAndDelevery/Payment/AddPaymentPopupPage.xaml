@@ -20,7 +20,7 @@
     <StackLayout Margin="40,20,40,20">
       <StackLayout Spacing="20">
         <Label Text="Ajouter une méthode de paiement" HorizontalTextAlignment="Center" TextColor="Black" VerticalOptions="Center" HorizontalOptions="FillAndExpand" FontSize="20"/>
-        <Entry x:Name="CategoryName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la categorie"/>
+        <Entry x:Name="MethodName" PlaceholderColor="LightGray" VerticalOptions="Center" HorizontalOptions="FillAndExpand" WidthRequest="150" FontSize="20" Placeholder="Nom de la méthode de paiement"/>
       </StackLayout>
       <StackLayout VerticalOptions="End" HorizontalOptions="End" Spacing="30" Margin="0,20,0,0" Orientation="Horizontal">
         <Label Text="Annuler" x:Name="CancelLabel" TextColor="DodgerBlue" FontSize="20" HorizontalOptions="End">

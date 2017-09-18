@@ -42,7 +42,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private async void AddToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new AddDeleveryMethodForm(this, pastryShop));
+            await PopupNavigation.PushAsync(new PEditAddDeleveryMethodForm(this, pastryShop));
         }
 
         public async void Load(bool reloadParentval)

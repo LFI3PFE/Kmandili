@@ -33,13 +33,14 @@ namespace Kmandili.Views.Admin
                     {
                         Title = "Clients"
                     },
-                    new PastryShopList()
+                    new APastryShopList()
                     {
                         Title = "Pâtisseries"
                     }
                 }
             };
             Master = new AdminMasterPage(this);
+            //Detail = new NavigationPage(tab);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:

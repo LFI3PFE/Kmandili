@@ -25,11 +25,11 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 
         private async void ComfirmTapped(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(CategoryName.Text))
+            if (!string.IsNullOrEmpty(MethodName.Text))
             {
                 var payment = new Models.Payment()
                 {
-                    PaymentMethod = CategoryName.Text
+                    PaymentMethod = MethodName.Text
                 };
                 var paymentRC = new RestClient<Models.Payment>();
                 try

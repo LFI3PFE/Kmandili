@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kmandili.Views.Admin.PSViews.PastryShopListAndFilter.APastryShopList">
+  <ScrollView VerticalOptions="FillAndExpand">
+    <StackLayout BackgroundColor="Transparent" x:Name="BodyLayout" VerticalOptions="FillAndExpand">
+      <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+        <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+      </StackLayout>
+      <StackLayout x:Name="LoadingLayout" VerticalOptions="Start" Padding="0,20,0,0" IsVisible="False">
+        <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
+      </StackLayout>
+      <StackLayout x:Name="EmptyLabel" VerticalOptions="Start" HorizontalOptions="FillAndExpand" IsVisible="False">
+        <StackLayout>
+          <Label Text="(Aucune Pâtisserie Trouvée)" FontSize="25" TextColor="Gray" VerticalOptions="Center" HorizontalOptions="Center" />
+        </StackLayout>
+      </StackLayout>
+      <StackLayout Padding="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
+        <ListView x:Name="List" HasUnevenRows="True" ItemTapped="SelectedNot">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                <StackLayout BackgroundColor="Transparent" VerticalOptions="Center" HeightRequest="100">
+                  <Label x:Name="PatisserieId" Text="{Binding ID}" IsVisible="False"/>
+                  <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
+                    <StackLayout Padding="5" VerticalOptions="Center">
+                      <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
+                        <Image Source="{Binding ProfilePic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                      </StackLayout>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">
+                      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="1">
+                        <Label Text="{Binding Name}" FontSize="30" TextColor="Black" HorizontalOptions="StartAndExpand"/>
+                        <StackLayout HorizontalOptions="End" VerticalOptions="CenterAndExpand" Padding="0,0,10,0">
+                            <Image Source="delete.png" WidthRequest="20" VerticalOptions="Center">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="RemovePastryShop"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                      </StackLayout>
+                      <StackLayout Padding="20,0,0,0">
+                        <Label Text="{Binding ShortDesc}" FontSize="15" TextColor="Black"/>
+                        <StackLayout Orientation="Horizontal" Spacing="15" Padding="10,0,0,0">
+                          <StackLayout Orientation="Horizontal">
+                            <Image Source="like.png" HeightRequest="20"/>
+                            <StackLayout Padding="0,-5,0,0">
+                              <Label Text="{Binding Rating}" FontSize="25" TextColor="Black"/>
+                            </StackLayout>
+                          </StackLayout>
+                          <Label Text="{Binding Ratings.Count, StringFormat='({0:F0} avis)'}" FontSize="15" TextColor="Black"/>
+                        </StackLayout>
+                      </StackLayout>
+                    </StackLayout>
+                  </StackLayout>
+                </StackLayout>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>

@@ -642,7 +642,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                             Email.Text = "";
                             return;
                         }
-                        var x = new EmailVerificationPopupPage(this, Email.Text.ToLower());
+                        var x = new PEmailVerificationPopupPage(this, Email.Text.ToLower());
                         await PopupNavigation.PushAsync(x);
                     }
                     catch (HttpRequestException)
