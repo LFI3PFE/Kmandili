@@ -262,8 +262,8 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             pastryShop.Products.OrderBy(p => p.Name).ToList().ForEach(p => displayedProducts.Add(p));
             selectedSortType.SortTypeIndex = 0;
             selectedSortType.IsAsc = true;
-            selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = pastryShop.Products.Max(p => p.Price);
-            selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = pastryShop.Products.Min(p => p.Price);
+            selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = (float)Math.Ceiling(pastryShop.Products.Max(p => p.Price) * 2) / 2;
+            selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = (float)Math.Floor(pastryShop.Products.Min(p => p.Price) * 2) / 2;
         }
 
         public void SelectedNot(object sender, EventArgs e)

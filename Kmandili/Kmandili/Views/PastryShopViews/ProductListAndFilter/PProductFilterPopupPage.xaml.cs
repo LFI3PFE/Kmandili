@@ -91,10 +91,17 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             }
             innerLayout.Children.Add(categoriesLayout);
             innerLayout.Children.Add(new Label() { Text = "Range de prix:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
-            RangeSlider priceRangeSlider = new RangeSlider() { MinimumValue = (float)(maxPriceRange.MinPriceRange), MaximumValue = (float)maxPriceRange.MaxPriceRange, StepValue = 0, LowerValue = (float)(selectedpriceRange.MinPriceRange), UpperValue = (float)selectedpriceRange.MaxPriceRange, ShowTextAboveThumbs = true, TextSize = 20, FormatLabel = FormaLabel };
-            priceRangeSlider.DragCompleted += PriceRangeSlider_DragCompleted;
             StackLayout priceRangeLayout = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
-            priceRangeLayout.Children.Add(priceRangeSlider);
+            if (maxPriceRange.MinPriceRange != maxPriceRange.MaxPriceRange)
+            {
+                RangeSlider priceRangeSlider = new RangeSlider() { MinimumValue = (float)maxPriceRange.MinPriceRange, MaximumValue = (float)maxPriceRange.MaxPriceRange, StepValue = 0.00f, LowerValue = (float)selectedpriceRange.MinPriceRange, UpperValue = (float)selectedpriceRange.MaxPriceRange, ShowTextAboveThumbs = true, TextSize = 20, FormatLabel = FormaLabel };
+                priceRangeSlider.DragCompleted += PriceRangeSlider_DragCompleted;
+                priceRangeLayout.Children.Add(priceRangeSlider);
+            }
+            else
+            {
+                priceRangeLayout.Children.Add(new Label() { Text = "Un seul prix: " + maxPriceRange.MinPriceRange + "dt", HorizontalTextAlignment = TextAlignment.Center });
+            }
             innerLayout.Children.Add(priceRangeLayout);
             Label aplyLabel = new Label() { Text = "Appliquer", TextColor = Color.DodgerBlue, FontSize = 20, HorizontalOptions = LayoutOptions.End };
             TapGestureRecognizer aplyGestureRecognizer = new TapGestureRecognizer();

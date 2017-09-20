@@ -123,8 +123,8 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             }
             products = products.OrderBy(p => p.Name).ToList();
             products.ForEach(p => displayedProducts.Add(p));
-            selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = products.Max(p => p.Price);
-            selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = products.Min(p => p.Price);
+            selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = (float)Math.Ceiling(products.Max(p => p.Price) * 2) / 2;
+            selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = (float)Math.Floor(products.Min(p => p.Price) * 2) / 2;
             selectedSortType.SortTypeIndex = 0;
             selectedSortType.IsAsc = true;
             Loading.IsRunning = false;
@@ -274,12 +274,14 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
         public void AplyFilters()
         {
             if(products == null || displayedProducts == null) return;
+            var x = ((Double)products[0].Price).CompareTo(selectedPriceRange.MinPriceRange);
+            var y = ((Double)products[0].Price).CompareTo(selectedPriceRange.MaxPriceRange);
             var res =
                 products.Where(
                     p =>
                         (string.IsNullOrEmpty(SearchBar.Text) || p.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
                         (selectedCategories.Count == 0 || selectedCategories.Any(c => c.ID == p.Category_FK)) && 
-                        (p.Price >= selectedPriceRange.MinPriceRange && p.Price <= selectedPriceRange.MaxPriceRange)).ToList();
+                        (((Double)p.Price).CompareTo(selectedPriceRange.MinPriceRange) >= 0 && ((Double)p.Price).CompareTo(selectedPriceRange.MaxPriceRange) <= 0)).ToList();
             if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Name).ToList();
