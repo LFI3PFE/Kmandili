@@ -15,9 +15,9 @@ namespace Kmandili.Views
     {
         public LoadingPopupPage()
         {
+            InitializeComponent();
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
-            InitializeComponent();
             Loading.IsRunning = true;
         }
 

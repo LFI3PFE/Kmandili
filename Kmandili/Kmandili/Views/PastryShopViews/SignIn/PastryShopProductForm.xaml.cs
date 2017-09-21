@@ -89,24 +89,28 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         {
             if (ProductName.Text == null || ProductName.Text.Length == 0)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Nam est obligatoir!", "Ok");
                 return false;
             }
 
             if (Price.Text == null || Price.Text.Length == 0)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Prix est obligatoir!", "Ok");
                 return false;
             }
 
             if (ProductDescription.Text == null || ProductDescription.Text.Length == 0)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ description est obligatoir!", "Ok");
                 return false;
             }
 
             if (ProductPhoto.Text == null || ProductPhoto.Text.Length == 0)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une photo du produit est obligatoire!", "Ok");
                 return false;
             }
@@ -201,11 +205,6 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             ProductPhoto.Text = _mediaFileProfil.Path;
             toGallery = false;
             App.galleryIsOpent = false;
-        }
-
-        public void EntryFocused(Object sender, EventArgs e)
-        {
-
         }
     }
 }

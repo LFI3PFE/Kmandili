@@ -185,49 +185,58 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             int x;
             if (Number.Text == null || Number.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment est obligateur!", "Ok");
                 return false;
             }
             else if (!int.TryParse(Number.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment ne doit contenir que des Chiffres!", "Ok");
                 Number.Text = "";
                 return false;
             }
             else if (Street.Text == null || Street.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Rue est obligateur!", "Ok");
                 return false;
             }
             else if (City.Text == null || City.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Ville est obligateur!", "Ok");
                 return false;
             }
             else if (ZipCode.Text == null || ZipCode.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal est obligateur!", "Ok");
                 return false;
             }
             else if (ZipCode.Text.Length != 4)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal doit contenir exactement 4 Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
             else if (!int.TryParse(ZipCode.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal ne doit contenir que des Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
             else if (State.Text == null || State.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Gouvernorat est obligateur!", "Ok");
                 return false;
             }
             else if (Country.Text == null || Country.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Pays est obligateur!", "Ok");
                 return false;
             }
@@ -245,12 +254,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 {
                     if (!int.TryParse(phoneNumber, out x))
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
                         (s.Children[0] as Entry).Text = "";
                         return false;
                     }
                     else if (phoneNumber.Length != 8)
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
                         return false;
                     }
@@ -263,6 +274,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             if (!exist)
             {
                 await DisplayAlert("Erreur", "Au moins un Numéro de Téléphone est obligatoir!", "Ok");
+                await PopupNavigation.PopAllAsync();
             }
             return exist;
         }

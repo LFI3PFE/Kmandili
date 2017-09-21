@@ -15,6 +15,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         public PastryShopEnteringMenu(PastryShop pastryShop)
         {
             InitializeComponent();
+            Liste.SeparatorVisibility = SeparatorVisibility.None;
             NavigationPage.SetHasBackButton(this, false);
             this.pastryShop = pastryShop;
             load();
