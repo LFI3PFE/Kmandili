@@ -90,7 +90,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 categoriesLayout.Children.Add(categoryLayout);
             }
             innerLayout.Children.Add(categoriesLayout);
-            innerLayout.Children.Add(new Label() { Text = "Range de prix:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
+            innerLayout.Children.Add(new Label() { Text = "Plage de prix:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
             StackLayout priceRangeLayout = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
             if (maxPriceRange.MinPriceRange != maxPriceRange.MaxPriceRange)
             {

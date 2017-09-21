@@ -274,14 +274,12 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
         public void AplyFilters()
         {
             if(products == null || displayedProducts == null) return;
-            var x = ((Double)products[0].Price).CompareTo(selectedPriceRange.MinPriceRange);
-            var y = ((Double)products[0].Price).CompareTo(selectedPriceRange.MaxPriceRange);
             var res =
                 products.Where(
                     p =>
                         (string.IsNullOrEmpty(SearchBar.Text) || p.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
                         (selectedCategories.Count == 0 || selectedCategories.Any(c => c.ID == p.Category_FK)) && 
-                        (((Double)p.Price).CompareTo(selectedPriceRange.MinPriceRange) >= 0 && ((Double)p.Price).CompareTo(selectedPriceRange.MaxPriceRange) <= 0)).ToList();
+                        (p.Price >= selectedPriceRange.MinPriceRange && p.Price <= selectedPriceRange.MaxPriceRange)).ToList();
             if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Name).ToList();
