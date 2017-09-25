@@ -22,6 +22,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
         public UserOrderDetail (UserOrderList userOrderList, Order order)
 		{
 			InitializeComponent ();
+            ProductsList.SeparatorVisibility = SeparatorVisibility.None;
             if (order.Status.StatusName == "En Attente")
             {
                 ToolbarItem canceToolbarItem = new ToolbarItem()
@@ -141,11 +142,11 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 
         private async void CanceToolbarItem_Clicked(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             var choix = await DisplayAlert("Confirmation",
                 "Etes-vous sur de vouloir annuler cette commande?",
                 "Confirmer", "Annuler");
             if (!choix) return;
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
             OrderRestClient orderRC = new OrderRestClient();
             EmailRestClient emailRC = new EmailRestClient();
             try
@@ -155,7 +156,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                 {
                     userOrderList.load();
                     await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
-                    await PopupNavigation.PopAsync();
+                    await PopupNavigation.PopAllAsync();
                     await Navigation.PopAsync();
                 }
             }

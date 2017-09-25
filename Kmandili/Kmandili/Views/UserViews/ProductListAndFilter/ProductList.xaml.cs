@@ -221,7 +221,7 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                         cartP.updateTotal();
                     }
                 }
-                await DisplayAlert("Succée", "Produit Ajouté au pannier", "OK");
+                await DisplayAlert("Succée", "Produit Ajouté au chariot", "OK");
             }
             else if (action == "Consulter pâtisserie")
             {

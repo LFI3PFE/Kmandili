@@ -32,6 +32,7 @@ namespace Kmandili.Views.Admin.UserViews.Orders
         public AUOrderList(int ID)
         {
             InitializeComponent();
+            OrderListView.SeparatorVisibility = SeparatorVisibility.None;
             this.ID = ID;
             BodyLayout.TranslateTo(0, -50);
 
@@ -152,6 +153,7 @@ namespace Kmandili.Views.Admin.UserViews.Orders
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             OrderListView.IsVisible = true;
+            await PopupNavigation.PopAllAsync();
         }
 
         private void SelectedNot(object sender, EventArgs e)

@@ -186,22 +186,26 @@ namespace Kmandili.Views.UserViews
             int x;
             if (Number.Text == null || Number.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numero est obligateur!", "Ok");
                 return false;
             }
             else if (!int.TryParse(Number.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment ne doit contenir que des Chiffres!", "Ok");
                 Number.Text = "";
                 return false;
             }
             else if (Street.Text == null || Street.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Rue est obligateur!", "Ok");
                 return false;
             }
             else if (City.Text == null || City.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Ville est obligateur!", "Ok");
                 return false;
             }
@@ -212,23 +216,27 @@ namespace Kmandili.Views.UserViews
             }
             else if (ZipCode.Text.Length != 4)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal doit contenir exactement 4 Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
             else if (!int.TryParse(ZipCode.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal ne doit contenir que des Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
             else if (State.Text == null || State.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Gouvernorat est obligateur!", "Ok");
                 return false;
             }
             else if (Country.Text == null || Country.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Pays est obligateur!", "Ok");
                 return false;
             }
@@ -246,12 +254,14 @@ namespace Kmandili.Views.UserViews
                 {
                     if (!int.TryParse(phoneNumber, out x))
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
                         (s.Children[0] as Entry).Text = "";
                         return false;
                     }
                     else if (phoneNumber.Length != 8)
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
                         return false;
                     }
@@ -263,6 +273,7 @@ namespace Kmandili.Views.UserViews
             }
             if (!exist)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Au moins un Numéro de Téléphone est obligatoir!", "Ok");
             }
             return exist;
@@ -272,27 +283,32 @@ namespace Kmandili.Views.UserViews
         {
             if (Name.Text == null || Name.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
                 return false;
             }
             else if (LastName.Text == null || LastName.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Prenom est obligateur!", "Ok");
                 return false;
             }
             else if (Email.Text == null || Email.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
                 return false;
             }
             else if (!App.isValidEmail(Email.Text))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
                 Email.Text = "";
                 return false;
             }
             else if (Password.Text == null || Password.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Password est obligateur!", "Ok");
                 return false;
             }
@@ -438,6 +454,7 @@ namespace Kmandili.Views.UserViews
 
         public async void UpdateBt_Clicked(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (await valid())
             {
                 if (user.Email != Email.Text.ToLower())
@@ -446,10 +463,12 @@ namespace Kmandili.Views.UserViews
                     {
                         if ((await App.GetEmailExist(Email.Text.ToLower())))
                         {
+                            await PopupNavigation.PopAllAsync();
                             await DisplayAlert("Erreur", "Cette adresse email est déjà utilisée!", "Ok");
                             Email.Text = "";
                             return;
                         }
+                        await PopupNavigation.PopAllAsync();
                         await PopupNavigation.PushAsync(new UEmailVerificationPopupPage(this, Email.Text.ToLower()));
                     }
                     catch (Exception)
@@ -467,20 +486,27 @@ namespace Kmandili.Views.UserViews
 
 	    private async void DeleteBt_Clicked(object sender, EventArgs e)
 	    {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (user.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
             {
+                await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
                         "Impossible de supprimer votre compte, une ou plusieurs commandes ne sont pas encore réglées!",
                         "Ok");
                 return;
             }
-            await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler");
+            if(!await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer votre compte?", "Oui", "Annuler"))
+            {
+                await PopupNavigation.PopAllAsync();
+                return;
+            }
 	        var userRC = new RestClient<User>();
 	        try
 	        {
                 if (await userRC.DeleteAsync(user.ID))
                 {
+                    await PopupNavigation.PopAllAsync();
                     await DisplayAlert("Succées", "Votre Compte a été supprimer.\n", "Ok");
                     App.Logout();
                 }

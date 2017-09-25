@@ -61,7 +61,7 @@
                           <Label Text="{Binding Product.Name}" FontSize="25" TextColor="Black" Grid.Row="0" Grid.Column="0"/>
                         </Grid>
                       </StackLayout>
-                      <StackLayout Padding="20,0,0,0">
+                      <StackLayout Padding="10,0,0,0">
                         <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
                           <StackLayout Orientation="Horizontal">
                             <Label Text="Prix: " FontAttributes="Bold" FontSize="15" TextColor="Black"/>
@@ -74,7 +74,7 @@
                         <StackLayout Orientation="Horizontal" Spacing="10">
                           <StackLayout Orientation="Horizontal" Spacing="5">
                             <Label Text="Quantité:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
-                            <Label Text="{Binding Quantity}" FontSize="18" TextColor="Black"/>
+                            <Label Text="{Binding Quantity}" FontSize="18" TextColor="Black" VerticalTextAlignment="Center"/>
                           </StackLayout>
                           <StackLayout Orientation="Horizontal" Spacing="5">
                             <Label Text="Total:" FontSize="18" FontAttributes="Bold" TextColor="Black"/>

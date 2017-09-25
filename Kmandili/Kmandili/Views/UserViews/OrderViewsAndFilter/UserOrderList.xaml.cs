@@ -30,6 +30,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 		public UserOrderList ()
 		{
 			InitializeComponent ();
+            OrderList.SeparatorVisibility = SeparatorVisibility.None;
 		    BodyLayout.TranslateTo(0, -50);
             
             filterToolbarItem = new ToolbarItem()

@@ -41,9 +41,8 @@ namespace Kmandili.Views.UserViews
             {
                 Icon = "emptyCart.png",
                 Text = "Vider",
-                Order =
-                    Device.OnPlatform(ToolbarItemOrder.Secondary, ToolbarItemOrder.Secondary, ToolbarItemOrder.Primary),
-                Priority = 2
+                Order = ToolbarItemOrder.Primary,
+                Priority = 1
             };
 #pragma warning restore CS0618 // Type or member is obsolete
             confirmToolbarItem.Clicked += confirmToolbarItemClicked;

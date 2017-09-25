@@ -144,6 +144,7 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
         {
             var u = (User)e.Item;
             (sender as ListView).SelectedItem = null;
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             var choice = await DisplayActionSheet("Choisir une action", "Annuler", null, "Consulter liste des commandes", "Editer le profile");
             switch (choice)
             {
@@ -152,6 +153,9 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
                     break;
                 case "Editer le profile":
                     await App.Current.MainPage.Navigation.PushAsync(new EditProfile(u.ID, this));
+                    break;
+                default:
+                    await PopupNavigation.PopAllAsync();
                     break;
             }
         }
@@ -271,18 +275,20 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
                         "Ok");
                 return;
             }
-            await PopupNavigation.PopAllAsync();
             if (user.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
             {
+                await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
-                        "Impossible de supprimer cet utilisateur, une ou plusieurs de ses commandes n'ont pas été réglées!",
+                        "Impossible de supprimer ce client, une ou plusieurs de ses commandes n'ont pas été réglées!",
                         "Ok");
                 return;
             }
-            var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cet utilisateur?", "Oui", "Annuler");
-            if (!choix) return;
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
+            if(!await DisplayAlert("Confirmation", "Êtes-vous sûr de vouloire supprimer ce client?", "Oui", "Annuler"))
+            {
+                await PopupNavigation.PopAllAsync();
+                return;
+            }
             try
             {
                 if (await userRC.DeleteAsync(user.ID))

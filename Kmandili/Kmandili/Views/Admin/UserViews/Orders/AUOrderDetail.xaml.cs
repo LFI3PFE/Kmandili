@@ -62,11 +62,11 @@ namespace Kmandili.Views.Admin.UserViews.Orders
 
         private async void CanceToolbarItem_Clicked(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             var choix = await DisplayAlert("Confirmation",
                 "Etes-vous sur de vouloir annuler cette commande?",
                 "Confirmer", "Annuler");
             if (!choix) return;
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
             OrderRestClient orderRC = new OrderRestClient();
             EmailRestClient emailRC = new EmailRestClient();
             try
@@ -75,9 +75,9 @@ namespace Kmandili.Views.Admin.UserViews.Orders
                 if (await orderRC.DeleteAsync(order.ID))
                 {
                     orderList.load();
-                    await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
+                    await DisplayAlert("Succès", "Commande annulée avec succès.", "Ok");
                     App.updateClientList = true;
-                    await PopupNavigation.PopAsync();
+                    await PopupNavigation.PopAllAsync();
                     await Navigation.PopAsync();
                 }
             }

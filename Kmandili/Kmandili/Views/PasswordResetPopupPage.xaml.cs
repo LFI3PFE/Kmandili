@@ -32,6 +32,7 @@ namespace Kmandili.Views
 	            Password.Text = "";
 	            SencondPassword.Text = "";
 	            Password.Focus();
+                return;
 	        }
             PasswordResetRestClient passwordRC = new PasswordResetRestClient();
 	        try
@@ -39,7 +40,7 @@ namespace Kmandili.Views
                 if (!(await passwordRC.PutAsync(email, Password.Text)))
                 {
                     var choice = await
-                        DisplayAlert("Erreur", "Une erreur s'est produite lors de la mise à jours du mot de passe!", "Ressayer",
+                        DisplayAlert("Erreur", "Une erreur s'est produite lors de la mise à jour du mot de passe!", "Ressayer",
                             "Annuler");
                     if (choice)
                     {
@@ -48,6 +49,7 @@ namespace Kmandili.Views
                     else
                     {
                         await PopupNavigation.PopAllAsync();
+                        return;
                     }
                 }
             }
@@ -55,8 +57,9 @@ namespace Kmandili.Views
 	        {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
-	        }
-	        await DisplayAlert("Succès", "Mot de passe mis à jours avec succés", "Ok");
+                return;
+            }
+	        await DisplayAlert("Succès", "Mot de passe mis à jour avec succés", "Ok");
 	        await PopupNavigation.PopAsync();
 	    }
 	}

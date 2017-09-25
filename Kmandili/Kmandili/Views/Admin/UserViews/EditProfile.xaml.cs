@@ -48,7 +48,6 @@ namespace Kmandili.Views.Admin.UserViews
 
         private async void load(int id)
         {
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRestClient = new UserRestClient();
             try
             {
@@ -66,7 +65,7 @@ namespace Kmandili.Views.Admin.UserViews
             }
             if (user == null)
             {
-                await PopupNavigation.PopAsync();
+                await PopupNavigation.PopAllAsync();
                 return;
             }
             Name.Text = user.Name;
@@ -96,7 +95,7 @@ namespace Kmandili.Views.Admin.UserViews
             }
             if (phoneNumberTypes == null)
             {
-                await PopupNavigation.PopAsync();
+                await PopupNavigation.PopAllAsync();
                 return;
             }
             foreach (var phoneNumber in user.PhoneNumbers)
@@ -106,7 +105,7 @@ namespace Kmandili.Views.Admin.UserViews
             }
             StackLayout lastPhoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
             PhoneNumberStackLayouts.Add(lastPhoneNumberStackLayout);
-            await PopupNavigation.PopAsync();
+            await PopupNavigation.PopAllAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout(PhoneNumber phoneNumber)

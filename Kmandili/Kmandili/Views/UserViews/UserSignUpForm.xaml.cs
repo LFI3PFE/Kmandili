@@ -51,6 +51,7 @@ namespace Kmandili.Views.UserViews
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
+                await PopupNavigation.PopAllAsync();
                 await Navigation.PopAsync();
                 return;
             }
@@ -128,41 +129,50 @@ namespace Kmandili.Views.UserViews
             int x;
             if (Number.Text == null || Number.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numero est obligateur!", "Ok");
                 return false;
             } else if (!int.TryParse(Number.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment ne doit contenir que des Chiffres!", "Ok");
                 Number.Text = "";
                 return false;
             } else if (Street.Text == null || Street.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Rue est obligateur!", "Ok");
                 return false;
             } else if (City.Text == null || City.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Ville est obligateur!", "Ok");
                 return false;
             } else if(ZipCode.Text == null || ZipCode.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal est obligateur!", "Ok");
                 return false;
             } else if(ZipCode.Text.Length != 4)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal doit contenir exactement 4 Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             } else if (!int.TryParse(ZipCode.Text, out x))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Co. Postal ne doit contenir que des Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             } else if(State.Text == null || State.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Gouvernorat est obligateur!", "Ok");
                 return false;
             } else if(Country.Text == null || Country.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Pays est obligateur!", "Ok");
                 return false;
             }
@@ -180,11 +190,13 @@ namespace Kmandili.Views.UserViews
                 {
                     if (!int.TryParse(phoneNumber, out x))
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
                         (s.Children[0] as Entry).Text = "";
                         return false;
                     } else if (phoneNumber.Length != 8)
                     {
+                        await PopupNavigation.PopAllAsync();
                         await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
                         return false;
                     } else
@@ -195,6 +207,7 @@ namespace Kmandili.Views.UserViews
             }
             if (!exist)
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Au moins un Numéro de Téléphone est obligatoir!", "Ok");
             }
             return exist;
@@ -204,24 +217,29 @@ namespace Kmandili.Views.UserViews
         {
             if (Name.Text == null || Name.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
                 return false;
             }else if(LastName.Text == null || LastName.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Prenom est obligateur!", "Ok");
                 return false;
             }else if(Email.Text == null || Email.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
                 return false;
             }
             else if (!App.isValidEmail(Email.Text))
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
                 Email.Text = "";
                 return false;
             }else if(Password.Text == null || Password.Text == "")
             {
+                await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Password est obligateur!", "Ok");
                 return false;
             } else if (!(await validAddress()))
