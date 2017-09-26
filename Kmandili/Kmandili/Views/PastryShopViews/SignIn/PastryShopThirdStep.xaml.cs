@@ -34,7 +34,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         private async void RemoveGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            int ID = Int32.Parse((sender as StackLayout).ClassId);
+            int ID = Int32.Parse(((sender as StackLayout).Children[0] as Label).Text);
             pastry.PastryShopDeleveryMethods.Remove(pastry.PastryShopDeleveryMethods.FirstOrDefault(d => d.ID == ID));
             await PopupNavigation.PopAsync();
             RefreshDeleveryMethods();
@@ -66,10 +66,8 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             });
             TapGestureRecognizer removeGestureRecognizer = new TapGestureRecognizer();
             removeGestureRecognizer.Tapped += RemoveGestureRecognizer_Tapped;
-            StackLayout removeIconLayout = new StackLayout()
-            {
-                ClassId = pastryShopDeleveryMethod.ID.ToString()
-            };
+            StackLayout removeIconLayout = new StackLayout();
+            removeIconLayout.Children.Add(new Label() { Text = pastryShopDeleveryMethod.ID.ToString(), IsVisible = false });
             removeIconLayout.GestureRecognizers.Add(removeGestureRecognizer);
             removeIconLayout.Children.Add(new Image()
             {
@@ -135,9 +133,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             {
                 ContentLayout.IsVisible = true;
                 NoDeleveryMethoLayout.IsVisible = false;
+                int i = 1;
                 foreach (var pastryShopDeleveryMethod in pastry.PastryShopDeleveryMethods)
                 {
+                    pastryShopDeleveryMethod.ID = i;
                     ContentLayout.Children.Add(MakeDeleveryMethodLayout(pastryShopDeleveryMethod));
+                    i++;
                 }
             }
             else

@@ -44,6 +44,7 @@ namespace Kmandili.Views.UserViews
             {
                 Text = "Produits",
                 Order = ToolbarItemOrder.Primary,
+                Icon = "products.png",
                 Priority = 0
             };
             ProductList.Clicked += ProductListOnClick;
@@ -69,7 +70,8 @@ namespace Kmandili.Views.UserViews
             PointOfSalesItem = new ToolbarItem()
             {
                 Text = "Points de vente",
-                Order = ToolbarItemOrder.Secondary
+                Order = ToolbarItemOrder.Primary,
+                Icon = "shop.png"
             };
             PointOfSalesItem.Clicked += PointOfSalesItem_Clicked;
 #pragma warning restore CS0618 // Type or member is obsolete

@@ -20,6 +20,7 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
 		public CategoriesList()
 		{
 			InitializeComponent ();
+            List.SeparatorVisibility = SeparatorVisibility.None;
             addToolbarItem = new ToolbarItem()
             {
                 Icon = "plus.png",

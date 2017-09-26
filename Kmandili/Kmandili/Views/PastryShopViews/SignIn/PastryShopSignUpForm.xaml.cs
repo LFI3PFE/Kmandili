@@ -42,7 +42,6 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void load()
         {
-            //await PopupNavigation.PushAsync(new LoadingPopupPage());
             try
             {
                 phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
@@ -50,7 +49,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             catch (HttpRequestException)
             {
-                //await PopupNavigation.PopAllAsync();
+                await PopupNavigation.PopAllAsync();
                 await
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
@@ -58,12 +57,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
+            await PopupNavigation.PopAllAsync();
             if (phoneNumberTypes == null || priceRanges == null) return;
             PriceRange.ItemsSource = priceRanges;
             PriceRange.SelectedIndex = 0;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
-            //await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout()

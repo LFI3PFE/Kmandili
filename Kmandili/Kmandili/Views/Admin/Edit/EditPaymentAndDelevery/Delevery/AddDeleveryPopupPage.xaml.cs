@@ -28,6 +28,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
         public AddDeleveryPopupPage(DeleveryList deleveryList)
         {
             InitializeComponent();
+            List.SeparatorVisibility = SeparatorVisibility.None;
             this.deleveryList = deleveryList;
             Load();
         }

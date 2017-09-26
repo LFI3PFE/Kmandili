@@ -31,14 +31,20 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 
             NavigationPage.SetHasNavigationBar(this, false);
+
+#pragma warning disable CS0618 // Type or member is obsolete
             pastryShopList = new UPastryShopList()
             {
+                Icon = Device.OnPlatform("shop.png", "", ""),
+
                 Title = "Liste des pâtisseries"
             };
             productList = new ProductList()
             {
+                Icon = Device.OnPlatform("products.png", "", ""),
                 Title = "Liste des Produits"
             };
+#pragma warning restore CS0618 // Type or member is obsolete
             MyTabbedPage tab = new MyTabbedPage()
             {
                 Children =

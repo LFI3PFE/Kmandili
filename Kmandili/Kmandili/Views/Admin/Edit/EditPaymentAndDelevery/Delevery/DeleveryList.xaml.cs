@@ -20,6 +20,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 		public DeleveryList ()
 		{
 			InitializeComponent ();
+            List.SeparatorVisibility = SeparatorVisibility.None;
             addToolbarItem = new ToolbarItem()
             {
                 Icon = "plus.png",

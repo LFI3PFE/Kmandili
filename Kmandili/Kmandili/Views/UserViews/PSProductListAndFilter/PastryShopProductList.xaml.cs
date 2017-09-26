@@ -259,7 +259,7 @@ namespace Kmandili.Views.UserViews.PSProductListAndFilter
                     cartP.updateTotal();
                 }
             }
-            await DisplayAlert("Succée", "Produit Ajouté au chariot", "OK");
+            await DisplayAlert("Succès", "Produit ajouté au chariot", "OK");
         }
     }
 }

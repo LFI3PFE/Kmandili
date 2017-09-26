@@ -23,6 +23,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 		public PSOrderDetail(PSOrderList pastryShopOrderList, Order order)
 		{
             InitializeComponent ();
+            ProductsList.SeparatorVisibility = SeparatorVisibility.None;
             load();
 		    confirmToolbarItem = new ToolbarItem()
 		    {

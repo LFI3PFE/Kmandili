@@ -36,9 +36,9 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                                                     <Label Text="{Binding Name}" FontSize="30" TextColor="Black"/>
-                                                    <StackLayout Padding="10,0,0,0" VerticalOptions="FillAndExpand">
+                                                    <!--<StackLayout Padding="10,0,0,0" VerticalOptions="FillAndExpand">
                                                         <Label Text="{Binding PastryShop.Name}" FontSize="18" TextColor="Gray" VerticalOptions="CenterAndExpand" VerticalTextAlignment="End"/>
-                                                    </StackLayout>
+                                                    </StackLayout>-->
                                                 </StackLayout>
                                                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" HorizontalOptions="FillAndExpand"><!--Padding="0,5,10,0"-->
                                                     <Image Source="addToCart.png" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" WidthRequest="20">

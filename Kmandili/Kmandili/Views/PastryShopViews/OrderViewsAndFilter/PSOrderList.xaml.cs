@@ -32,6 +32,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 		{
 			InitializeComponent ();
             BodyLayout.TranslateTo(0, -50);
+            OrderList.SeparatorVisibility = SeparatorVisibility.None;
 
             filterToolbarItem = new ToolbarItem()
             {

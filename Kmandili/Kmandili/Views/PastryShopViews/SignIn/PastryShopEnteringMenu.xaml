@@ -50,7 +50,7 @@
                                             </StackLayout>
                                         </Grid>
                                     </StackLayout>
-                                    <StackLayout Padding="20,0,0,0">
+                                    <StackLayout Padding="10,0,0,0">
                                         <Label Text="{Binding Description}" FontSize="15" TextColor="Black"/>
                                         <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
                                             <StackLayout Orientation="Horizontal" Padding="0,-5,0,0">

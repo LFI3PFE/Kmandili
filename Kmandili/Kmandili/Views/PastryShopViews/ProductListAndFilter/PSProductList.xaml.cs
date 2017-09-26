@@ -51,7 +51,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
-                Order = ToolbarItemOrder.Secondary,
+                Order = ToolbarItemOrder.Primary,
                 Icon = "filter.png"
             };
             filterToolbarItem.Clicked += FilterToolbarItem_Clicked;

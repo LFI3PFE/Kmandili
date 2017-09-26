@@ -55,7 +55,8 @@ namespace Kmandili.Views.UserViews
                 await Navigation.PopAsync();
                 return;
             }
-            if (phoneNumberTypes == null) return;
+            await PopupNavigation.PopAllAsync();
+            if (phoneNumberTypes == null)return;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }

@@ -25,20 +25,24 @@ namespace Kmandili.Views.Admin
 		{
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
+#pragma warning disable CS0618 // Type or member is obsolete
             MyTabbedPage tab = new MyTabbedPage()
             {
                 Children =
                 {
                     new UsersList()
                     {
+                        Icon = Device.OnPlatform("clients.png", "", ""),
                         Title = "Clients"
                     },
                     new APastryShopList()
                     {
+                        Icon = Device.OnPlatform("shop.png", "", ""),
                         Title = "Pâtisseries"
                     }
                 }
             };
+#pragma warning restore CS0618 // Type or member is obsolete
             Master = new AdminMasterPage(this);
             //Detail = new NavigationPage(tab);
             switch (Device.RuntimePlatform)

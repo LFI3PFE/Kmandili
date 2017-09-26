@@ -29,6 +29,7 @@ namespace Kmandili.Views.PastryShopViews
             ProductList = new ToolbarItem
             {
                 Text = "Produits",
+                Icon = "products.png",
                 Order = ToolbarItemOrder.Primary,
                 Priority = 0
             };
@@ -37,7 +38,8 @@ namespace Kmandili.Views.PastryShopViews
             pointOfSaleList = new ToolbarItem()
             {
                 Text = "Points de vente",
-                Order = ToolbarItemOrder.Secondary
+                Order = ToolbarItemOrder.Primary,
+                Icon = "shop.png"
             };
             pointOfSaleList.Clicked += PointOfSaleList_Clicked;
 

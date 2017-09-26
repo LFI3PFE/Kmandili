@@ -285,8 +285,6 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
                         "Ok");
                 return;
             }
-            
-            await PopupNavigation.PopAllAsync();
             if (pastryShop.Orders.Any(o => (o.Status_FK != 5 && o.Status_FK != 3)))
             {
                 await
@@ -297,7 +295,6 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             }
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette pâtisserie?", "Oui", "Annuler");
             if (!choix) return;
-            await PopupNavigation.PushAsync(new LoadingPopupPage());
             try
             {
                 if (await pastryShopRC.DeleteAsync(pastryShop.ID))

@@ -409,6 +409,9 @@
   <ItemGroup>
     <BundleResource Include="Resources\slider-default-handle-disabled.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\clients.png" />
+  </ItemGroup>
   <Import Project="..\Kmandili\Kmandili.projitems" Label="Shared" Condition="Exists('..\Kmandili\Kmandili.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />

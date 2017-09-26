@@ -51,15 +51,19 @@ namespace Kmandili
 
         public async void SignUp(Object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             var choice = await DisplayActionSheet("S'inscrire comme", "Annuler", null, "Client", "Pâtisserie");
             if (choice == "Client")
             {
                 await Navigation.PushAsync(new UserSignUpForm());
+                return;
             }
             else if(choice == "Pâtisserie")
             {
                 await Navigation.PushAsync(new PastryShopSignUpForm());
+                return;
             }
+            await PopupNavigation.PopAllAsync();
         }
 
         private void isLoading(bool loading)

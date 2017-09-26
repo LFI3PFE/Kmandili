@@ -31,6 +31,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
         public APOrderList(int ID)
         {
             InitializeComponent();
+            OrderListView.SeparatorVisibility = SeparatorVisibility.None;
             BodyLayout.TranslateTo(0, -50);
 
             filterToolbarItem = new ToolbarItem()
