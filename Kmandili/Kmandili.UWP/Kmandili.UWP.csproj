@@ -122,6 +122,7 @@
     <Content Include="categories_left_menu.png" />
     <Content Include="Chart.js" />
     <Content Include="chart.png" />
+    <Content Include="clients.png" />
     <Content Include="close.png" />
     <Content Include="confirm.png" />
     <Content Include="Cover_Pic.jpg" />
