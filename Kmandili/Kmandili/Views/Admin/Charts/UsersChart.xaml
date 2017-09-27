@@ -8,7 +8,7 @@
     </StackLayout>
     <StackLayout Spacing="0" x:Name="BodyLayout" VerticalOptions="FillAndExpand" IsVisible="False">
       <StackLayout Padding="0,25,0,0" Margin="0" Spacing="0" VerticalOptions="Center" BackgroundColor="White">
-        <Label Text="Nouveaux utilisateur par mois" FontSize="25" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
+                <Label Text="Évolution du nombre d'utilisateurs par mois" FontSize="25" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" VerticalTextAlignment="Center"/>
       </StackLayout>
       <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" BackgroundColor="White" Padding="0,20,0,0">
         <StackLayout HorizontalOptions="FillAndExpand" Padding="20,0,0,0">
