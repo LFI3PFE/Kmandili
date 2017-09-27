@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using Kmandili.Helpers;
 using Plugin.Connectivity;
+using System.Net;
 
 namespace Kmandili.Models.RestClient
 {
@@ -46,19 +47,21 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(WebServiceUrl);
-
-                var taskModels = JsonConvert.DeserializeObject<List<T>>(json);
+                var json = await httpClient.GetAsync(WebServiceUrl);
+                if(json.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var taskModels = JsonConvert.DeserializeObject<List<T>>(await json.Content.ReadAsStringAsync());
 
                 return taskModels;
             }
-            catch (HttpRequestException ex)
+            catch (WebException)
             {
-                if (ex.Message == "404 (Not Found)")
-                {
-                    return null;
-                }
-                throw;
+                throw new HttpRequestException();
             }
         }
 
@@ -69,19 +72,21 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(WebServiceUrl + id);
-
-                var taskModels = JsonConvert.DeserializeObject<T>(json);
+                var json = await httpClient.GetAsync(WebServiceUrl + id);
+                if(json.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return default(T);
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var taskModels = JsonConvert.DeserializeObject<T>(await json.Content.ReadAsStringAsync());
 
                 return taskModels;
             }
-            catch (HttpRequestException ex)
+            catch (WebException)
             {
-                if (ex.Message == "404 (Not Found)")
-                {
-                    return default(T);
-                }
-                throw;
+                throw new HttpRequestException();
             }
         }
         

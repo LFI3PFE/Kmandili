@@ -479,6 +479,7 @@ namespace Kmandili.Views.UserViews
                 }
                 else
                 {
+                    await PopupNavigation.PopAllAsync();
                     EmailVerified();
                 }
             }

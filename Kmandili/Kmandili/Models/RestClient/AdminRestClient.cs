@@ -8,6 +8,7 @@ using Kmandili.Helpers;
 using Kmandili.Models.LocalModels;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
+using System.Net;
 
 namespace Kmandili.Models.RestClient
 {
@@ -20,17 +21,20 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/Admin");
-                var admin = JsonConvert.DeserializeObject<Admin>(json);
+                var json = await httpClient.GetAsync(App.ServerURL + "api/Admin");
+                if(json.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var admin = JsonConvert.DeserializeObject<Admin>(await json.Content.ReadAsStringAsync());
                 return admin;
             }
-            catch (HttpRequestException ex)
+            catch (WebException)
             {
-                if (ex.Message == "404 (Not Found)")
-                {
-                    return default(Admin);
-                }
-                throw;
+                throw new HttpRequestException();
             }
         }
 

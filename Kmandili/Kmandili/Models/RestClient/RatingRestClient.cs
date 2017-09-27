@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace Kmandili.Models.RestClient
 {
@@ -18,20 +19,39 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
-
-                var taskModels = JsonConvert.DeserializeObject<Rating>(json);
-
-                return taskModels;
-            }
-            catch (HttpRequestException ex)
-            {
-                if (ex.Message == "404 (Not Found)")
+                var json = await httpClient.GetAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
+                if (json.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
                 }
-                throw;
+                var taskModels = JsonConvert.DeserializeObject<Rating>(await json.Content.ReadAsStringAsync());
+                return taskModels;
+            }catch (WebException) {
+                throw new HttpRequestException();
             }
+
+            //try
+            //{
+            //    var json = await httpClient.GetStringAsync(WebServiceUrl + user_fk + "/" + pastryShop_fk + "/");
+            //    var taskModels = JsonConvert.DeserializeObject<Rating>(json);
+
+            //    return taskModels;
+            //}
+            //catch (HttpRequestException ex)
+            //{
+            //    if ((ex.InnerException is WebException))
+            //    {
+            //        var x = ((WebException)ex.InnerException).Status;
+            //    }
+            //    if (ex.Message == "404 (Not Found)")
+            //    {
+            //        return null;
+            //    }
+            //    throw;
+            //}
         }
 
         public async Task<bool> PutAsync(int user_fk, int pastryShop_fk, Rating rating)

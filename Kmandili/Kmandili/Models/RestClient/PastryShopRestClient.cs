@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
+using System.Net;
 
 namespace Kmandili.Models.RestClient
 {
@@ -19,17 +20,21 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(WebServiceUrl + "byemail/" + email + "/");
-                var taskModels = JsonConvert.DeserializeObject<PastryShop>(json);
-                return taskModels;
-            }
-            catch (HttpRequestException ex)
-            {
-                if (ex.Message == "404 (Not Found)")
+                var json = await httpClient.GetAsync(WebServiceUrl + "byemail/" + email + "/");
+                if(json.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
                 }
-                throw;
+                else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var taskModels = JsonConvert.DeserializeObject<PastryShop>(await json.Content.ReadAsStringAsync());
+                return taskModels;
+            }
+            catch (WebException)
+            {
+                throw new HttpRequestException();
             }
         }
 

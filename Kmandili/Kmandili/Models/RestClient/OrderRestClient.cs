@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
+using System.Net;
 
 namespace Kmandili.Models.RestClient
 {
@@ -18,19 +19,21 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/ordersByUserID/" + id);
-
-                var taskModels = JsonConvert.DeserializeObject<List<Order>>(json);
+                var json = await httpClient.GetAsync(App.ServerURL + "api/ordersByUserID/" + id);
+                if(json.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var taskModels = JsonConvert.DeserializeObject<List<Order>>(await json.Content.ReadAsStringAsync());
 
                 return taskModels;
             }
-            catch (HttpRequestException ex)
+            catch (WebException)
             {
-                if (ex.Message == "404 (Not Found)")
-                {
-                    return null;
-                }
-                throw;
+                throw new HttpRequestException();
             }
         }
 
@@ -41,19 +44,21 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/ordersByPastryShopID/" + id);
-
-                var taskModels = JsonConvert.DeserializeObject<List<Order>>(json);
+                var json = await httpClient.GetAsync(App.ServerURL + "api/ordersByPastryShopID/" + id);
+                if(json.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }else if(json.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new HttpRequestException();
+                }
+                var taskModels = JsonConvert.DeserializeObject<List<Order>>(await json.Content.ReadAsStringAsync());
 
                 return taskModels;
             }
-            catch (HttpRequestException ex)
+            catch (WebException)
             {
-                if (ex.Message == "404 (Not Found)")
-                {
-                    return null;
-                }
-                throw;
+                throw new HttpRequestException();
             }
         }
 

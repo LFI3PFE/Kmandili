@@ -120,6 +120,15 @@ namespace Kmandili
             {
                 case "a":
                     isLoading(false);
+                    var adminRC = new AdminRestClient();
+                    var ad = await adminRC.GetAdmin();
+                    if(ad.UserName != Settings.Email || ad.Password != Settings.Password)
+                    {
+                        await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
+                        Settings.ClearSettings();
+                        isLoading(false);
+                        return;
+                    }
                     await Navigation.PushAsync(new AdminMasterDetailPage());
                     //App.setMainPage(new AdminMasterDetailPage());
                     break;
@@ -129,6 +138,13 @@ namespace Kmandili
                     try
                     {
                         u = await userRestClient.GetAsyncById(Settings.Id);
+                        if(u.Password != Settings.Password || u.Email != Settings.Email)
+                        {
+                            await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
+                            Settings.ClearSettings();
+                            isLoading(false);
+                            return;
+                        }
                     }
                     catch (HttpRequestException)
                     {
@@ -137,6 +153,7 @@ namespace Kmandili
                             DisplayAlert("Erreur",
                                 "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                 "Ok");
+                        Settings.ClearSettings();
                         isLoading(false);
                         return;
                     }
@@ -145,6 +162,7 @@ namespace Kmandili
                     {
                         await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
                         Settings.ClearSettings();
+                        isLoading(false);
                         return;
                     }
                     App.setMainPage(new UserMasterDetailPage(u));
@@ -155,6 +173,13 @@ namespace Kmandili
                     try
                     {
                         p = await pastryShopRestClient.GetAsyncById(Settings.Id);
+                        if (p.Password != Settings.Password || p.Email != Settings.Email)
+                        {
+                            await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
+                            Settings.ClearSettings();
+                            isLoading(false);
+                            return;
+                        }
                     }
                     catch (HttpRequestException)
                     {
@@ -163,6 +188,7 @@ namespace Kmandili
                             DisplayAlert("Erreur",
                                 "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                 "Ok");
+                        Settings.ClearSettings();
                         isLoading(false);
                         return;
                     }
@@ -171,6 +197,7 @@ namespace Kmandili
                     {
                         await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
                         Settings.ClearSettings();
+                        isLoading(false);
                         return;
                     }
                     App.setMainPage(new PastryShopMasterDetailPage(p));
