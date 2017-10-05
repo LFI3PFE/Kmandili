@@ -1,13 +1,13 @@
 # Kmandili
-- This App was created as a graduation project for obtaining the "Basic Computer License" (Licence Fondamentale en Informatique) diploma from "Faculty of Science of Tunis" (FST).
-- This application along with the web service named "KmandiliWebService" was able to get the diploma with an excellent average grade of 18/20 the 04/10/2017.
-- Seif Abdennadher, the owner of thes repo, is the only author of thes app, and the only owner.
+This App was created as a graduation project for obtaining the "Basic Computer License" (Licence Fondamentale en Informatique) diploma from "Faculty of Science of Tunis" (FST).  
+This application along with the web service named "KmandiliWebService" was able to get the diploma with an excellent average grade of 18/20 the 04/10/2017.  
+Seif Abdennadher, the owner of thes repo, is the only author of thes app, and the only owner.
 
 ******************************************************************************************************************************************
 
-- To run this app, you will need to clone the webservice first and implement it (See KmandiliWebService README file) you will need visual studio 2017 (tested and work properly on it) with Xamarin.forms plugin installed.
+To run this app, you will need to clone the webservice first and implement it (See KmandiliWebService README file) you will need visual studio 2017 (tested and work properly on it) with Xamarin.forms plugin installed.  
 
-* Latest test done with:
+Latest test done with:
  - Visual Studio 2017 v15.3.5
  - Xamarin.forms v2.4.0.282
  - Plugins:
