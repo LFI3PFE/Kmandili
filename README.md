@@ -21,4 +21,4 @@ Latest test done with:
  - On:
     - Samsung J3 2016 (Samsung SM-J320F Android 5.1 - API 22)
     - Visual Studio Mobile Emulator 10.0.15063.0 1080p 6inch 2GB
-    - XCode IPhone 7 emulator running on macOS Sierra (from VMware Workstation 12 Pro v12.5.5 build-5234757)
+    - XCode IPhone 7 emulator running on macOS Sierra v10.12.6 (running on VMware Workstation 12 Pro v12.5.5 build-5234757)
