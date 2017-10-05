@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
@@ -16,29 +15,26 @@ using Xamarin.Forms;
 
 namespace Kmandili
 {
-	public partial class App : Application
-	{
-        //public static string ServerURL = "http://192.168.1.4:300/";
-        public static string ServerURL = "http://seifiisexpress.sytes.net:300/";
-        //public static string ServerURL = "http://kmandili.azurewebsites.net/";
-        //public static Connected Connected = null;
+    public partial class App : Application
+    {
+        public static string ServerURL = "http://kmandiliwebservice.servehttp.com:300/";
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
-	    public static bool updatePastryList = false;
-	    public static bool updateClientList = false;
-	    public static bool isConnected = false;
-        public App ()
-		{
-			InitializeComponent();
+        public static bool updatePastryList = false;
+        public static bool updateClientList = false;
+        public static bool isConnected = false;
+        public App()
+        {
+            InitializeComponent();
 
             //MainPage = new WebViewTest();
             MainPage = new NavigationPage(new MainPage());
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
-		}
+        }
 
-	    public static string ToTitleCase(string s)
-	    {
-	        return s.Substring(0, 1).ToUpper() + s.Substring(1, s.Length - 1);
+        public static string ToTitleCase(string s)
+        {
+            return s.Substring(0, 1).ToUpper() + s.Substring(1, s.Length - 1);
         }
 
         public static bool TokenExpired()
@@ -57,7 +53,7 @@ namespace Kmandili
         }
 
         public static void setMainPage(MasterDetailPage newMainPage)
-	    {
+        {
             //App.Current.MainPage = new NavigationPage(newMainPage);
             switch (Device.RuntimePlatform)
             {
@@ -67,8 +63,7 @@ namespace Kmandili
                 case Device.Android:
                     App.Current.MainPage = new NavigationPage(newMainPage);
                     break;
-                case Device.WinPhone:
-                case Device.Windows:
+                case Device.UWP:
                     App.Current.MainPage = new NavigationPage(newMainPage);
                     break;
                 default:
@@ -90,7 +85,7 @@ namespace Kmandili
 
         public async static void Logout()
         {
-            if(Settings.Type == "a")
+            if (Settings.Type == "a")
                 await Current.MainPage.Navigation.PopToRootAsync();
             else
                 Current.MainPage = new NavigationPage(new MainPage());
@@ -98,7 +93,7 @@ namespace Kmandili
             Cart.Clear();
             galleryIsOpent = false;
             isConnected = false;
-            
+
         }
 
         public static bool isValidEmail(string inputEmail)
@@ -139,23 +134,23 @@ namespace Kmandili
             }
         }
 
-        protected async override void OnStart ()
-		{
+        protected async override void OnStart()
+        {
             if (!CrossConnectivity.Current.IsConnected)
             {
                 await PopupNavigation.PushAsync(new ConnectionLostPopupPage());
             }
         }
 
-		protected override void OnSleep ()
-		{
+        protected override void OnSleep()
+        {
             // Handle when your app sleeps
         }
 
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-        
-	}
+        protected override void OnResume()
+        {
+            // Handle when your app resumes
+        }
+
+    }
 }

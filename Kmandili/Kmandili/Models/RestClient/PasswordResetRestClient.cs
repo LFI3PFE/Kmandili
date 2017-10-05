@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Plugin.Connectivity;
 
 namespace Kmandili.Models.RestClient
 {

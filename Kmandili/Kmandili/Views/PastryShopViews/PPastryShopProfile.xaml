@@ -12,9 +12,6 @@
                         <StackLayout BackgroundColor="#3b4552" HeightRequest="90" WidthRequest="137" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = -160}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=130}">
                             <Image x:Name="ProfilImage" HeightRequest="90" Aspect="AspectFill" HorizontalOptions="FillAndExpand"/>
                         </StackLayout>
-                        <!--<Button x:Name="imageCircleBack"
-                        BackgroundColor="#3b4552" HeightRequest="90" WidthRequest="137" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = -160}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=130}" />
-                        <Image x:Name="ProfilImage" HeightRequest="90" Aspect="AspectFill" HorizontalOptions="FillAndExpand" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=imageCircleBack, Property=X, Factor=1,Constant=0}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=130}" />-->
                         <StackLayout Spacing="0" Orientation="Vertical" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Y, Factor=0, Constant=155}" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = 0}">
                             <Label x:Name="PastryName" TextColor="#3b4552" FontAttributes="Bold" FontSize="36" HorizontalTextAlignment="Center"/>
                             <StackLayout Orientation="Horizontal">

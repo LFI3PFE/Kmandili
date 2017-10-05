@@ -6,6 +6,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:BoolToNotConverter x:Key="BoolToNotConverter"></local:BoolToNotConverter>
+            <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
@@ -30,7 +31,7 @@
                                 <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                     <StackLayout Padding="5" VerticalOptions="Center">
                                         <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                            <Image Source="{Binding PastryShop.ProfilePic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                                            <Image Source="{Binding PastryShop.ProfilePic, Converter={StaticResource ImageNameToUriConverter}}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
                                         </StackLayout>
                                     </StackLayout>
                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">

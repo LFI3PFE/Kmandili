@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Kmandili.Models.LocalModels;
-using Newtonsoft.Json;
-using Plugin.Settings;
+﻿using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
 namespace Kmandili.Helpers

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

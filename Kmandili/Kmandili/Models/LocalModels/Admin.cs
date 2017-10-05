@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kmandili.Models.LocalModels
+﻿namespace Kmandili.Models.LocalModels
 {
     public class Admin
     {

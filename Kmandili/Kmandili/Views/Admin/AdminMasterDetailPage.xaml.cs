@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
+﻿using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
 using Kmandili.Views.Admin.UserViews.UserListAndFilter;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -53,8 +48,7 @@ namespace Kmandili.Views.Admin
                 case Device.Android:
                     Detail = new NavigationPage(tab);
                     break;
-                case Device.WinPhone:
-                case Device.Windows:
+                case Device.UWP:
                     Detail = tab;
                     break;
                 default:

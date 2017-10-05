@@ -1,8 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kmandili.Converters"
              x:Class="Kmandili.Views.Admin.UserViews.Orders.AUOrderList">
-  <ScrollView>
+<ContentPage.Resources>
+    <ResourceDictionary>
+        <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
+    </ResourceDictionary>
+</ContentPage.Resources>
+    <ScrollView>
     <StackLayout x:Name="BodyLayout" Padding="0,10,0,0">
       <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
         <SearchBar x:Name="SearchBar" TextChanged="SearchBar_OnTextChanged" Placeholder="Chercher" FontSize="20" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
@@ -24,7 +30,7 @@
                 <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                   <StackLayout Padding="5" VerticalOptions="Center">
                     <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                      <Image Source="{Binding PastryShop.ProfilePic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                      <Image Source="{Binding PastryShop.ProfilePic, Converter={StaticResource ImageNameToUriConverter}}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
                     </StackLayout>
                   </StackLayout>
                   <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">

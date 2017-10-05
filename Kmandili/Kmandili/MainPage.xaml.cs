@@ -1,18 +1,14 @@
 ﻿using Kmandili.Models;
-using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.PastryShopViews;
 using Kmandili.Views.PastryShopViews.SignIn;
 using Kmandili.Views.UserViews;
 using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Kmandili.Views;
 using Kmandili.Views.Admin;
-using Newtonsoft.Json;
-using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 

@@ -4,12 +4,12 @@
     "Newtonsoft.Json": "10.0.3",
     "Rg.Plugins.Popup": "1.0.4",
     "System.Net.Http": "4.3.3",
-    "Xam.Plugin.Connectivity": "3.0.2",
+    "Xam.Plugin.Connectivity": "3.0.3",
     "Xam.Plugin.Media": "3.0.1",
     "Xam.Plugins.Settings": "3.0.1",
-    "Xamarin.Forms": "2.3.4.270",
-    "Xamarin.Forms.RangeSlider": "0.6.18",
-    "Xamarin.RangeSlider": "0.6.18"
+    "Xamarin.Forms": "2.4.0.282",
+    "Xamarin.Forms.RangeSlider": "0.7.10",
+    "Xamarin.RangeSlider": "0.7.10"
   },
   "frameworks": {
     "uap10.0.10240": {}

@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kmandili.Converters"
              x:Class="Kmandili.Views.UserViews.PSProductListAndFilter.PastryShopProductList">
+<ContentPage.Resources>
+    <ResourceDictionary>
+        <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
+    </ResourceDictionary>
+</ContentPage.Resources>
     <ScrollView>
         <StackLayout x:Name="BodyLayout" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" Padding="0,0,0,0">
             <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
@@ -22,7 +28,7 @@
                                     <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                         <StackLayout Padding="5" VerticalOptions="Center">
                                             <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                                <Image Source="{Binding Pic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                                                <Image Source="{Binding Pic, Converter={StaticResource ImageNameToUriConverter}}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="0">
@@ -36,9 +42,6 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
                                                     <Label Text="{Binding Name}" FontSize="30" TextColor="Black"/>
-                                                    <!--<StackLayout Padding="10,0,0,0" VerticalOptions="FillAndExpand">
-                                                        <Label Text="{Binding PastryShop.Name}" FontSize="18" TextColor="Gray" VerticalOptions="CenterAndExpand" VerticalTextAlignment="End"/>
-                                                    </StackLayout>-->
                                                 </StackLayout>
                                                 <StackLayout VerticalOptions="FillAndExpand" Grid.Row="0" Grid.Column="1" HorizontalOptions="FillAndExpand"><!--Padding="0,5,10,0"-->
                                                     <Image Source="addToCart.png" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" WidthRequest="20">

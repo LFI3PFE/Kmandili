@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kmandili.Converters"
              x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopEnteringMenu">
+<ContentPage.Resources>
+    <ResourceDictionary>
+        <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
+    </ResourceDictionary>
+</ContentPage.Resources>
     <ScrollView>
         <ListView x:Name="Liste" HasUnevenRows="True" ItemSelected="selected" VerticalOptions="FillAndExpand" >
             <ListView.Header>
@@ -27,7 +33,7 @@
                             <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                 <StackLayout Padding="5" VerticalOptions="Center">
                                     <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                        <Image Source="{Binding Pic}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
+                                        <Image Source="{Binding Pic, Converter={StaticResource ImageNameToUriConverter}}" Aspect="AspectFill" HeightRequest="80" HorizontalOptions="FillAndExpand"/>
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="1">

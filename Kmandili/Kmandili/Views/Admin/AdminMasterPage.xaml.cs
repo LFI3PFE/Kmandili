@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kmandili.Views.Admin.Charts;
 using Kmandili.Views.Admin.Edit;
 using Kmandili.Views.Admin.Edit.EditCategories;

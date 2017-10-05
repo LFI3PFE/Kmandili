@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kmandili.Models
+﻿namespace Kmandili.Models
 {
     public class WorkDay
     {

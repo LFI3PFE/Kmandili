@@ -13,6 +13,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BoolToNotConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\ImageNameToUriConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringToTitleCaseConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Settings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IBaseUrl.cs" />

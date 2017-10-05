@@ -41,7 +41,6 @@
                         <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="0" Grid.Column="0">
                           <Label Text="{Binding User.Name, Converter={StaticResource StringToTitleCaseConverter}}" FontSize="30" TextColor="Black"/>
                           <Label Text="{Binding User.LastName, Converter={StaticResource StringToTitleCaseConverter}}" FontSize="30" TextColor="Black"/>
-                          <!--<Image Source="RedNotificationDot.png" VerticalOptions="Center" IsVisible="{Binding SeenPastryShop, Converter={StaticResource BoolToNotConverter}}" WidthRequest="10"/>-->
                         </StackLayout>
                         <StackLayout Grid.Row="0" Grid.Column="1" Padding="0,10,10,0">
                           <StackLayout Orientation="Horizontal">

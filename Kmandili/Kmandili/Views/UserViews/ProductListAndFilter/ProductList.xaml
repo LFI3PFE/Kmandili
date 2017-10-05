@@ -1,7 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Kmandili.Converters"
              x:Class="Kmandili.Views.UserViews.ProductListAndFilter.ProductList">
+<ContentPage.Resources>
+    <ResourceDictionary>
+        <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
+    </ResourceDictionary>
+</ContentPage.Resources>
     <ScrollView x:Name="BodyScrollView" VerticalOptions="Fill">
         <StackLayout x:Name="BodyLayout" VerticalOptions="FillAndExpand">
             <StackLayout x:Name="SearchBarLayout" Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
@@ -25,7 +31,7 @@
                                     <StackLayout Orientation="Horizontal" HeightRequest="90" BackgroundColor="White">
                                         <StackLayout Padding="5" VerticalOptions="Center">
                                             <StackLayout BackgroundColor="Gray" WidthRequest="129" HeightRequest="80">
-                                                <Image Source="{Binding Pic}" HeightRequest="80" HorizontalOptions="FillAndExpand" Aspect="AspectFill"/>
+                                                <Image Source="{Binding Pic, Converter={StaticResource ImageNameToUriConverter}}" HeightRequest="80" HorizontalOptions="FillAndExpand" Aspect="AspectFill"/>
                                             </StackLayout>
                                         </StackLayout>
                                         <StackLayout Orientation="Vertical" Spacing="1">

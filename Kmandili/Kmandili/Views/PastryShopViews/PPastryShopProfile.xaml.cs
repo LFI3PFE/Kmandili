@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Views.PastryShopViews.POSListAndAdd;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 using Rg.Plugins.Popup.Services;
@@ -85,8 +84,8 @@ namespace Kmandili.Views.PastryShopViews
         {
             Rating.Text = pastryShop.Ratings.Sum(r => r.Value).ToString();
             NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
-            Cover.Source = pastryShop.CoverPic;
-            ProfilImage.Source = pastryShop.ProfilePic;
+            Cover.Source = App.ServerURL + "Uploads/" + pastryShop.CoverPic;
+            ProfilImage.Source = App.ServerURL + "Uploads/" + pastryShop.ProfilePic;
             PastryName.Text = pastryShop.Name;
             Address.Text = pastryShop.Address.ToString();
             Desc.Text = pastryShop.LongDesc;

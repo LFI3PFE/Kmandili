@@ -1,6 +1,4 @@
 ﻿using Kmandili.Models;
-using Kmandili.Models.RestClient;
-using Kmandili.Views.UserViews;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,8 +25,7 @@ namespace Kmandili.Views.PastryShopViews
                 case Device.Android:
                     Detail = new NavigationPage(pastryShopProfile);
                     break; ;
-                case Device.WinPhone:
-                case Device.Windows:
+                case Device.UWP:
                     Detail = pastryShopProfile;
                     break;
                 default:

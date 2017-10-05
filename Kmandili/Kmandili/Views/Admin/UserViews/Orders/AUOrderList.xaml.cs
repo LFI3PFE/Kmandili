@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
-using Kmandili.Views.UserViews.OrderViewsAndFilter;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

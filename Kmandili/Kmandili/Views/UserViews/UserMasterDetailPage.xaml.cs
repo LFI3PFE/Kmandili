@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kmandili.Models;
-using Kmandili.Models.RestClient;
 using Kmandili.Views.UserViews.PastryShopListAndFilter;
 using Kmandili.Views.UserViews.ProductListAndFilter;
 using Xamarin.Forms;
@@ -13,7 +8,7 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UserMasterDetailPage : MasterDetailPage
+	public partial class UserMasterDetailPage
 	{
         private class MyTabbedPage : TabbedPage
         {
@@ -23,23 +18,20 @@ namespace Kmandili.Views.UserViews
             }
         }
 
-        private UPastryShopList pastryShopList;
-        private ProductList productList;
-        
-        public UserMasterDetailPage (User user)
+	    public UserMasterDetailPage (User user)
 		{
-			InitializeComponent ();
+		    InitializeComponent ();
 
             NavigationPage.SetHasNavigationBar(this, false);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-            pastryShopList = new UPastryShopList()
+            var pastryShopList = new UPastryShopList()
             {
                 Icon = Device.OnPlatform("shop.png", "", ""),
 
                 Title = "Liste des pâtisseries"
             };
-            productList = new ProductList()
+            var productList = new ProductList()
             {
                 Icon = Device.OnPlatform("products.png", "", ""),
                 Title = "Liste des Produits"
@@ -63,8 +55,7 @@ namespace Kmandili.Views.UserViews
                 case Device.Android:
                     Detail = new NavigationPage(tab);
                     break;
-                case Device.WinPhone:
-                case Device.Windows:
+                case Device.UWP:
                     Detail = tab;
                     break;
                 default:
@@ -76,8 +67,8 @@ namespace Kmandili.Views.UserViews
 
         private void UserMasterDetailPage_IsPresentedChanged(object sender, EventArgs e)
         {
-            if(IsPresented)
-                (Master as UserMasterPage).UpdateOrderNotificationNumber();
+            if (IsPresented)
+                (Master as UserMasterPage)?.UpdateOrderNotificationNumber();
         }
     }
 }

@@ -5,8 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -110,8 +108,8 @@ namespace Kmandili.Views.UserViews
             }
             Rating.Text = pastryShop.Rating.ToString();
             NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
-            Cover.Source = pastryShop.CoverPic;
-            ProfilImage.Source = pastryShop.ProfilePic;
+            Cover.Source = App.ServerURL + "Uploads/" + pastryShop.CoverPic;
+            ProfilImage.Source = App.ServerURL + "Uploads/" + pastryShop.ProfilePic;
             PastryName.Text = pastryShop.Name;
             Address.Text = pastryShop.Address.ToString();
             Desc.Text = pastryShop.LongDesc;
