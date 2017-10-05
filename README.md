@@ -11,7 +11,7 @@ You will need visual studio 2017 (tested and work properly on it) with Xamarin.f
 Latest test done with:
  - Visual Studio 2017 v15.3.5
  - Xamarin.forms v2.4.0.282
- Plugins:
+ - Plugins:
     - Xam.Plugins.Settings v3.0.1
     - Xam.Plugin.Media v3.0.1
     - Xam.Plugin.Connectivity v3.0.3
@@ -19,7 +19,7 @@ Latest test done with:
     - Plugin.Permissions v2.0.1 (on Android project only)
     - Plugin.CurrentActivity v1.0.1 (on Android project only)
     - Newtonsoft.Json v10.0.3
- On:
+ - On:
     - Samsung J3 2016 (Samsung SM-J320F Android 5.1 - API 22)
     - Visual Studio Mobile Emulator 10.0.15063.0 1080p 6inch 2GB
     - XCode IPhone 7 emulator running on macOS Sierra (from VMware Workstation 12 Pro v12.5.5 build-5234757)
