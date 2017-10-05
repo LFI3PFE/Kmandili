@@ -1,7 +1,7 @@
 # Kmandili
 This App was created as a graduation project for obtaining the "Basic Computer License" (Licence Fondamentale en Informatique) diploma from "Faculty of Science of Tunis" (FST).  
 This application along with the web service named "KmandiliWebService" was able to get the diploma with an excellent average grade of 18/20 the 04/10/2017.  
-Seif Abdennadher, the owner of thes repo, is the only author of thes app, and the only owner.
+Seif Abdennadher, the owner of this repo, is the only author of thes app, and the only owner.
 
 ******************************************************************************************************************************************
 
@@ -21,4 +21,10 @@ Latest test done with:
  - On:
     - Samsung J3 2016 (Samsung SM-J320F Android 5.1 - API 22)
     - Visual Studio Mobile Emulator 10.0.15063.0 1080p 6inch 2GB
-    - XCode IPhone 7 emulator running on macOS Sierra v10.12.6 (running on VMware Workstation 12 Pro v12.5.5 build-5234757)
+    - XCode v8.2.1 (8C1002) IPhone 7 emulator running on macOS Sierra v10.12.6 (running on VMware Workstation 12 Pro v12.5.5 build-5234757)  
+******************************************************************************************************************************************
+For macOS virtualization you will need:
+ - VMWare 12 pro v12.5.5 build-5234757
+ - macOS Sierra v10.12.6
+ - XCode v8.2.1 or later with Xamarin Studio or Visual Studio for Mac
+ - Internet connection must be bridged si that guest OS (macOS) can get a physical IP address
