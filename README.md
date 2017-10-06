@@ -25,6 +25,8 @@ Latest test done with:
 ******************************************************************************************************************************************
 For macOS virtualization you will need:
  - VMWare 12 pro v12.5.5 build-5234757
- - macOS Sierra v10.12.6
- - XCode v8.2.1 or later with Xamarin Studio or Visual Studio for Mac
+ - macOS Sierra v10.12.6 or later
+    - macOS Sierra: https://techsviewer.com/install-macos-sierra-vmware-windows/
+    - macOS High Sierra: https://techsviewer.com/install-macos-high-sierra-vmware-windows/
+ - XCode v8.2.1 or later with Xamarin Studio or Visual Studio for Mac (download from apple downloads using AppleID)
  - Internet connection must be bridged si that guest OS (macOS) can get a physical IP address
