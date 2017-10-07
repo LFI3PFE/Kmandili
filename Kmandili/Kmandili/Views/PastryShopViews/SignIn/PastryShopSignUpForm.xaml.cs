@@ -13,37 +13,37 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopSignUpForm : ContentPage
+	public partial class PastryShopSignUpForm
 	{
-        private ObservableCollection<StackLayout> PhoneNumberStackLayouts = new ObservableCollection<StackLayout>();
-        private RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-        private RestClient<PriceRange> priceRangeTypeRC = new RestClient<PriceRange>();
-        private List<PhoneNumberType> phoneNumberTypes;
-        private List<PriceRange> priceRanges;
+        private readonly ObservableCollection<StackLayout> _phoneNumberStackLayouts = new ObservableCollection<StackLayout>();
+        private readonly RestClient<PhoneNumberType> _phoneNumberTypeRc = new RestClient<PhoneNumberType>();
+        private readonly RestClient<PriceRange> _priceRangeTypeRc = new RestClient<PriceRange>();
+        private List<PhoneNumberType> _phoneNumberTypes;
+        private List<PriceRange> _priceRanges;
 
         public PastryShopSignUpForm()
         {
             InitializeComponent();
-            PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
-            load();
+            _phoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
+            Load();
         }
 
         private void PhoneNumberStackLayouts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PhoneNumbersLayout.Children.Clear();
-            foreach (StackLayout s in PhoneNumberStackLayouts)
+            foreach (StackLayout s in _phoneNumberStackLayouts)
             {
-                s.ClassId = PhoneNumberStackLayouts.IndexOf(s).ToString();
+                s.ClassId = _phoneNumberStackLayouts.IndexOf(s).ToString();
                 PhoneNumbersLayout.Children.Add(s);
             }
         }
 
-        private async void load()
+        private async void Load()
         {
             try
             {
-                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-                priceRanges = await priceRangeTypeRC.GetAsync();
+                _phoneNumberTypes = await _phoneNumberTypeRc.GetAsync();
+                _priceRanges = await _priceRangeTypeRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -56,11 +56,11 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
             }
             await PopupNavigation.PopAllAsync();
-            if (phoneNumberTypes == null || priceRanges == null) return;
-            PriceRange.ItemsSource = priceRanges;
+            if (_phoneNumberTypes == null || _priceRanges == null) return;
+            PriceRange.ItemsSource = _priceRanges;
             PriceRange.SelectedIndex = 0;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
-            PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            _phoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
 
         private StackLayout CreatePhoneNumberStackLayout()
@@ -78,7 +78,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Picker typePicker = new Picker()
             {
                 WidthRequest = 90,
-                ItemsSource = phoneNumberTypes,
+                ItemsSource = _phoneNumberTypes,
                 SelectedIndex = 0,
             };
             Image addIcon = new Image()
@@ -92,13 +92,13 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 WidthRequest = 20,
                 IsVisible = false
             };
-            TapGestureRecognizer addPhoneNumberGR = new TapGestureRecognizer();
-            addPhoneNumberGR.Tapped += AddPhoneNumber_Tapped;
-            addIcon.GestureRecognizers.Add(addPhoneNumberGR);
+            TapGestureRecognizer addPhoneNumberGr = new TapGestureRecognizer();
+            addPhoneNumberGr.Tapped += AddPhoneNumber_Tapped;
+            addIcon.GestureRecognizers.Add(addPhoneNumberGr);
 
-            TapGestureRecognizer removePhoneNumberGR = new TapGestureRecognizer();
-            removePhoneNumberGR.Tapped += RemovePhoneNumberGR_Tapped;
-            removeIcon.GestureRecognizers.Add(removePhoneNumberGR);
+            TapGestureRecognizer removePhoneNumberGr = new TapGestureRecognizer();
+            removePhoneNumberGr.Tapped += RemovePhoneNumberGR_Tapped;
+            removeIcon.GestureRecognizers.Add(removePhoneNumberGr);
 
             StackLayout phoneNumberStackLayout = new StackLayout()
             {
@@ -114,20 +114,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private void AddPhoneNumber_Tapped(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty((((sender as Image).Parent as StackLayout).Children[0] as Entry).Text)) return;
-            (PhoneNumberStackLayouts.Last().Children[2] as Image).IsVisible = false;
-            (PhoneNumberStackLayouts.Last().Children[3] as Image).IsVisible = true;
+            if (string.IsNullOrEmpty((((sender as Image)?.Parent as StackLayout)?.Children[0] as Entry)?.Text)) return;
+            ((Image) _phoneNumberStackLayouts.Last().Children[2]).IsVisible = false;
+            ((Image) _phoneNumberStackLayouts.Last().Children[3]).IsVisible = true;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
-            PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            _phoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
 
         private void RemovePhoneNumberGR_Tapped(object sender, EventArgs e)
         {
-            int index = Int32.Parse(((sender as Image).Parent as StackLayout).ClassId);
-            PhoneNumberStackLayouts.RemoveAt(index);
+            int index = Int32.Parse(((sender as Image)?.Parent as StackLayout)?.ClassId);
+            _phoneNumberStackLayouts.RemoveAt(index);
         }
 
-        private void editorUnFocused(object sender, EventArgs e)
+        private void EditorUnFocused(object sender, EventArgs e)
         {
             if (LongDesc.Text == "")
             {
@@ -136,31 +136,30 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
         }
 
-        private async Task<bool> validAddress()
+        private async Task<bool> ValidAddress()
         {
-            int x;
-            if (Number.Text == null || Number.Text == "")
+            if (string.IsNullOrEmpty(Number.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Numero est obligateur!", "Ok");
                 return false;
             }
-            else if (!int.TryParse(Number.Text, out x))
+            else if (!int.TryParse(Number.Text, out _))
             {
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment ne doit contenir que des Chiffres!", "Ok");
                 Number.Text = "";
                 return false;
             }
-            else if (Street.Text == null || Street.Text == "")
+            else if (string.IsNullOrEmpty(Street.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Rue est obligateur!", "Ok");
                 return false;
             }
-            else if (City.Text == null || City.Text == "")
+            else if (string.IsNullOrEmpty(City.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Ville est obligateur!", "Ok");
                 return false;
             }
-            else if (ZipCode.Text == null || ZipCode.Text == "")
+            else if (string.IsNullOrEmpty(ZipCode.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Co. Postal est obligateur!", "Ok");
                 return false;
@@ -171,18 +170,18 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 ZipCode.Text = "";
                 return false;
             }
-            else if (!int.TryParse(ZipCode.Text, out x))
+            else if (!int.TryParse(ZipCode.Text, out _))
             {
                 await DisplayAlert("Erreur", "Le champ Co. Postal ne doit contenir que des Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
-            else if (State.Text == null || State.Text == "")
+            else if (string.IsNullOrEmpty(State.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Gouvernorat est obligateur!", "Ok");
                 return false;
             }
-            else if (Country.Text == null || Country.Text == "")
+            else if (string.IsNullOrEmpty(Country.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Pays est obligateur!", "Ok");
                 return false;
@@ -190,24 +189,23 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return true;
         }
 
-        private async Task<bool> validPhoneNumber()
+        private async Task<bool> ValidPhoneNumber()
         {
-            int x;
             bool exist = false;
-            foreach (StackLayout s in PhoneNumberStackLayouts)
+            foreach (StackLayout s in _phoneNumberStackLayouts)
             {
-                string phoneNumber = (s.Children[0] as Entry).Text;
-                if (phoneNumber != null && phoneNumber != "")
+                string phoneNumber = (s.Children[0] as Entry)?.Text;
+                if (!string.IsNullOrEmpty(phoneNumber))
                 {
-                    if (!int.TryParse(phoneNumber, out x))
+                    if (!int.TryParse(phoneNumber, out _))
                     {
-                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
-                        (s.Children[0] as Entry).Text = "";
+                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (_phoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
+                        ((Entry) s.Children[0]).Text = "";
                         return false;
                     }
                     else if (phoneNumber.Length != 8)
                     {
-                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
+                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (_phoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
                         return false;
                     }
                     else
@@ -223,34 +221,34 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return exist;
         }
 
-        private async Task<bool> valid()
+        private async Task<bool> Valid()
         {
-            if (Name.Text == null || Name.Text == "")
+            if (string.IsNullOrEmpty(Name.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
                 return false;
             }
-            else if (Email.Text == null || Email.Text == "")
+            else if (string.IsNullOrEmpty(Email.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
                 return false;
             }
-            else if (!App.isValidEmail(Email.Text))
+            else if (!App.IsValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
                 Email.Text = "";
                 return false;
             }
-            else if (Password.Text == null || Password.Text == "")
+            else if (string.IsNullOrEmpty(Password.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Password est obligateur!", "Ok");
                 return false;
             }
-            else if (!(await validAddress()))
+            else if (!(await ValidAddress()))
             {
                 return false;
             }
-            else if (!(await validPhoneNumber()))
+            else if (!(await ValidPhoneNumber()))
             {
                 return false;
             }
@@ -259,7 +257,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void ConfirmBt_Clicked(object sender, EventArgs e)
         {
-            if (!await valid()) return;
+            if (!await Valid()) return;
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             try
             {
@@ -299,28 +297,24 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 Address = address,
                 LongDesc = LongDesc.Text,
                 ShortDesc = ShortDesc.Text,
-                PriceRange_FK = priceRanges.ElementAt(PriceRange.SelectedIndex).ID
+                PriceRange_FK = _priceRanges.ElementAt(PriceRange.SelectedIndex).ID
             };
-            foreach (StackLayout s in PhoneNumberStackLayouts)
+            foreach (StackLayout s in _phoneNumberStackLayouts)
             {
-                if ((s.Children[0] as Entry).Text != "")
+                if ((s.Children[0] as Entry)?.Text != "")
                 {
                     PhoneNumber p = new PhoneNumber()
                     {
-                        Number = (s.Children[0] as Entry).Text,
-                        PhoneNumberType_FK = (phoneNumberTypes.ElementAt((s.Children[1] as Picker).SelectedIndex)).ID,
+                        Number = (s.Children[0] as Entry)?.Text,
+                        PhoneNumberType_FK = (_phoneNumberTypes.ElementAt(((Picker) s.Children[1]).SelectedIndex)).ID,
                     };
                     pastryShop.PhoneNumbers.Add(p);
                 }
             }
-            //NavigationPage navigationPage = new NavigationPage(new ContentPage());
-            //await navigationPage.PushAsync(new PastryShopUploadPhotos(pastryShop));
-            //toUpload = true;
-            //await Navigation.PushAsync(new PastryShopUploadPhotos(pastryShop));
 	        await Navigation.PushAsync(new PastryShopThirdStep(pastryShop));
 	    }
 
-        private void editorFocused(object sender, EventArgs e)
+        private void EditorFocused(object sender, EventArgs e)
         {
             if (LongDesc.Text == "Longue Description...")
             {
@@ -331,21 +325,21 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private void ShortDesc_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string _text = ShortDesc.Text;
-            if (_text.Length > 30)
+            string text = ShortDesc.Text;
+            if (text.Length > 30)
             {
-                _text = _text.Remove(_text.Length - 1);
-                ShortDesc.Text = _text;
+                text = text.Remove(text.Length - 1);
+                ShortDesc.Text = text;
             }
         }
 
         private void LongDesc_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string _text = LongDesc.Text;
-            if (_text.Length > 100)
+            string text = LongDesc.Text;
+            if (text.Length > 100)
             {
-                _text = _text.Remove(_text.Length - 1);
-                LongDesc.Text = _text;
+                text = text.Remove(text.Length - 1);
+                LongDesc.Text = text;
             }
         }
     }

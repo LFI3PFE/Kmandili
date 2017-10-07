@@ -13,15 +13,15 @@ using Kmandili.Views.PastryShopViews.OrderViewsAndFilter;
 namespace Kmandili.Views.PastryShopViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopMasterPage : ContentPage
+	public partial class PastryShopMasterPage
 	{
-	    private PastryShopMasterDetailPage pastryShopMasterDetailPage;
-	    private PastryShop pastryShop;
+	    private readonly PastryShopMasterDetailPage _pastryShopMasterDetailPage;
+	    private PastryShop _pastryShop;
 		public PastryShopMasterPage (PastryShopMasterDetailPage pastryShopMasterDetailPage, PastryShop pastryShop)
 		{
 			InitializeComponent ();
-		    this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
-		    this.pastryShop = pastryShop;
+		    _pastryShopMasterDetailPage = pastryShopMasterDetailPage;
+		    _pastryShop = pastryShop;
             UpdateOrderNotificationNumber(pastryShop.Orders.ToList());
         }
 
@@ -35,9 +35,9 @@ namespace Kmandili.Views.PastryShopViews
             PastryShopRestClient pastryShopRestClient = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRestClient.GetAsyncById(pastryShop.ID);
-                if (pastryShop == null) return;
-                int number = pastryShop.Orders.Count(o => !o.SeenPastryShop);
+                _pastryShop = await pastryShopRestClient.GetAsyncById(_pastryShop.ID);
+                if (_pastryShop == null) return;
+                int number = _pastryShop.Orders.Count(o => !o.SeenPastryShop);
                 NotificationsNumber.Source = (number != 0 ? (number > 9 ? "_9plus.png" : "_" + number + ".png") : "");
             }
             catch (HttpRequestException)
@@ -46,63 +46,43 @@ namespace Kmandili.Views.PastryShopViews
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                return;
             }
         }
 
         public void UpdateOrderNotificationNumber(List<Order> orders)
         {
             int number = orders.Count(o => !o.SeenPastryShop);
-            var x = NotificationsNumber;
             NotificationsNumber.Source = (number != 0 ? (number > 9 ? "_9plus.png" : "_" + number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)
         {
-            pastryShopMasterDetailPage.IsPresented = false;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new PSOrderList(pastryShop.ID));
-            //NavigationPage nav = new NavigationPage(new ContentPage());
-            //await nav.PushAsync(new PastryShopOrderList());
-            //await Navigation.PushModalAsync(nav);
+            _pastryShopMasterDetailPage.IsPresented = false;
+            await _pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new PsOrderList(_pastryShop.ID));
         }
-
-	    //private async void ToEditDeleveryMethod(object sender, EventArgs e)
-	    //{
-     //       pastryShopMasterDetailPage.IsPresented = false;
-     //       pastryShopMasterDetailPage.hasNavigatedToEdit = true;
-     //       await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditDeleveryMethods(pastryShopMasterDetailPage));
-     //   }
 
 
         private async void ToEditProfile(object sender, EventArgs e)
 	    {
-            pastryShopMasterDetailPage.IsPresented = false;
-            pastryShopMasterDetailPage.hasNavigatedToEdit = true;
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(pastryShop.ID, true));
+            _pastryShopMasterDetailPage.IsPresented = false;
+            _pastryShopMasterDetailPage.HasNavigatedToEdit = true;
+            await _pastryShopMasterDetailPage.Detail.Navigation.PushAsync(new EditProfileInfo(_pastryShop.ID, true));
         }
 
 	    private async void ToChart(object sender, EventArgs e)
 	    {
-	        //var x =
-	        //    ((((App.Current.MainPage as NavigationPage).CurrentPage as PastryShopMasterDetailPage).Detail) as
-	        //        NavigationPage).CurrentPage;
-	        //if (x.Title == "ChartsPage")
-	        //{
-	        //    ((App.Current.MainPage as NavigationPage).CurrentPage as MasterDetailPage).IsPresented = false;
-         //       return;
-	        //}
-            pastryShopMasterDetailPage.IsPresented = false;
+            _pastryShopMasterDetailPage.IsPresented = false;
 	        var doughnutPage = new Doughnut()
 	        {
                 Icon = "",
                 Title = "Meilleurs produits"
 	        };
-	        var linePage = new Line(pastryShop)
+	        var linePage = new Line(_pastryShop)
 	        {
 	            Icon = "",
 	            Title = "Commandes"
 	        };
-	        var earningsPage = new PEarningsChart(pastryShop)
+	        var earningsPage = new PEarningsChart(_pastryShop)
 	        {
 	            Title = "Revenus"
 	        };
@@ -115,7 +95,7 @@ namespace Kmandili.Views.PastryShopViews
                     linePage,
                 },
             };
-            await pastryShopMasterDetailPage.Detail.Navigation.PushAsync(chartsPage);
+            await _pastryShopMasterDetailPage.Detail.Navigation.PushAsync(chartsPage);
         }
     }
 }

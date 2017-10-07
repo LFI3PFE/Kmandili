@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,28 +11,28 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class POrderFilterPopupPage : PopupPage
+    public partial class POrderFilterPopupPage
     {
-        private PSOrderList pastryShopOrderList;
-        private List<Status> selectedStatuses;
+        private readonly PsOrderList _pastryShopOrderList;
+        private readonly List<Status> _selectedStatuses;
 
-        private List<Status> statuses;
+        private List<Status> _statuses;
 
-        public POrderFilterPopupPage(PSOrderList pastryShopOrderList, List<Status> selectedStatuses)
+        public POrderFilterPopupPage(PsOrderList pastryShopOrderList, List<Status> selectedStatuses)
         {
             BackgroundColor = Color.FromHex("#CC000000");
-            this.pastryShopOrderList = pastryShopOrderList;
-            this.selectedStatuses = selectedStatuses;
+            _pastryShopOrderList = pastryShopOrderList;
+            _selectedStatuses = selectedStatuses;
             InitializeComponent();
             Load();
         }
 
         private async void Load()
         {
-            RestClient<Status> statusRC = new RestClient<Status>();
+            RestClient<Status> statusRc = new RestClient<Status>();
             try
             {
-                statuses = await statusRC.GetAsync();
+                _statuses = await statusRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -44,8 +43,8 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
                         "Ok");
                 return;
             }
-            if (statuses == null) return;
-            this.Content = MakeContent();
+            if (_statuses == null) return;
+            Content = MakeContent();
         }
 
         private StackLayout MakeContent()
@@ -74,7 +73,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             });
 
             StackLayout statusesLayout = new StackLayout() {Spacing = 5};
-            foreach (var status in statuses)
+            foreach (var status in _statuses)
             {
                 StackLayout statusLayout = new StackLayout()
                 {
@@ -82,11 +81,11 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
                     Spacing = 20,
                     Padding = new Thickness(20, 0, 0, 0)
                 };
-                Switch statusSwitch = new Switch()
+                Switch statusSwitch = new Switch
                 {
                     ClassId = status.ID.ToString(),
+                    IsToggled = _selectedStatuses.Any(s => s.StatusName == status.StatusName),
                 };
-                statusSwitch.IsToggled = selectedStatuses.Any(s => s.StatusName == status.StatusName);
                 statusSwitch.Toggled += StatusSwitch_Toggled;
                 statusLayout.Children.Add(statusSwitch);
                 statusLayout.Children.Add(new Label()
@@ -119,13 +118,13 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
         private void StatusSwitch_Toggled(object sender, EventArgs e)
         {
             var statusSwitch = sender as Switch;
-            if (statusSwitch.IsToggled)
+            if (statusSwitch != null && statusSwitch.IsToggled)
             {
-                selectedStatuses.Add(statuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
+                _selectedStatuses.Add(_statuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
             }
             else
             {
-                selectedStatuses.Remove(selectedStatuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
+                _selectedStatuses.Remove(_selectedStatuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch?.ClassId)));
             }
         }
 
@@ -137,7 +136,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
 
         protected override void OnDisappearing()
         {
-            pastryShopOrderList.AplyFilters();
+            _pastryShopOrderList.AplyFilters();
         }
     }
 }

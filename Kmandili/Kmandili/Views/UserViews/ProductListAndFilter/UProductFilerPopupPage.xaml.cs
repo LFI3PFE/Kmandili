@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,31 +13,31 @@ using Xamarin.RangeSlider.Forms;
 namespace Kmandili.Views.UserViews.ProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UProductFilerPopupPage : PopupPage
+	public partial class UProductFilerPopupPage
 	{
-        private List<Category> selectedCategories;
-        private List<Category> categories;
-        private ProductList productList;
-	    private PriceRange selectedpriceRange;
-	    private PriceRange maxPriceRange;
+        private readonly List<Category> _selectedCategories;
+        private List<Category> _categories;
+        private readonly ProductList _productList;
+	    private readonly PriceRange _selectedpriceRange;
+	    private readonly PriceRange _maxPriceRange;
         public UProductFilerPopupPage(ProductList productList, List<Category> selectedCategories, PriceRange maxPriceRange, PriceRange selectedPriceRange)
         {
 
             InitializeComponent();
             BackgroundColor = Color.FromHex("#CC000000");
-            this.maxPriceRange = maxPriceRange;
-            this.selectedpriceRange = selectedPriceRange;
-            this.selectedCategories = selectedCategories;
-            this.productList = productList;
+            _maxPriceRange = maxPriceRange;
+            _selectedpriceRange = selectedPriceRange;
+            _selectedCategories = selectedCategories;
+            _productList = productList;
             Load();
         }
 
         private async void Load()
         {
-            RestClient<Category> categorieRC = new RestClient<Category>();
+            RestClient<Category> categorieRc = new RestClient<Category>();
             try
             {
-                categories = await categorieRC.GetAsync();
+                _categories = await categorieRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -49,8 +48,8 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                         "Ok");
                 return;
             }
-            if (categories == null) return;
-            this.Content = MakeContent();
+            if (_categories == null) return;
+            Content = MakeContent();
         }
 
         private StackLayout MakeContent()
@@ -72,14 +71,14 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             innerLayout.Children.Add(new Label() { Text = "Les catégories:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
 
             StackLayout categoriesLayout = new StackLayout() { Spacing = 5 };
-            foreach (var category in categories)
+            foreach (var category in _categories)
             {
                 StackLayout categoryLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 20, Padding = new Thickness(20, 0, 0, 0) };
-                Switch categorySwitch = new Switch()
+                Switch categorySwitch = new Switch
                 {
                     ClassId = category.ID.ToString(),
+                    IsToggled = _selectedCategories.Any(sc => sc.CategoryName == category.CategoryName),
                 };
-                categorySwitch.IsToggled = selectedCategories.Any(sc => sc.CategoryName == category.CategoryName);
                 categorySwitch.Toggled += CategorySwitch_Toggled;
                 categoryLayout.Children.Add(categorySwitch);
                 categoryLayout.Children.Add(new Label() { Text = category.CategoryName, FontSize = 18, TextColor = Color.Black, VerticalTextAlignment = TextAlignment.Center });
@@ -89,15 +88,15 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             innerLayout.Children.Add(categoriesLayout);
             innerLayout.Children.Add(new Label() { Text = "Plage de prix:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
             StackLayout priceRangeLayout = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
-            if (maxPriceRange.MinPriceRange != maxPriceRange.MaxPriceRange)
+            if (_maxPriceRange.MinPriceRange != _maxPriceRange.MaxPriceRange)
             {
-                RangeSlider priceRangeSlider = new RangeSlider() { MinimumValue = (float)maxPriceRange.MinPriceRange, MaximumValue = (float)maxPriceRange.MaxPriceRange, StepValue = 0.00f, LowerValue = (float)selectedpriceRange.MinPriceRange, UpperValue = (float)selectedpriceRange.MaxPriceRange, ShowTextAboveThumbs = true, TextSize = 20, FormatLabel = FormaLabel };
+                RangeSlider priceRangeSlider = new RangeSlider() { MinimumValue = (float)_maxPriceRange.MinPriceRange, MaximumValue = (float)_maxPriceRange.MaxPriceRange, StepValue = 0.00f, LowerValue = (float)_selectedpriceRange.MinPriceRange, UpperValue = (float)_selectedpriceRange.MaxPriceRange, ShowTextAboveThumbs = true, TextSize = 20, FormatLabel = FormaLabel };
                 priceRangeSlider.DragCompleted += PriceRangeSlider_DragCompleted;
                 priceRangeLayout.Children.Add(priceRangeSlider);
             }
             else
             {
-                priceRangeLayout.Children.Add(new Label() { Text = "Un seul prix: " + maxPriceRange.MinPriceRange + "dt", HorizontalTextAlignment = TextAlignment.Center });
+                priceRangeLayout.Children.Add(new Label() { Text = "Un seul prix: " + _maxPriceRange.MinPriceRange + "dt", HorizontalTextAlignment = TextAlignment.Center });
             }
             innerLayout.Children.Add(priceRangeLayout);
             Label aplyLabel = new Label() { Text = "Appliquer", TextColor = Color.DodgerBlue, FontSize = 20, HorizontalOptions = LayoutOptions.End };
@@ -112,8 +111,8 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
 
         private void PriceRangeSlider_DragCompleted(object sender, EventArgs e)
         {
-            selectedpriceRange.MinPriceRange = Math.Ceiling((sender as RangeSlider).LowerValue*2)/2;
-            selectedpriceRange.MaxPriceRange = Math.Ceiling((sender as RangeSlider).UpperValue*2)/2;
+            _selectedpriceRange.MinPriceRange = Math.Ceiling(((RangeSlider) sender).LowerValue*2)/2;
+            _selectedpriceRange.MaxPriceRange = Math.Ceiling(((RangeSlider) sender).UpperValue*2)/2;
         }
 
         private string FormaLabel(Thumb thumb, float val)
@@ -129,19 +128,19 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
         private void CategorySwitch_Toggled(object sender, ToggledEventArgs e)
         {
             var categorySwitch = sender as Switch;
-            if (categorySwitch.IsToggled)
+            if (categorySwitch != null && categorySwitch.IsToggled)
             {
-                selectedCategories.Add(categories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
+                _selectedCategories.Add(_categories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
             }
             else
             {
-                selectedCategories.Remove(selectedCategories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
+                _selectedCategories.Remove(_selectedCategories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch?.ClassId ?? throw new InvalidOperationException())));
             }
         }
 
         protected override void OnDisappearing()
         {
-            productList.AplyFilters();
+            _productList.AplyFilters();
         }
     }
 }

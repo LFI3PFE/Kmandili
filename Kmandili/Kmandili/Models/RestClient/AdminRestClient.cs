@@ -17,7 +17,7 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetAsync(App.ServerURL + "api/Admin");
+                var json = await httpClient.GetAsync(App.ServerUrl + "api/Admin");
                 if(json.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
@@ -39,7 +39,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.PutAsync(App.ServerURL + "api/Admin/" + userName + "/" + password, null);
+            var result = await httpClient.PutAsync(App.ServerUrl + "api/Admin/" + userName + "/" + password, null);
             return result.IsSuccessStatusCode;
         }
     }

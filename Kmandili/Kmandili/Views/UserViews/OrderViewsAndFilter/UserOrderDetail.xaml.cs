@@ -1,6 +1,7 @@
 ﻿using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,11 +12,11 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UserOrderDetail : ContentPage
+	public partial class UserOrderDetail
 	{
-        private Order order;
-	    private UserOrderList userOrderList;
-	    private bool updateParent = false;
+        private Order _order;
+	    private readonly UserOrderList _userOrderList;
+	    private bool _updateParent;
 
         public UserOrderDetail (UserOrderList userOrderList, Order order)
 		{
@@ -40,28 +41,28 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                 confirmToolbarItem.Clicked += ConfirmToolbarItem_Clicked;
                 ToolbarItems.Add(confirmToolbarItem);
             }
-            this.order = order;
-		    this.userOrderList = userOrderList;
-            updateView();
+            _order = order;
+		    _userOrderList = userOrderList;
+            UpdateView();
 		    Task.Run(() => MarkAsSeen());
 		}
 
-	    private void updateView()
+	    private void UpdateView()
 	    {
-            ProductsList.ItemsSource = order.OrderProducts;
-            ProductListViewLayout.HeightRequest = order.OrderProducts.Count * 100;
-            OrderID.Text = order.ID.ToString();
-            PastryShopName.Text = order.PastryShop.Name;
-            Date.Text = order.Date.ToString("d");
-            Delevery.Text = order.DeleveryMethod.DeleveryType;
-            Payment.Text = order.Payment.PaymentMethod;
-            Status.Text = order.Status.StatusName;
-            Total.Text = order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString();
+            ProductsList.ItemsSource = _order.OrderProducts;
+            ProductListViewLayout.HeightRequest = _order.OrderProducts.Count * 100;
+            OrderID.Text = _order.ID.ToString();
+            PastryShopName.Text = _order.PastryShop.Name;
+            Date.Text = _order.Date.ToString("d");
+            Delevery.Text = _order.DeleveryMethod.DeleveryType;
+            Payment.Text = _order.Payment.PaymentMethod;
+            Status.Text = _order.Status.StatusName;
+            Total.Text = _order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString(CultureInfo.InvariantCulture);
         }
 
-	    protected async override void OnAppearing()
+	    protected override async void OnAppearing()
 	    {
-	        if (order.Status.StatusName == "Livrée" && !order.SeenUser)
+	        if (_order.Status.StatusName == "Livrée" && !_order.SeenUser)
 	        {
 	            await DisplayAlert("Remarque", "Votre commande a été marqué comme \"Livrée\", merci de la marquer comme \"Reçue\" dés que vous la recevrez!", "Ok");
 	        }
@@ -69,13 +70,13 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 
 	    private async void MarkAsSeen()
 	    {
-	        if (!order.SeenUser)
+	        if (!_order.SeenUser)
 	        {
-                OrderRestClient orderRC = new OrderRestClient();
+                OrderRestClient orderRc = new OrderRestClient();
 	            try
 	            {
-                    if (await orderRC.MarkAsSeenUser(order.ID))
-                        updateParent = true;
+                    if (await orderRc.MarkAsSeenUser(_order.ID))
+                        _updateParent = true;
                 }
 	            catch (Exception)
 	            {
@@ -89,9 +90,9 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 	    protected override void OnDisappearing()
 	    {
 	        base.OnDisappearing();
-	        if (updateParent)
+	        if (_updateParent)
 	        {
-	            userOrderList.load();
+	            _userOrderList.Load();
 	        }
 	    }
 
@@ -100,28 +101,28 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             Order newOrder = new Order()
             {
-                ID = order.ID,
-                PastryShop_FK = order.PastryShop_FK,
-                User_FK = order.User_FK,
+                ID = _order.ID,
+                PastryShop_FK = _order.PastryShop_FK,
+                User_FK = _order.User_FK,
                 Status_FK = 5,
-                DeleveryMethod_FK = order.DeleveryMethod_FK,
-                PaymentMethod_FK = order.PaymentMethod_FK,
-                Date = order.Date,
+                DeleveryMethod_FK = _order.DeleveryMethod_FK,
+                PaymentMethod_FK = _order.PaymentMethod_FK,
+                Date = _order.Date,
                 SeenUser = true,
                 SeenPastryShop = false,
             };
-            OrderRestClient orderRC = new OrderRestClient();
+            OrderRestClient orderRc = new OrderRestClient();
 	        try
 	        {
-                if (await orderRC.PutAsync(newOrder.ID, newOrder))
+                if (await orderRc.PutAsync(newOrder.ID, newOrder))
                 {
-                    order = await orderRC.GetAsyncById(order.ID);
-                    if (order == null) return;
-                    EmailRestClient emailRC = new EmailRestClient();
-                    await emailRC.SendOrderEmail(order.ID);
-                    updateParent = true;
+                    _order = await orderRc.GetAsyncById(_order.ID);
+                    if (_order == null) return;
+                    EmailRestClient emailRc = new EmailRestClient();
+                    await emailRc.SendOrderEmail(_order.ID);
+                    _updateParent = true;
                     ToolbarItems.Clear();
-                    updateView();
+                    UpdateView();
                     await PopupNavigation.PopAsync();
                 }
             }
@@ -133,8 +134,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
                 await Navigation.PopAsync();
-                return;
-            }
+	        }
         }
 
 
@@ -145,14 +145,14 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                 "Etes-vous sur de vouloir annuler cette commande?",
                 "Confirmer", "Annuler");
             if (!choix) return;
-            OrderRestClient orderRC = new OrderRestClient();
-            EmailRestClient emailRC = new EmailRestClient();
+            OrderRestClient orderRc = new OrderRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                if (!await emailRC.SendCancelOrderEmail(order.ID)) return;
-                if (await orderRC.DeleteAsync(order.ID))
+                if (!await emailRc.SendCancelOrderEmail(_order.ID)) return;
+                if (await orderRc.DeleteAsync(_order.ID))
                 {
-                    userOrderList.load();
+                    _userOrderList.Load();
                     await DisplayAlert("Succès", "Votre commande a été annuler.", "Ok");
                     await PopupNavigation.PopAllAsync();
                     await Navigation.PopAsync();
@@ -166,13 +166,12 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
                 await Navigation.PopAsync();
-                return;
             }
         }
 
         private void SelectedNot(object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
     }
 }

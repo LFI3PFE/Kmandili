@@ -15,19 +15,18 @@ using Xamarin.Forms;
 
 namespace Kmandili
 {
-    public partial class App : Application
+    public partial class App
     {
-        public static string ServerURL = "http://kmandiliwebservice.servehttp.com:300/";
+        public static string ServerUrl = "http://kmandiliwebservice.servehttp.com:300/";
         public static List<CartPastry> Cart = new List<CartPastry>();
-        public static bool galleryIsOpent = false;
-        public static bool updatePastryList = false;
-        public static bool updateClientList = false;
-        public static bool isConnected = false;
+        public static bool GalleryIsOpent;
+        public static bool UpdatePastryList = false;
+        public static bool UpdateClientList = false;
+        public static bool IsConnected;
         public App()
         {
             InitializeComponent();
 
-            //MainPage = new WebViewTest();
             MainPage = new NavigationPage(new MainPage());
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
         }
@@ -46,28 +45,27 @@ namespace Kmandili
             var b = expireDate < DateTime.Now;
             if (b)
             {
-                App.Current.MainPage.DisplayAlert("Erreur", "Session Experiée", "Ok");
+                Current.MainPage.DisplayAlert("Erreur", "Session Experiée", "Ok");
                 Logout();
             }
             return b;
         }
 
-        public static void setMainPage(MasterDetailPage newMainPage)
+        public static void SetMainPage(MasterDetailPage newMainPage)
         {
-            //App.Current.MainPage = new NavigationPage(newMainPage);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    App.Current.MainPage = newMainPage;
+                    Current.MainPage = newMainPage;
                     break;
                 case Device.Android:
-                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    Current.MainPage = new NavigationPage(newMainPage);
                     break;
                 case Device.UWP:
-                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    Current.MainPage = new NavigationPage(newMainPage);
                     break;
                 default:
-                    App.Current.MainPage = new NavigationPage(newMainPage);
+                    Current.MainPage = new NavigationPage(newMainPage);
                     break;
             }
         }
@@ -83,7 +81,7 @@ namespace Kmandili
             }
         }
 
-        public async static void Logout()
+        public static async void Logout()
         {
             if (Settings.Type == "a")
                 await Current.MainPage.Navigation.PopToRootAsync();
@@ -91,12 +89,12 @@ namespace Kmandili
                 Current.MainPage = new NavigationPage(new MainPage());
             Settings.ClearSettings();
             Cart.Clear();
-            galleryIsOpent = false;
-            isConnected = false;
+            GalleryIsOpent = false;
+            IsConnected = false;
 
         }
 
-        public static bool isValidEmail(string inputEmail)
+        public static bool IsValidEmail(string inputEmail)
         {
             string strRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
                   @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
@@ -112,7 +110,7 @@ namespace Kmandili
         {
             while (!CrossConnectivity.Current.IsConnected)
             {
-                await App.Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
+                await Current.MainPage.DisplayAlert("Erreur", "Pas de connection internet", "Ressayer");
                 return (await CheckConnection());
             }
             return true;
@@ -120,21 +118,14 @@ namespace Kmandili
 
         public static async Task<bool> GetEmailExist(string email)
         {
-            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
+            if (!(await CheckConnection()) || (TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            try
-            {
-                var json = await httpClient.GetStringAsync(App.ServerURL + "api/GetEmailExist/" + email + "/");
-                return JsonConvert.DeserializeObject<bool>(json);
-            }
-            catch (HttpRequestException ex)
-            {
-                throw;
-            }
+            var json = await httpClient.GetStringAsync(ServerUrl + "api/GetEmailExist/" + email + "/");
+            return JsonConvert.DeserializeObject<bool>(json);
         }
 
-        protected async override void OnStart()
+        protected override async void OnStart()
         {
             if (!CrossConnectivity.Current.IsConnected)
             {

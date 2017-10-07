@@ -13,7 +13,7 @@
                     <Entry x:Name="Email" PlaceholderColor="Gray" TextColor="Black" Placeholder="Email" WidthRequest="150" FontSize="25" Keyboard="Email"/>
                     <Entry x:Name="Password" PlaceholderColor="Gray" TextColor="Black" Placeholder="Mot de passe" WidthRequest="150" FontSize="25" IsPassword="True"/>
                     <Entry x:Name="ShortDesc" TextChanged="ShortDesc_TextChanged" PlaceholderColor="Gray" TextColor="Black" Placeholder="Courte Description..." WidthRequest="150" FontSize="25"/>
-                    <Editor x:Name="LongDesc" TextChanged="LongDesc_TextChanged" HeightRequest="100" Text="Longue Description..." TextColor="Gray" FontSize="25" Focused="editorFocused" Unfocused="editorUnFocused"/>
+                    <Editor x:Name="LongDesc" TextChanged="LongDesc_TextChanged" HeightRequest="100" Text="Longue Description..." TextColor="Gray" FontSize="25" Focused="EditorFocused" Unfocused="EditorUnFocused"/>
                     <StackLayout Orientation="Horizontal" Spacing="10">
                         <Label Text="Gamme de prix :" FontSize="20" TextColor="Black"/>
                         <Picker x:Name="PriceRange" WidthRequest="150"/>

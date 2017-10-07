@@ -9,7 +9,7 @@
     </ResourceDictionary>
 </ContentPage.Resources>
     <ScrollView>
-        <ListView x:Name="Liste" HasUnevenRows="True" ItemSelected="selected" VerticalOptions="FillAndExpand" >
+        <ListView x:Name="Liste" HasUnevenRows="True" ItemSelected="Selected" VerticalOptions="FillAndExpand" >
             <ListView.Header>
                 <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Vertical" Padding="10,30,10,40" Spacing="40">
                     <StackLayout HorizontalOptions="Center">

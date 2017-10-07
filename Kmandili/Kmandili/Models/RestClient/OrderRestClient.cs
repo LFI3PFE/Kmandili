@@ -17,7 +17,7 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetAsync(App.ServerURL + "api/ordersByUserID/" + id);
+                var json = await httpClient.GetAsync(App.ServerUrl + "api/ordersByUserID/" + id);
                 if(json.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
@@ -42,7 +42,7 @@ namespace Kmandili.Models.RestClient
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             try
             {
-                var json = await httpClient.GetAsync(App.ServerURL + "api/ordersByPastryShopID/" + id);
+                var json = await httpClient.GetAsync(App.ServerUrl + "api/ordersByPastryShopID/" + id);
                 if(json.StatusCode == HttpStatusCode.NotFound)
                 {
                     return null;
@@ -65,7 +65,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenUser/" + id, null);
+            var result = await httpClient.PutAsync(App.ServerUrl + "api/markAsSeenUser/" + id, null);
             return result.IsSuccessStatusCode;
         }
 
@@ -74,7 +74,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || App.TokenExpired()) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.PutAsync(App.ServerURL + "api/markAsSeenPastryShop/" + id, null);
+            var result = await httpClient.PutAsync(App.ServerUrl + "api/markAsSeenPastryShop/" + id, null);
             return result.IsSuccessStatusCode;
         }
     }

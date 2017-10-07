@@ -46,7 +46,7 @@ namespace Kmandili.Models.RestClient
             HttpContent httpContent = new StringContent(json);
 
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var result = await httpClient.PutAsync(App.ServerURL + "api/PastryShops/Categories/" + id, httpContent);
+            var result = await httpClient.PutAsync(App.ServerUrl + "api/PastryShops/Categories/" + id, httpContent);
 
             return result.IsSuccessStatusCode;
         }

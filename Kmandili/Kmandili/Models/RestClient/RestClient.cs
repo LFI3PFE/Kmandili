@@ -31,7 +31,7 @@ namespace Kmandili.Models.RestClient
             {
                 controllerName = typeof(T).Name+"s";
             }
-            WebServiceUrl = App.ServerURL + "api/" + controllerName + "/";
+            WebServiceUrl = App.ServerUrl + "api/" + controllerName + "/";
         }
 
         public async Task<List<T>> GetAsync()

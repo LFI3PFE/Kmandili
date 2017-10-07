@@ -194,10 +194,10 @@ namespace Kmandili.Views.Admin.UserViews.UserListAndFilter
 
         protected override void OnAppearing()
         {
-            if (App.updateClientList)
+            if (App.UpdateClientList)
             {
                 load();
-                App.updateClientList = false;
+                App.UpdateClientList = false;
             }
         }
 

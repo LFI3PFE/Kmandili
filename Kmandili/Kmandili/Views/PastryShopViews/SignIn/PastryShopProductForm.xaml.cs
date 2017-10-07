@@ -9,45 +9,44 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Kmandili.Views.PastryShopViews.ProductListAndFilter;
 using Rg.Plugins.Popup.Services;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopProductForm : ContentPage
+	public partial class PastryShopProductForm
 	{
-        private PastryShop pastryShop;
-        private List<Category> categories;
-        private List<SaleUnit> saleUnits;
+        private readonly PastryShop _pastryShop;
+        private List<Category> _categories;
+        private List<SaleUnit> _saleUnits;
         private MediaFile _mediaFileProfil;
-        private bool toGallery = false;
-        private PastryShopEnteringMenu productsPage;
-        private PSProductList ProductsList;
+	    public bool ToGallery;
+        private readonly PastryShopEnteringMenu _productsPage;
+        private readonly PsProductList _productsList;
 
-        public PastryShopProductForm(PastryShopEnteringMenu ProductsPage, PastryShop pastryShop)
+        public PastryShopProductForm(PastryShopEnteringMenu productsPage, PastryShop pastryShop)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
-            this.productsPage = ProductsPage;
+            _pastryShop = pastryShop;
+            _productsPage = productsPage;
             Load();
         }
 
-        public PastryShopProductForm(PSProductList ProductsList, PastryShop pastryShop)
+        public PastryShopProductForm(PsProductList productsList, PastryShop pastryShop)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
-            this.ProductsList = ProductsList;
+            _pastryShop = pastryShop;
+            _productsList = productsList;
             Load();
         }
 
         public async void Load()
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            RestClient<SaleUnit> saleUnitRC = new RestClient<SaleUnit>();
+            RestClient<SaleUnit> saleUnitRc = new RestClient<SaleUnit>();
             try
             {
-                saleUnits = await saleUnitRC.GetAsync();
+                _saleUnits = await saleUnitRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -59,14 +58,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
-            if (saleUnits == null) return;
-            PickerUnit.ItemsSource = saleUnits;
+            if (_saleUnits == null) return;
+            PickerUnit.ItemsSource = _saleUnits;
             PickerUnit.SelectedIndex = 0;
 
-            RestClient<Category> categoryRC = new RestClient<Category>();
+            RestClient<Category> categoryRc = new RestClient<Category>();
             try
             {
-                categories = await categoryRC.GetAsync();
+                _categories = await categoryRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -78,36 +77,36 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
-            if (categories == null) return;
-            CategoryPicker.ItemsSource = categories;
+            if (_categories == null) return;
+            CategoryPicker.ItemsSource = _categories;
             CategoryPicker.SelectedIndex = 0;
             await PopupNavigation.PopAsync();
         }
 
         public async Task<bool> ValidForm()
         {
-            if (ProductName.Text == null || ProductName.Text.Length == 0)
+            if (string.IsNullOrEmpty(ProductName.Text))
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Nam est obligatoir!", "Ok");
                 return false;
             }
 
-            if (Price.Text == null || Price.Text.Length == 0)
+            if (string.IsNullOrEmpty(Price.Text))
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ Prix est obligatoir!", "Ok");
                 return false;
             }
 
-            if (ProductDescription.Text == null || ProductDescription.Text.Length == 0)
+            if (string.IsNullOrEmpty(ProductDescription.Text))
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Le champ description est obligatoir!", "Ok");
                 return false;
             }
 
-            if (ProductPhoto.Text == null || ProductPhoto.Text.Length == 0)
+            if (string.IsNullOrEmpty(ProductPhoto.Text))
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une photo du produit est obligatoire!", "Ok");
@@ -121,21 +120,21 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (await ValidForm())
             {
-                RestClient<Product> productRC = new RestClient<Product>();
+                RestClient<Product> productRc = new RestClient<Product>();
                 Product product = new Product()
                 {
                     Name = ProductName.Text,
                     Price = double.Parse(Price.Text),
                     Description = ProductDescription.Text,
-                    SaleUnit_FK = saleUnits.ElementAt(PickerUnit.SelectedIndex).ID,
-                    Category_FK = categories.ElementAt(CategoryPicker.SelectedIndex).ID,
-                    PastryShop_FK = pastryShop.ID,
+                    SaleUnit_FK = _saleUnits.ElementAt(PickerUnit.SelectedIndex).ID,
+                    Category_FK = _categories.ElementAt(CategoryPicker.SelectedIndex).ID,
+                    PastryShop_FK = _pastryShop.ID,
                     Pic = await Upload(_mediaFileProfil)
                 };
 
                 try
                 {
-                    product = await productRC.PostAsync(product);
+                    product = await productRc.PostAsync(product);
                 }
                 catch (HttpRequestException)
                 {
@@ -151,17 +150,16 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 {
                     await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur dans l'ajout du produit!", "Ok");
-                    return;
                 }
                 else
                 {
-                    if(productsPage != null)
+                    if(_productsPage != null)
                     {
-                        productsPage.load();
+                        _productsPage.Load();
                     }
                     else
                     {
-                        ProductsList.Load(true);
+                        _productsList.Load(true);
                     }
                     await PopupNavigation.PopAsync();
                     await Navigation.PopAsync();
@@ -178,7 +176,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 var res = await new UploadRestClient().Upload(stream, fileName);
                 if (res)
                 {
-                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                    return App.ServerUrl + "Uploads/" + fileName + ".jpg";
                 }
                 return null;
             }
@@ -192,8 +190,8 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void ImportImg_OnClick(Object seneder, EventArgs e)
         {
-            toGallery = true;
-            App.galleryIsOpent = true;
+            ToGallery = true;
+            App.GalleryIsOpent = true;
             await CrossMedia.Current.Initialize();
 
             _mediaFileProfil = await CrossMedia.Current.PickPhotoAsync();
@@ -202,8 +200,8 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
 
             ProductPhoto.Text = _mediaFileProfil.Path;
-            toGallery = false;
-            App.galleryIsOpent = false;
+            ToGallery = false;
+            App.GalleryIsOpent = false;
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Net.Http;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.PastryShopViews.EditProfile;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,17 +9,17 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PEmailVerificationPopupPage : PopupPage
+	public partial class PEmailVerificationPopupPage
 	{
-        private string email;
-        private PastryShopSignUpForm pastryShopSignUpForm;
-	    private EditProfileInfo editProfileInfo;
-        private string code = "";
+        private readonly string _email;
+        private readonly PastryShopSignUpForm _pastryShopSignUpForm;
+	    private readonly EditProfileInfo _editProfileInfo;
+        private string _code = "";
 
         public PEmailVerificationPopupPage(PastryShopSignUpForm pastryShopSignUpForm, string email)
         {
-            this.email = email;
-            this.pastryShopSignUpForm = pastryShopSignUpForm;
+            _email = email;
+            _pastryShopSignUpForm = pastryShopSignUpForm;
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
@@ -29,8 +28,8 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public PEmailVerificationPopupPage(EditProfileInfo editProfileInfo, string email)
         {
-            this.email = email;
-            this.editProfileInfo = editProfileInfo;
+            _email = email;
+            _editProfileInfo = editProfileInfo;
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
@@ -42,10 +41,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Code.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            EmailRestClient emailRC = new EmailRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                code = await emailRC.SendEmailVerification(email);
+                _code = await emailRc.SendEmailVerification(_email);
             }
             catch (HttpRequestException)
             {
@@ -61,15 +60,15 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         private async void ComfirmTapped(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Code.Text)) return;
-            if (Code.Text.Length == 6 && code == Code.Text)
+            if (Code.Text.Length == 6 && _code == Code.Text)
             {
-                if (pastryShopSignUpForm != null)
+                if (_pastryShopSignUpForm != null)
                 {
-                    pastryShopSignUpForm.EmailVerified();
+                    _pastryShopSignUpForm.EmailVerified();
                 }
                 else
                 {
-                    editProfileInfo.EmailVerified();
+                    _editProfileInfo.EmailVerified();
                 }
                 await PopupNavigation.PopAllAsync();
             }

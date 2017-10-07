@@ -14,7 +14,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
-            string WebServiceUrl = App.ServerURL + "api/SendPasswordRestCode/" + email + "/";
+            string WebServiceUrl = App.ServerUrl + "api/SendPasswordRestCode/" + email + "/";
             var result = await httpClient.PostAsync(WebServiceUrl, null);
             var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
             return taskModels;
@@ -25,7 +25,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
-            string WebServiceUrl = App.ServerURL + "api/sendEmailVerificationCode/" + email + "/";
+            string WebServiceUrl = App.ServerUrl + "api/sendEmailVerificationCode/" + email + "/";
             var result = await httpClient.PostAsync(WebServiceUrl, null);
             var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
             return taskModels;
@@ -36,7 +36,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.GetAsync(App.ServerURL + "api/sendOrderEmail/" + id);
+            var result = await httpClient.GetAsync(App.ServerUrl + "api/sendOrderEmail/" + id);
             return result.IsSuccessStatusCode;
         }
 
@@ -45,7 +45,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
+            var result = await httpClient.GetAsync(App.ServerUrl + "/api/sendCanelOrderEmail/" + id);
             return result.IsSuccessStatusCode;
         }
         
@@ -54,7 +54,7 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
-            var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmailByAdmin/" + id);
+            var result = await httpClient.GetAsync(App.ServerUrl + "/api/sendCanelOrderEmailByAdmin/" + id);
             return result.IsSuccessStatusCode;
         }
     }

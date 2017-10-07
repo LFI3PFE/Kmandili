@@ -9,16 +9,16 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopEnteringMenu : ContentPage
-	{
-        private PastryShop pastryShop;
+	public partial class PastryShopEnteringMenu
+    {
+        private PastryShop _pastryShop;
         public PastryShopEnteringMenu(PastryShop pastryShop)
         {
             InitializeComponent();
             Liste.SeparatorVisibility = SeparatorVisibility.None;
             NavigationPage.SetHasBackButton(this, false);
-            this.pastryShop = pastryShop;
-            load();
+            _pastryShop = pastryShop;
+            Load();
         }
 
         protected override bool OnBackButtonPressed()
@@ -26,7 +26,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return true;
         }
 
-        public async void load()
+        public async void Load()
         {
             NoResultsLabel.IsVisible = false;
             Liste.ItemsSource = null;
@@ -34,10 +34,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Loading.IsRunning = true;
             AddBt.IsEnabled = false;
             ContinueBt.IsEnabled = false;
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            PastryShopRestClient pastryShopRc = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                _pastryShop = await pastryShopRc.GetAsyncById(_pastryShop.ID);
             }
             catch (HttpRequestException)
             {
@@ -49,9 +49,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
-            if (pastryShop == null) return;
+            if (_pastryShop == null) return;
             ContinueBt.IsEnabled = true;
-            if (pastryShop.Products.Count == 0)
+            if (_pastryShop.Products.Count == 0)
             {
                 NoResultsLabel.IsVisible = true;
                 ContinueBt.IsEnabled = false;
@@ -59,24 +59,24 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             AddBt.IsEnabled = true;
             LoadingLayout.IsVisible = false;
             Loading.IsRunning = false;
-            Liste.ItemsSource = pastryShop.Products;
+            Liste.ItemsSource = _pastryShop.Products;
         }
 
         public async void DeleteProduct(Object sender, EventArgs e)
         {
             Label label =
-                ((((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as
-                    StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label);
-            int ID = Int32.Parse(label.Text);
+                ((((((((sender as Image)?.Parent as StackLayout)?.Parent as Grid)?.Parent as StackLayout)?.Parent as
+                    StackLayout)?.Parent as StackLayout)?.Parent as StackLayout)?.Children[0] as Label);
+            int id = Int32.Parse(label?.Text);
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             NoResultsLabel.IsVisible = false;
             Liste.ItemsSource = null;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            RestClient<Product> productRC = new RestClient<Product>();
+            RestClient<Product> productRc = new RestClient<Product>();
             try
             {
-                if (!(await productRC.DeleteAsync(ID)))
+                if (!(await productRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAsync();
                     return;
@@ -93,19 +93,19 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
             }
             await PopupNavigation.PopAsync();
-            load();
+            Load();
         }
 
         public async void AddProduct_OnClick(Object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PastryShopProductForm(this, pastryShop));
+            await Navigation.PushAsync(new PastryShopProductForm(this, _pastryShop));
         }
 
         public async void Continue(Object sender, EventArgs e)
         {
-            if (pastryShop.Products.Count != 0)
+            if (_pastryShop.Products.Count != 0)
             {
-                await Navigation.PushAsync(new PastryShopEnteringPointOfSales(pastryShop));
+                await Navigation.PushAsync(new PastryShopEnteringPointOfSales(_pastryShop));
             }
             else
             {
@@ -113,9 +113,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
         }
 
-        public void selected(Object sender, EventArgs e)
+        public void Selected(Object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
     }
 }

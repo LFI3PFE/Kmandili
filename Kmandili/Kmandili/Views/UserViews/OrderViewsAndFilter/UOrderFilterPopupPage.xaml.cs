@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,28 +11,28 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UOrderFilterPopupPage : PopupPage
+	public partial class UOrderFilterPopupPage
 	{
-	    private UserOrderList userOrderList;
-	    private List<Status> selectedStatuses;
+	    private readonly UserOrderList _userOrderList;
+	    private readonly List<Status> _selectedStatuses;
 
-	    private List<Status> statuses; 
+	    private List<Status> _statuses; 
 
 		public UOrderFilterPopupPage(UserOrderList userOrderList, List<Status> selectedStatuses )
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-            this.userOrderList = userOrderList;
-		    this.selectedStatuses = selectedStatuses;
+            _userOrderList = userOrderList;
+		    _selectedStatuses = selectedStatuses;
 			InitializeComponent ();
 		    Load();
 		}
 
 	    private async void Load()
 	    {
-	        RestClient<Status> statusRC = new RestClient<Status>();
+	        RestClient<Status> statusRc = new RestClient<Status>();
 	        try
             {
-                statuses = await statusRC.GetAsync();
+                _statuses = await statusRc.GetAsync();
             }
 	        catch (HttpRequestException)
 	        {
@@ -44,8 +43,8 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
                         "Ok");
                 return;
 	        }
-	        if (statuses == null) return;
-	        this.Content = MakeContent();
+	        if (_statuses == null) return;
+	        Content = MakeContent();
 	    }
 
 	    private StackLayout MakeContent()
@@ -68,14 +67,14 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             innerLayout.Children.Add(new Label() { Text = "Les status:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
 
             StackLayout statusesLayout = new StackLayout() { Spacing = 5 };
-            foreach (var status in statuses)
+            foreach (var status in _statuses)
             {
                 StackLayout statusLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 20, Padding = new Thickness(20, 0, 0, 0) };
-                Switch statusSwitch = new Switch()
+                Switch statusSwitch = new Switch
                 {
                     ClassId = status.ID.ToString(),
+                    IsToggled = _selectedStatuses.Any(s => s.StatusName == status.StatusName),
                 };
-                statusSwitch.IsToggled = selectedStatuses.Any(s => s.StatusName == status.StatusName);
                 statusSwitch.Toggled += StatusSwitch_Toggled;
                 statusLayout.Children.Add(statusSwitch);
                 statusLayout.Children.Add(new Label() { Text = status.StatusName, FontSize = 18, TextColor = Color.Black, VerticalTextAlignment = TextAlignment.Center });
@@ -96,13 +95,13 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 	    private void StatusSwitch_Toggled(object sender, EventArgs e)
 	    {
             var statusSwitch = sender as Switch;
-            if (statusSwitch.IsToggled)
+            if (statusSwitch != null && statusSwitch.IsToggled)
             {
-                selectedStatuses.Add(statuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
+                _selectedStatuses.Add(_statuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
             }
             else
             {
-                selectedStatuses.Remove(selectedStatuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
+                _selectedStatuses.Remove(_selectedStatuses.FirstOrDefault(s => s.ID == Int32.Parse(statusSwitch.ClassId)));
             }
         }
 
@@ -114,7 +113,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
 
 	    protected override void OnDisappearing()
 	    {
-            userOrderList.AplyFilters();
+            _userOrderList.AplyFilters();
 	    }
 	}
 }

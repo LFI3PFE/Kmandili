@@ -1,13 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopThirdStep"
-             xmlns:local="clr-namespace:Kmandili.Converters">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:BoolToNotConverter x:Key="BoolToNotConverter"></local:BoolToNotConverter>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             x:Class="Kmandili.Views.PastryShopViews.SignIn.PastryShopThirdStep">
     <ScrollView>
         <StackLayout>
             <StackLayout>
@@ -15,7 +9,7 @@
                     <Label Text="Les Catégories:" FontSize="23" TextColor="Black"/>
                 </StackLayout>
                 <StackLayout x:Name="CategoriesContentLayout" Padding="30,0,0,0">
-                    <ListView x:Name="CategoriesListView" ItemSelected="selectedNot" RowHeight="30" HeightRequest="30" >
+                    <ListView x:Name="CategoriesListView" ItemSelected="SelectedNot" RowHeight="30" HeightRequest="30" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

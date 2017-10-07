@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,19 +11,19 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.EditProfile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PEditAddDeleveryMethodForm : PopupPage
+	public partial class PEditAddDeleveryMethodForm
 	{
-	    private EditDeleveryMethods editDeleveryMethods;
-	    private List<DeleveryMethod> deleveryMethods;
-	    private List<DeleveryDelay> deleveryDelays;
-	    private List<Payment> selectedPayments = new List<Payment>();
-	    private PastryShop pastryShop;
+	    private readonly EditDeleveryMethods _editDeleveryMethods;
+	    private List<DeleveryMethod> _deleveryMethods;
+	    private List<DeleveryDelay> _deleveryDelays;
+	    private readonly List<Payment> _selectedPayments = new List<Payment>();
+	    private readonly PastryShop _pastryShop;
 
 		public PEditAddDeleveryMethodForm(EditDeleveryMethods editDeleveryMethods, PastryShop pastryShop)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-		    this.pastryShop = pastryShop;
-		    this.editDeleveryMethods = editDeleveryMethods;
+		    _pastryShop = pastryShop;
+		    _editDeleveryMethods = editDeleveryMethods;
             InitializeComponent ();
             Load();
             DeleveryPicker.SelectedIndexChanged += DeleveryPicker_SelectedIndexChanged;
@@ -34,19 +33,19 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         {
             var senderPicker = (sender as Picker);
             if (senderPicker?.SelectedItem == null) return;
-            selectedPayments.Clear();
+            _selectedPayments.Clear();
             PaymentsLayout.Children.Clear();
             (senderPicker.SelectedItem as DeleveryMethod)?.Payments.ToList().ForEach(p => PaymentsLayout.Children.Add(MakePaymentLayout(p)));
         }
 
         private async void Load()
         {
-            var deleveryMethodRC = new RestClient<DeleveryMethod>();
-            var deleveryDelayRC = new RestClient<DeleveryDelay>();
+            var deleveryMethodRc = new RestClient<DeleveryMethod>();
+            var deleveryDelayRc = new RestClient<DeleveryDelay>();
 
             try
             {
-                deleveryMethods = await deleveryMethodRC.GetAsync();
+                _deleveryMethods = await deleveryMethodRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -59,15 +58,15 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 return;
             }
             
-            if (deleveryMethods == null)
+            if (_deleveryMethods == null)
             {
                 return;
             }
-            DeleveryPicker.ItemsSource = deleveryMethods = deleveryMethods.Where(d => pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod_FK != d.ID)).ToList();
+            DeleveryPicker.ItemsSource = _deleveryMethods = _deleveryMethods.Where(d => _pastryShop.PastryShopDeleveryMethods.All(pdm => pdm.DeleveryMethod_FK != d.ID)).ToList();
 	        DeleveryPicker.SelectedIndex = 0;
             try
             {
-                deleveryDelays = await deleveryDelayRC.GetAsync();
+                _deleveryDelays = await deleveryDelayRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -79,11 +78,11 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 await Navigation.PopAsync();
                 return;
             }
-            if (deleveryDelays == null)
+            if (_deleveryDelays == null)
             {
                 return;
             }
-            DelayPicker.ItemsSource = deleveryDelays;
+            DelayPicker.ItemsSource = _deleveryDelays;
             DelayPicker.SelectedIndex = 0;
         }
 
@@ -110,15 +109,15 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private void PaymentSwitch_Toggled(object sender, ToggledEventArgs e)
         {
             var sendSwitch = (sender as Switch);
-            var payment = deleveryMethods.ElementAt(DeleveryPicker.SelectedIndex)
+            var payment = _deleveryMethods.ElementAt(DeleveryPicker.SelectedIndex)
                 .Payments.FirstOrDefault(p => p.ID == Int32.Parse((sender as Switch)?.ClassId));
             if (sendSwitch != null && sendSwitch.IsToggled)
             {
-                selectedPayments.Add(payment);
+                _selectedPayments.Add(payment);
             }
             else
             {
-                selectedPayments.Remove(payment);
+                _selectedPayments.Remove(payment);
             }
         }
 
@@ -129,7 +128,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    private async void Add(object sender, EventArgs e)
 	    {
-	        if (selectedPayments.Count == 0)
+	        if (_selectedPayments.Count == 0)
 	        {
 	            await
 	                DisplayAlert("Erreur", "Vous devez selection au moin une methode de payment pour ce type de livraison!",
@@ -138,52 +137,55 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 	        }
 	        await PopupNavigation.PushAsync(new LoadingPopupPage());
 	        var selectedDeleveryMethod = (DeleveryPicker.SelectedItem as DeleveryMethod);
-	        var selectedDelay = (DelayPicker.SelectedItem as DeleveryDelay);
-	        var pastryShopDeleveryMethod = new PastryShopDeleveryMethod()
+	        var selectedDelay = ((DeleveryDelay) DelayPicker.SelectedItem);
+	        if (selectedDelay != null && selectedDeleveryMethod != null)
 	        {
-                PastryShop_FK = pastryShop.ID,
-                DeleveryDelay_FK = selectedDelay.ID,
-                DeleveryMethod_FK = selectedDeleveryMethod.ID
-	        };
-            var pastryShopDeleveryMethodRC = new RestClient<PastryShopDeleveryMethod>();
-	        try
-            {
-                pastryShopDeleveryMethod = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDeleveryMethod);
-            }
-	        catch (HttpRequestException)
-	        {
-                await PopupNavigation.PopAllAsync();
-                await
-                    DisplayAlert("Erreur",
-                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
-                        "Ok");
-                return;
-	        }
-            if(pastryShopDeleveryMethod == null) { await PopupNavigation.PopAsync(); return;}
-            var pastryDeleveryPaymentRC = new RestClient<PastryDeleveryPayment>();
-	        foreach (var selectedPayment in selectedPayments)
-	        {
-	            var pastryDeleveryPayment = new PastryDeleveryPayment()
+	            var pastryShopDeleveryMethod = new PastryShopDeleveryMethod()
 	            {
-	                PastryShopDeleveryMethod_FK = pastryShopDeleveryMethod.ID,
-                    Payment_FK = selectedPayment.ID
+	                PastryShop_FK = _pastryShop.ID,
+	                DeleveryDelay_FK = selectedDelay.ID,
+	                DeleveryMethod_FK = selectedDeleveryMethod.ID
 	            };
+	            var pastryShopDeleveryMethodRc = new RestClient<PastryShopDeleveryMethod>();
 	            try
 	            {
-                    if (await pastryDeleveryPaymentRC.PostAsync(pastryDeleveryPayment) == null) return;
-                }
+	                pastryShopDeleveryMethod = await pastryShopDeleveryMethodRc.PostAsync(pastryShopDeleveryMethod);
+	            }
 	            catch (HttpRequestException)
 	            {
-                    await PopupNavigation.PopAllAsync();
-                    await
-                        DisplayAlert("Erreur",
-                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
-                            "Ok");
-                    return;
+	                await PopupNavigation.PopAllAsync();
+	                await
+	                    DisplayAlert("Erreur",
+	                        "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+	                        "Ok");
+	                return;
+	            }
+	            if(pastryShopDeleveryMethod == null) { await PopupNavigation.PopAsync(); return;}
+	            var pastryDeleveryPaymentRc = new RestClient<PastryDeleveryPayment>();
+	            foreach (var selectedPayment in _selectedPayments)
+	            {
+	                var pastryDeleveryPayment = new PastryDeleveryPayment()
+	                {
+	                    PastryShopDeleveryMethod_FK = pastryShopDeleveryMethod.ID,
+	                    Payment_FK = selectedPayment.ID
+	                };
+	                try
+	                {
+	                    if (await pastryDeleveryPaymentRc.PostAsync(pastryDeleveryPayment) == null) return;
+	                }
+	                catch (HttpRequestException)
+	                {
+	                    await PopupNavigation.PopAllAsync();
+	                    await
+	                        DisplayAlert("Erreur",
+	                            "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
+	                            "Ok");
+	                    return;
+	                }
 	            }
 	        }
 	        await PopupNavigation.PopAsync();
-	        editDeleveryMethods.Load(true);
+	        _editDeleveryMethods.Load(true);
 	    }
     }
 }

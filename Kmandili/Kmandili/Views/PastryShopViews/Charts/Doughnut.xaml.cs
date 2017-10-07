@@ -8,14 +8,12 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.Charts
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Doughnut : ContentPage
+	public partial class Doughnut
 	{
-	    private ToolbarItem refreshToolbarItem;
-
-        public Doughnut()
+	    public Doughnut()
         {
             InitializeComponent();
-            refreshToolbarItem = new ToolbarItem()
+            var refreshToolbarItem = new ToolbarItem()
             {
                 Text = "Rafraîchir",
                 Order = ToolbarItemOrder.Primary,
@@ -36,12 +34,12 @@ namespace Kmandili.Views.PastryShopViews.Charts
             BodyLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            var chartRC = new ChartsRestClient();
+            var chartRc = new ChartsRestClient();
             try
             {
                 var htmlWebSource = new HtmlWebViewSource()
                 {
-                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetDoughnutChartView/" + Settings.Id)
+                    Html = await chartRc.GetChartView(App.ServerUrl + "api/GetDoughnutChartView/" + Settings.Id)
                 };
                 Browser.Source = htmlWebSource;
             }

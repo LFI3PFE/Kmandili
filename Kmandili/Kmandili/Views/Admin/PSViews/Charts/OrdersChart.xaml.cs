@@ -76,7 +76,7 @@ namespace Kmandili.Views.Admin.PSViews.Charts
             {
                 var htmlWebView = new HtmlWebViewSource()
                 {
-                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetLineChartView/" + pastryShop.ID + "/" + year + "/" + semester)
+                    Html = await chartRC.GetChartView(App.ServerUrl + "api/GetLineChartView/" + pastryShop.ID + "/" + year + "/" + semester)
                 };
                 Browser.Source = htmlWebView;
             }

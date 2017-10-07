@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -8,7 +7,7 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PasswordResetEmailPopupPage : PopupPage
+	public partial class PasswordResetEmailPopupPage
 	{
 		public PasswordResetEmailPopupPage()
 		{
@@ -19,7 +18,7 @@ namespace Kmandili.Views
 	    private async void ComfirmTapped(object sender, EventArgs e)
 	    {
 	        if (string.IsNullOrEmpty(Email.Text)) return;
-	        if (!App.isValidEmail(Email.Text.ToLower()))
+	        if (!App.IsValidEmail(Email.Text.ToLower()))
 	        {
 	            await DisplayAlert("Erreur", "Adresse email invalide", "Ok");
 	            return;

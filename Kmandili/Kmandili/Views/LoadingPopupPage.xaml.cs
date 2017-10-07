@@ -1,11 +1,10 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Rg.Plugins.Popup.Pages;
 
 namespace Kmandili.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class LoadingPopupPage : PopupPage
+	public partial class LoadingPopupPage
     {
         public LoadingPopupPage()
         {

@@ -11,26 +11,24 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopThirdStep : ContentPage
+	public partial class PastryShopThirdStep
 	{
-        private List<DeleveryMethod> deleveryMethods;
-        private List<Category> categoryList;
-        private List<DeleveryDelay> deleveryDelays;
-        private PastryShop pastry;
+	    private List<Category> _categoryList;
+	    private readonly PastryShop _pastry;
         
 
         public PastryShopThirdStep(PastryShop pastry)
         {
             InitializeComponent();
             CategoriesListView.SeparatorVisibility = SeparatorVisibility.None;
-            this.pastry = pastry;
+            _pastry = pastry;
             Load();
         }
         private async void RemoveGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            int ID = Int32.Parse(((sender as StackLayout).Children[0] as Label).Text);
-            pastry.PastryShopDeleveryMethods.Remove(pastry.PastryShopDeleveryMethods.FirstOrDefault(d => d.ID == ID));
+            int id = Int32.Parse(((sender as StackLayout)?.Children[0] as Label)?.Text);
+            _pastry.PastryShopDeleveryMethods.Remove(_pastry.PastryShopDeleveryMethods.FirstOrDefault(d => d.ID == id));
             await PopupNavigation.PopAsync();
             RefreshDeleveryMethods();
         }
@@ -118,18 +116,18 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void AddDeleveryMethoTapped(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new PSignAddDeleveryMethodForm(this, pastry));
+            await PopupNavigation.PushAsync(new PSignAddDeleveryMethodForm(this, _pastry));
         }
 
 	    public void RefreshDeleveryMethods()
 	    {
             ContentLayout.Children.Clear();
-            if (pastry.PastryShopDeleveryMethods.Count != 0)
+            if (_pastry.PastryShopDeleveryMethods.Count != 0)
             {
                 ContentLayout.IsVisible = true;
                 NoDeleveryMethoLayout.IsVisible = false;
                 int i = 1;
-                foreach (var pastryShopDeleveryMethod in pastry.PastryShopDeleveryMethods)
+                foreach (var pastryShopDeleveryMethod in _pastry.PastryShopDeleveryMethods)
                 {
                     pastryShopDeleveryMethod.ID = i;
                     ContentLayout.Children.Add(MakeDeleveryMethodLayout(pastryShopDeleveryMethod));
@@ -148,10 +146,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             CategoriesContentLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            RestClient<Category> categoryRC = new RestClient<Category>();
+            RestClient<Category> categoryRc = new RestClient<Category>();
             try
             {
-                categoryList = await categoryRC.GetAsync();
+                _categoryList = await categoryRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -163,45 +161,45 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
-            if (categoryList == null) return;
-            CategoriesListView.HeightRequest = categoryList.Count * 30;
-            CategoriesListView.ItemsSource = categoryList;
+            if (_categoryList == null) return;
+            CategoriesListView.HeightRequest = _categoryList.Count * 30;
+            CategoriesListView.ItemsSource = _categoryList;
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             CategoriesContentLayout.IsVisible = true;
             RefreshDeleveryMethods();
         }
 
-        private void selectedNot(object sender, EventArgs e)
+        private void SelectedNot(object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
 
 	    private async void NextBt_Clicked(object sender, EventArgs e)
 	    {
-	        if (pastry.PastryShopDeleveryMethods.Count == 0)
+	        if (_pastry.PastryShopDeleveryMethods.Count == 0)
 	        {
                 await DisplayAlert("Erreur", "Au moins une methode de livraison avec une methode de payment doit être choisie!", "Ok!");
             }
-            else if (pastry.Categories.Count == 0)
+            else if (_pastry.Categories.Count == 0)
 	        {
                 await DisplayAlert("Erreur", "Au moins une catégorie doit être séléctionnée!", "Ok!");
             }
             else
             {
-                await Navigation.PushAsync(new PastryShopUploadPhotos(pastry));
+                await Navigation.PushAsync(new PastryShopUploadPhotos(_pastry));
             }
 	    }
 
         private void CategorySwitch_Toggled(object sender, ToggledEventArgs e)
         {
-            if ((sender as Switch).IsToggled)
+            if (((Switch) sender).IsToggled)
             {
-                pastry.Categories.Add(categoryList.FirstOrDefault(c => c.ID == Int32.Parse((sender as Switch).ClassId)));
+                _pastry.Categories.Add(_categoryList.FirstOrDefault(c => c.ID == Int32.Parse((sender as Switch)?.ClassId)));
             }
             else
             {
-                pastry.Categories.Remove(pastry.Categories.FirstOrDefault(c => c.ID == Int32.Parse((sender as Switch).ClassId)));
+                _pastry.Categories.Remove(_pastry.Categories.FirstOrDefault(c => c.ID == Int32.Parse((sender as Switch)?.ClassId)));
             }
         }
     }

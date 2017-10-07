@@ -45,21 +45,3 @@
         </StackLayout>
     </StackLayout>
 </pages:PopupPage>
-<!--<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kmandili.Views.PastryShopViews.EditProfile.AddDeleveryMethodForm">
-    <StackLayout>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <Picker x:Name="DeleveryPicker" Grid.Column="0" Grid.Row="0"></Picker>
-            <Picker x:Name="DelayPicker" Grid.Column="1" Grid.Row="0"></Picker>
-        </Grid>
-        <StackLayout x:Name="PaymentsLayout" Padding="40,0,40,0"></StackLayout>
-    </StackLayout>
-</ContentPage>-->

@@ -13,70 +13,70 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews.ProductListAndFilter
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProductList : ContentPage
-	{
-        private RestClient<Product> productRC = new RestClient<Product>();
-        private List<Product> products;
-        private ObservableCollection<Product> displayedProducts = new ObservableCollection<Product>();
-        private List<Category> selectedCategories = new List<Category>();
-        private PriceRange selectedPriceRange = new PriceRange();
-        private PriceRange maxPriceRange = new PriceRange();
-        private SortType selectedSortType = new SortType();
+	public partial class ProductList
+    {
+        private readonly RestClient<Product> _productRc = new RestClient<Product>();
+        private List<Product> _products;
+        private readonly ObservableCollection<Product> _displayedProducts = new ObservableCollection<Product>();
+        private readonly List<Category> _selectedCategories = new List<Category>();
+        private readonly PriceRange _selectedPriceRange = new PriceRange();
+        private readonly PriceRange _maxPriceRange = new PriceRange();
+        private readonly SortType _selectedSortType = new SortType();
 
-        private ToolbarItem searchToolbarItem;
-        private ToolbarItem endSearchToolbarItem;
-        private ToolbarItem filterToolbarItem;
-        private ToolbarItem sortToolbarItem;
+        private readonly ToolbarItem _searchToolbarItem;
+        private readonly ToolbarItem _endSearchToolbarItem;
+        private readonly ToolbarItem _filterToolbarItem;
+        private readonly ToolbarItem _sortToolbarItem;
 
         public ProductList ()
 		{
 			InitializeComponent ();
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
-            displayedProducts.CollectionChanged += DisplayedProducts_CollectionChanged;
-            List.ItemsSource = displayedProducts;
+            _displayedProducts.CollectionChanged += DisplayedProducts_CollectionChanged;
+            List.ItemsSource = _displayedProducts;
 
-            filterToolbarItem = new ToolbarItem()
+            _filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "filter.png"
             };
-            filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
+            _filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
-            searchToolbarItem = new ToolbarItem()
+            _searchToolbarItem = new ToolbarItem()
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "search.png"
             };
-            searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
+            _searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
-            endSearchToolbarItem = new ToolbarItem()
+            _endSearchToolbarItem = new ToolbarItem()
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "close.png"
             };
-            endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
+            _endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
-            sortToolbarItem = new ToolbarItem()
+            _sortToolbarItem = new ToolbarItem()
             {
                 Text = "Trier",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "sort.png"
             };
-            sortToolbarItem.Clicked += SortToolbarItem_Clicked;
+            _sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
-            ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(filterToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
-            load();
+            ToolbarItems.Add(_searchToolbarItem);
+            ToolbarItems.Add(_filterToolbarItem);
+            ToolbarItems.Add(_sortToolbarItem);
+            Load();
 		}
 
         private void DisplayedProducts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (displayedProducts == null || displayedProducts.Count == 0)
+            if (_displayedProducts == null || _displayedProducts.Count == 0)
             {
                 EmptyLabel.IsVisible = true;
                 ListLayout.IsVisible = false;
@@ -84,24 +84,24 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
-                BodyLayout.HeightRequest = (double)(displayedProducts.Count * 110);
+                BodyLayout.HeightRequest = _displayedProducts.Count * 110;
                 ListLayout.IsVisible = true;
             }
         }
 
         private void SelectedNot(Object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
 
-        public async void load()
+        public async void Load()
         {
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             try
             {
-                products = await productRC.GetAsync();
+                _products = await _productRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -112,7 +112,7 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                         "Ok");
                 return;
             }
-            if (products == null || products.Count == 0)
+            if (_products == null || _products.Count == 0)
             {
                 Loading.IsRunning = false;
                 LoadingLayout.IsVisible = false;
@@ -120,12 +120,12 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                 ListLayout.IsVisible = false;
                 return;
             }
-            products = products.OrderBy(p => p.Name).ToList();
-            products.ForEach(p => displayedProducts.Add(p));
-            selectedPriceRange.MaxPriceRange = maxPriceRange.MaxPriceRange = (float)Math.Ceiling(products.Max(p => p.Price) * 2) / 2;
-            selectedPriceRange.MinPriceRange = maxPriceRange.MinPriceRange = (float)Math.Floor(products.Min(p => p.Price) * 2) / 2;
-            selectedSortType.SortTypeIndex = 0;
-            selectedSortType.IsAsc = true;
+            _products = _products.OrderBy(p => p.Name).ToList();
+            _products.ForEach(p => _displayedProducts.Add(p));
+            _selectedPriceRange.MaxPriceRange = _maxPriceRange.MaxPriceRange = (float)Math.Ceiling(_products.Max(p => p.Price) * 2) / 2;
+            _selectedPriceRange.MinPriceRange = _maxPriceRange.MinPriceRange = (float)Math.Floor(_products.Min(p => p.Price) * 2) / 2;
+            _selectedSortType.SortTypeIndex = 0;
+            _selectedSortType.IsAsc = true;
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             ListLayout.IsVisible = true;
@@ -133,44 +133,44 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
 
         private async void SortToolbarItem_Clicked(object sender, EventArgs e)
         {
-            string Alph = "";
-            string Rev = "";
-            if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
+            string alph;
+            string rev;
+            if (_selectedSortType.SortTypeIndex == 0 && _selectedSortType.IsAsc)
             {
-                Alph = "Alphabet Descendant";
+                alph = "Alphabet Descendant";
             }
             else
             {
-                Alph = "Alphabet Ascendant";
+                alph = "Alphabet Ascendant";
             }
-            if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
+            if (_selectedSortType.SortTypeIndex == 1 && _selectedSortType.IsAsc)
             {
-                Rev = "Prix Descendant";
+                rev = "Prix Descendant";
             }
             else
             {
-                Rev = "Prix Ascendant";
+                rev = "Prix Ascendant";
             }
-            var choice = await DisplayActionSheet("Trier Par", "Annuler", null, Alph, Rev);
+            var choice = await DisplayActionSheet("Trier Par", "Annuler", null, alph, rev);
             if (choice == "Alphabet Descendant")
             {
-                selectedSortType.SortTypeIndex = 0;
-                selectedSortType.IsAsc = false;
+                _selectedSortType.SortTypeIndex = 0;
+                _selectedSortType.IsAsc = false;
             }
             else if (choice == "Alphabet Ascendant")
             {
-                selectedSortType.SortTypeIndex = 0;
-                selectedSortType.IsAsc = true;
+                _selectedSortType.SortTypeIndex = 0;
+                _selectedSortType.IsAsc = true;
             }
             else if (choice == "Prix Descendant")
             {
-                selectedSortType.SortTypeIndex = 1;
-                selectedSortType.IsAsc = false;
+                _selectedSortType.SortTypeIndex = 1;
+                _selectedSortType.IsAsc = false;
             }
             else if (choice == "Prix Ascendant")
             {
-                selectedSortType.SortTypeIndex = 1;
-                selectedSortType.IsAsc = true;
+                _selectedSortType.SortTypeIndex = 1;
+                _selectedSortType.IsAsc = true;
             }
             else
             {
@@ -179,18 +179,18 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             AplyFilters();
         }
 
-        private async void showProductMenu(Object sender, ItemTappedEventArgs e)
+        private async void ShowProductMenu(Object sender, ItemTappedEventArgs e)
         {
             Product product = e.Item as Product;
             var action = await DisplayActionSheet("Choisir une action", "Annuler", null, "Ajouter au pannier", "Consulter pâtisserie");
             if (action == "Ajouter au pannier")
             {
-                var index = App.Cart.FindIndex(p => p.PastryShop.ID == product.PastryShop.ID);
+                var index = App.Cart.FindIndex(p => product != null && p.PastryShop.ID == product.PastryShop.ID);
                 if (App.Cart.Count == 0 || index < 0)
                 {
                     CartPastry cartPastry = new CartPastry()
                     {
-                        PastryShop = product.PastryShop,
+                        PastryShop = product?.PastryShop,
                     };
                     CartProduct cartProduct = new CartProduct()
                     {
@@ -203,7 +203,7 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                     App.Cart.Add(cartPastry);
                 }else
                 {
-                    CartProduct cartP = App.Cart.ElementAt(index).CartProducts.FirstOrDefault(p => p.Product.ID == product.ID);
+                    CartProduct cartP = App.Cart.ElementAt(index).CartProducts.FirstOrDefault(p => product != null && p.Product.ID == product.ID);
                     if (cartP == null)
                     {
                         CartProduct cartProduct = new CartProduct()
@@ -224,13 +224,13 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             }
             else if (action == "Consulter pâtisserie")
             {
-                await Navigation.PushAsync(new UPastryShopProfile(product.PastryShop));
+                await Navigation.PushAsync(new UPastryShopProfile(product?.PastryShop));
             }
         }
         
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new UProductFilerPopupPage(this, selectedCategories, maxPriceRange, selectedPriceRange));
+            await PopupNavigation.PushAsync(new UProductFilerPopupPage(this, _selectedCategories, _maxPriceRange, _selectedPriceRange));
         }
 
         private void EndSearchToolbarItem_Clicked(object sender, EventArgs e)
@@ -243,18 +243,18 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             SearchBar.Text = "";
             SearchBar.Unfocus();
             ToolbarItems.Clear();
-            ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(filterToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
+            ToolbarItems.Add(_searchToolbarItem);
+            ToolbarItems.Add(_filterToolbarItem);
+            ToolbarItems.Add(_sortToolbarItem);
             await BodyLayout.TranslateTo(0, -50);
         }
 
         private void SearchToolbarItem_Clicked(object sender, EventArgs e)
         {
-            if (displayedProducts.Count != 0)
+            if (_displayedProducts.Count != 0)
             {
-                this.ToolbarItems.Clear();
-                ToolbarItems.Add(endSearchToolbarItem);
+                ToolbarItems.Clear();
+                ToolbarItems.Add(_endSearchToolbarItem);
                 BodyLayout.TranslateTo(0, 0);
                 SearchBar.Focus();
             }
@@ -272,22 +272,22 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
 
         public void AplyFilters()
         {
-            if(products == null || displayedProducts == null) return;
+            if(_products == null || _displayedProducts == null) return;
             var res =
-                products.Where(
+                _products.Where(
                     p =>
                         (string.IsNullOrEmpty(SearchBar.Text) || p.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
-                        (selectedCategories.Count == 0 || selectedCategories.Any(c => c.ID == p.Category_FK)) && 
-                        (p.Price >= selectedPriceRange.MinPriceRange && p.Price <= selectedPriceRange.MaxPriceRange)).ToList();
-            if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
+                        (_selectedCategories.Count == 0 || _selectedCategories.Any(c => c.ID == p.Category_FK)) && 
+                        (p.Price >= _selectedPriceRange.MinPriceRange && p.Price <= _selectedPriceRange.MaxPriceRange)).ToList();
+            if (_selectedSortType.SortTypeIndex == 0 && _selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Name).ToList();
             }
-            else if (selectedSortType.SortTypeIndex == 0 && !selectedSortType.IsAsc)
+            else if (_selectedSortType.SortTypeIndex == 0 && !_selectedSortType.IsAsc)
             {
                 res = res.OrderByDescending(p => p.Name).ToList();
             }
-            else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
+            else if (_selectedSortType.SortTypeIndex == 1 && _selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Price).ToList();
             }
@@ -295,8 +295,8 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
             {
                 res = res.OrderByDescending(p => p.Price).ToList();
             }
-            displayedProducts.Clear();
-            res.ForEach(p => displayedProducts.Add(p));
+            _displayedProducts.Clear();
+            res.ForEach(p => _displayedProducts.Add(p));
         }
 	}
 }

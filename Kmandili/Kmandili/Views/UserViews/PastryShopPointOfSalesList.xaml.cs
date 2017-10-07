@@ -7,13 +7,13 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopPointOfSalesList : ContentPage
+	public partial class PastryShopPointOfSalesList
 	{
-        private PastryShop pastryShop;
+        private readonly PastryShop _pastryShop;
 
         public PastryShopPointOfSalesList(PastryShop pastryShop)
         {
-            this.pastryShop = pastryShop;
+            _pastryShop = pastryShop;
             InitializeComponent();
             Load();
         }
@@ -21,21 +21,21 @@ namespace Kmandili.Views.UserViews
         private void Load()
         {
             CoreStackLayout.Children.Clear();
-            pastryShop.PointOfSales.ToList().ForEach(p => CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p)));
+            _pastryShop.PointOfSales.ToList().ForEach(p => CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p)));
         }
 
         private StackLayout MakePointOfSaleStackLayout(PointOfSale pointOfSale)
         {
-            StackLayout MainStack = new StackLayout()
+            StackLayout mainStack = new StackLayout()
             {
                 BackgroundColor = Color.White,
                 Margin = new Thickness(0, 0, 0, 7),
                 ClassId = pointOfSale.ID.ToString(),
             };
-            Grid MainGrid = new Grid();
-            MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
+            Grid mainGrid = new Grid();
+            mainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
 
             StackLayout gridFirstStackChild = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
             StackLayout s1 = new StackLayout();
@@ -81,46 +81,46 @@ namespace Kmandili.Views.UserViews
                 Padding = new Thickness(0, 0, 0, 10),
             };
 
-            Grid TimeTitelGrid = new Grid();
-            TimeTitelGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-            TimeTitelGrid.Children.Add(new Label() { Text = "Jours", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 0, 0);
-            TimeTitelGrid.Children.Add(new Label() { Text = "Heures", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 1, 0);
+            Grid timeTitelGrid = new Grid();
+            timeTitelGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+            timeTitelGrid.Children.Add(new Label() { Text = "Jours", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 0, 0);
+            timeTitelGrid.Children.Add(new Label() { Text = "Heures", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 1, 0);
 
-            gridSecondStackChild.Children.Add(TimeTitelGrid);
+            gridSecondStackChild.Children.Add(timeTitelGrid);
 
             foreach (WorkDay w in pointOfSale.WorkDays)
             {
-                StackLayout WorkDayStack = new StackLayout();
-                Grid WorkDayGrid = new Grid();
-                WorkDayGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
-                StackLayout HoursStack = new StackLayout() { Orientation = StackOrientation.Horizontal };
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.OpenTime), FontSize = 15, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = "-", FontSize = 15, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.CloseTime), FontSize = 15, TextColor = Color.Green });
+                StackLayout workDayStack = new StackLayout();
+                Grid workDayGrid = new Grid();
+                workDayGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                workDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+                workDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
+                StackLayout hoursStack = new StackLayout() { Orientation = StackOrientation.Horizontal };
+                hoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.OpenTime), FontSize = 15, TextColor = Color.Green });
+                hoursStack.Children.Add(new Label() { Text = "-", FontSize = 15, TextColor = Color.Green });
+                hoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.CloseTime), FontSize = 15, TextColor = Color.Green });
 
-                WorkDayGrid.Children.Add(new Label() { Text = DayNumberToDayName(w.Day), FontSize = 15, TextColor = Color.Black }, 0, 0);
-                WorkDayGrid.Children.Add(HoursStack, 1, 0);
-                WorkDayStack.Children.Add(WorkDayGrid);
-                gridSecondStackChild.Children.Add(WorkDayStack);
+                workDayGrid.Children.Add(new Label() { Text = DayNumberToDayName(w.Day), FontSize = 15, TextColor = Color.Black }, 0, 0);
+                workDayGrid.Children.Add(hoursStack, 1, 0);
+                workDayStack.Children.Add(workDayGrid);
+                gridSecondStackChild.Children.Add(workDayStack);
             }
 
-            MainGrid.Children.Add(gridFirstStackChild, 0, 0);
-            MainGrid.Children.Add(gridSecondStackChild, 1, 0);
+            mainGrid.Children.Add(gridFirstStackChild, 0, 0);
+            mainGrid.Children.Add(gridSecondStackChild, 1, 0);
 
-            MainStack.Children.Add(MainGrid);
-            MainStack.Children.Add(new StackLayout()
+            mainStack.Children.Add(mainGrid);
+            mainStack.Children.Add(new StackLayout()
             {
                 HeightRequest = 2,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 BackgroundColor = Color.Black,
                 Margin = new Thickness(0, 30, 0, 0)
             });
-            return MainStack;
+            return mainStack;
         }
 
         private string TimeSpanToTime(TimeSpan time)
@@ -128,9 +128,9 @@ namespace Kmandili.Views.UserViews
             return time.Hours + "h" + time.Minutes;
         }
 
-        private string DayNumberToDayName(int Day)
+        private string DayNumberToDayName(int day)
         {
-            switch (Day)
+            switch (day)
             {
                 case 1:
                     return "Lun.";

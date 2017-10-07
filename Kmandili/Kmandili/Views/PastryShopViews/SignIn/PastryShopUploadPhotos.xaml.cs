@@ -9,29 +9,28 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Kmandili.Helpers;
 using Rg.Plugins.Popup.Services;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopUploadPhotos : ContentPage
+	public partial class PastryShopUploadPhotos
 	{
-        private PastryShop pastryShop;
+        private PastryShop _pastryShop;
         private MediaFile _mediaFileProfil;
         private MediaFile _mediaFileCover;
-        private bool toGallery = false;
+	    public bool ToGallery;
 
         public PastryShopUploadPhotos(PastryShop pastryShop)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
+            _pastryShop = pastryShop;
         }
 
         private async void ImportCover_OnClick(Object sender, EventArgs e)
         {
-            toGallery = true;
-            App.galleryIsOpent = true;
+            ToGallery = true;
+            App.GalleryIsOpent = true;
             await CrossMedia.Current.Initialize();
 
             _mediaFileCover = await CrossMedia.Current.PickPhotoAsync();
@@ -40,13 +39,13 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
 
             Cover.Text = _mediaFileCover.Path;
-            App.galleryIsOpent = false;
+            App.GalleryIsOpent = false;
         }
 
         private async void ImportLogo_OnClick(Object sender, EventArgs e)
         {
-            toGallery = true;
-            App.galleryIsOpent = true;
+            ToGallery = true;
+            App.GalleryIsOpent = true;
             await CrossMedia.Current.Initialize();
 
             _mediaFileProfil = await CrossMedia.Current.PickPhotoAsync();
@@ -55,7 +54,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 return;
 
             Logo.Text = _mediaFileProfil.Path;
-            App.galleryIsOpent = false;
+            App.GalleryIsOpent = false;
         }
 
         private async void NextButton_OnClick(Object sender, EventArgs e)
@@ -64,31 +63,29 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             if (_mediaFileProfil == null)
             {
                 await DisplayAlert("Erreur", "Il faut selectionner une photo de profile!", "OK");
-                return;
             }
             else if (_mediaFileCover == null)
             {
                 await DisplayAlert("Erreur", "Il faut selectionner une photo de couverture!", "Ok");
-                return;
             }
             else
             {
-                pastryShop.ProfilePic = await Upload(_mediaFileProfil);
-                if (pastryShop.ProfilePic == null)
+                _pastryShop.ProfilePic = await Upload(_mediaFileProfil);
+                if (_pastryShop.ProfilePic == null)
                 {
                     await DisplayAlert("Erreur", "Erreur pendant le téléchargement du logo!", "Ok");
                     return;
                 }
-                pastryShop.CoverPic = await Upload(_mediaFileCover);
-                if (pastryShop.CoverPic == null)
+                _pastryShop.CoverPic = await Upload(_mediaFileCover);
+                if (_pastryShop.CoverPic == null)
                 {
                     await DisplayAlert("Erreur", "Erreur pendant le téléchargement de la photo de couverture!", "Ok");
                     return;
                 }
-                RestClient<Address> addressRC = new RestClient<Address>();
+                RestClient<Address> addressRc = new RestClient<Address>();
                 try
                 {
-                    pastryShop.Address = await addressRC.PostAsync(pastryShop.Address);
+                    _pastryShop.Address = await addressRc.PostAsync(_pastryShop.Address);
                 }
                 catch (HttpRequestException)
                 {
@@ -100,19 +97,19 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     await Navigation.PopAsync();
                     return;
                 }
-                if (pastryShop.Address != null)
+                if (_pastryShop.Address != null)
                 {
-                    pastryShop.Address_FK = pastryShop.Address.ID;
-                    pastryShop.Address = null;
-                    List<PastryShopDeleveryMethod> PSdeleveryMethods =
-                        new List<PastryShopDeleveryMethod>(pastryShop.PastryShopDeleveryMethods);
-                    pastryShop.PastryShopDeleveryMethods.Clear();
-                    PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                    string coverPath = pastryShop.CoverPic;
-                    string logoPath = pastryShop.ProfilePic;
+                    _pastryShop.Address_FK = _pastryShop.Address.ID;
+                    _pastryShop.Address = null;
+                    List<PastryShopDeleveryMethod> pSdeleveryMethods =
+                        new List<PastryShopDeleveryMethod>(_pastryShop.PastryShopDeleveryMethods);
+                    _pastryShop.PastryShopDeleveryMethods.Clear();
+                    PastryShopRestClient pastryShopRc = new PastryShopRestClient();
+                    string coverPath = _pastryShop.CoverPic;
+                    string logoPath = _pastryShop.ProfilePic;
                     try
                     {
-                        pastryShop = await pastryShopRC.PostAsync(pastryShop);
+                        _pastryShop = await pastryShopRc.PostAsync(_pastryShop);
                     }
                     catch (HttpRequestException)
                     {
@@ -125,7 +122,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         return;
                     }
                     
-                    if (pastryShop == null)
+                    if (_pastryShop == null)
                     {
                         await PopupNavigation.PopAsync();
                         await DisplayAlert("Erreur", "Erreur lors de l'enregistrement des informations!", "Ok");
@@ -137,32 +134,30 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         if (!(await Delete(logoPath)))
                         {
                             await DisplayAlert("Erreur", "Erreur lors de la supression de la couverture!", "Ok");
-                            return;
                         }
-                        return;
                     }
                     else
                     {
-                        RestClient<PastryDeleveryPayment> pastryDeleveryPaymentRC =
+                        RestClient<PastryDeleveryPayment> pastryDeleveryPaymentRc =
                             new RestClient<PastryDeleveryPayment>();
-                        foreach (PastryShopDeleveryMethod pastryShopDM in PSdeleveryMethods)
+                        foreach (PastryShopDeleveryMethod pastryShopDm in pSdeleveryMethods)
                         {
-                            pastryShopDM.PastryShop_FK = pastryShop.ID;
-                            pastryShopDM.DeleveryMethod_FK = pastryShopDM.DeleveryMethod.ID;
-                            pastryShopDM.DeleveryDelay_FK = pastryShopDM.DeleveryDelay.ID;
+                            pastryShopDm.PastryShop_FK = _pastryShop.ID;
+                            pastryShopDm.DeleveryMethod_FK = pastryShopDm.DeleveryMethod.ID;
+                            pastryShopDm.DeleveryDelay_FK = pastryShopDm.DeleveryDelay.ID;
                             List<PastryDeleveryPayment> pastryDeleveryPayments =
-                                pastryShopDM.PastryDeleveryPayments.ToList();
-                            pastryShopDM.PastryShop = null;
-                            pastryShopDM.DeleveryMethod = null;
-                            pastryShopDM.DeleveryDelay = null;
-                            pastryShopDM.PastryDeleveryPayments.Clear();
-                            RestClient<PastryShopDeleveryMethod> pastryShopDeleveryMethodRC =
+                                pastryShopDm.PastryDeleveryPayments.ToList();
+                            pastryShopDm.PastryShop = null;
+                            pastryShopDm.DeleveryMethod = null;
+                            pastryShopDm.DeleveryDelay = null;
+                            pastryShopDm.PastryDeleveryPayments.Clear();
+                            RestClient<PastryShopDeleveryMethod> pastryShopDeleveryMethodRc =
                                 new RestClient<PastryShopDeleveryMethod>();
-                            PastryShopDeleveryMethod PSDM;
+                            PastryShopDeleveryMethod psdm;
                             try
                             {
 
-                                PSDM = await pastryShopDeleveryMethodRC.PostAsync(pastryShopDM);
+                                psdm = await pastryShopDeleveryMethodRc.PostAsync(pastryShopDm);
                             }
                             catch (HttpRequestException)
                             {
@@ -174,21 +169,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                                 await Navigation.PopAsync();
                                 return;
                             }
-                            if (PSDM == null)
+                            if (psdm == null)
                             {
                                 await PopupNavigation.PopAsync();
                                 return;
                             }
                             foreach (PastryDeleveryPayment p in pastryDeleveryPayments)
                             {
-                                //p.PastryShopDeleveryMethods.Add(pastryShopDM);
                                 p.Payment_FK = p.Payment.ID;
                                 p.Payment = null;
                                 p.PastryShopDeleveryMethod = null;
-                                p.PastryShopDeleveryMethod_FK = PSDM.ID;
+                                p.PastryShopDeleveryMethod_FK = psdm.ID;
                                 try
                                 {
-                                    if (await pastryDeleveryPaymentRC.PostAsync(p) == null)
+                                    if (await pastryDeleveryPaymentRc.PostAsync(p) == null)
                                     {
                                         await PopupNavigation.PopAsync();
                                         return;
@@ -210,12 +204,12 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                         try
                         {
                             var tokenResponse =
-                                await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
+                                await authorizationRestClient.AuthorizationLoginAsync(_pastryShop.Email, _pastryShop.Password);
                             if(tokenResponse == null) return;
-                            Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID,
+                            Settings.SetSettings(_pastryShop.Email, _pastryShop.Password, _pastryShop.ID,
                                 tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
                             await PopupNavigation.PopAsync();
-                            await Navigation.PushAsync(new PastryShopEnteringMenu(pastryShop));
+                            await Navigation.PushAsync(new PastryShopEnteringMenu(_pastryShop));
                         }
                         catch (HttpRequestException)
                         {
@@ -239,7 +233,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 var res = await new UploadRestClient().Upload(stream, fileName);
                 if (res)
                 {
-                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                    return App.ServerUrl + "Uploads/" + fileName + ".jpg";
                 }
                 return null;
             }
@@ -251,14 +245,14 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
         }
 
-        private async Task<bool> Delete(string picURL)
+        private async Task<bool> Delete(string picUrl)
         {
-            string fileName = picURL.Substring(App.ServerURL.Count() + 8, (picURL.Length - (App.ServerURL.Count() + 8)));
+            string fileName = picUrl.Substring(App.ServerUrl.Length + 8, (picUrl.Length - (App.ServerUrl.Length + 8)));
             fileName = fileName.Substring(0, (fileName.Length - 4));
-            UploadRestClient uploadRC = new UploadRestClient();
+            UploadRestClient uploadRc = new UploadRestClient();
             try
             {
-                return (await uploadRC.Delete(fileName));
+                return (await uploadRc.Delete(fileName));
             }
             catch (HttpRequestException)
             {

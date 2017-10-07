@@ -165,8 +165,8 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
         {
             Rating.Text = pastryShop.Ratings.Sum(r => r.Value).ToString();
             NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
-            Cover.Source = App.ServerURL + "Uploads/" + pastryShop.CoverPic;
-            ProfilImage.Source = App.ServerURL + "Uploads/" + pastryShop.ProfilePic;
+            Cover.Source = App.ServerUrl + "Uploads/" + pastryShop.CoverPic;
+            ProfilImage.Source = App.ServerUrl + "Uploads/" + pastryShop.ProfilePic;
             PastryName.Text = pastryShop.Name;
             Address.Text = pastryShop.Address.ToString();
             Desc.Text = pastryShop.LongDesc;
@@ -289,7 +289,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
                 return;
             }
             await PopupNavigation.PopAllAsync();
-            await Navigation.PushAsync(new PSProductList(pastryShop));
+            await Navigation.PushAsync(new PsProductList(pastryShop));
         }
     }
 }

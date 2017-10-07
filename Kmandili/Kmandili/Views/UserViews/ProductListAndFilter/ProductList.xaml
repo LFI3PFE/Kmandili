@@ -22,7 +22,7 @@
                 <ActivityIndicator x:Name="Loading" Color="#3b4552" HeightRequest="40"/>
             </StackLayout>
             <StackLayout Padding="0,10,0,0" x:Name="ListLayout" VerticalOptions="FillAndExpand">
-                <ListView x:Name="List" HasUnevenRows="True" ItemTapped="showProductMenu" VerticalOptions="FillAndExpand" ItemSelected="SelectedNot">
+                <ListView x:Name="List" HasUnevenRows="True" ItemTapped="ShowProductMenu" VerticalOptions="FillAndExpand" ItemSelected="SelectedNot">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

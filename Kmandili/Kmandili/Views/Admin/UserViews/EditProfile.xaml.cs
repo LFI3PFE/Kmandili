@@ -285,7 +285,7 @@ namespace Kmandili.Views.Admin.UserViews
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
                 return false;
             }
-            else if (!App.isValidEmail(Email.Text))
+            else if (!App.IsValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
                 Email.Text = "";

@@ -41,7 +41,7 @@ namespace Kmandili.Views.Admin.Edit
 	    private async void Update(object sender, EventArgs e)
 	    {
 	        if ((admin.UserName == Email.Text.ToLower()) && (admin.Password == Password.Text)) return;
-	        if (!App.isValidEmail(Email.Text.ToLower()))
+	        if (!App.IsValidEmail(Email.Text.ToLower()))
 	        {
 	            await DisplayAlert("Erreur", "Email invalide.", "Ok");
 	            return;

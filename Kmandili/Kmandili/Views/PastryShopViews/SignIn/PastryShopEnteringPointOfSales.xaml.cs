@@ -11,27 +11,27 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.SignIn
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PastryShopEnteringPointOfSales : ContentPage
+	public partial class PastryShopEnteringPointOfSales
 	{
-        private PastryShop pastryShop;
+        private PastryShop _pastryShop;
         public PastryShopEnteringPointOfSales(PastryShop pastryShop)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
+            _pastryShop = pastryShop;
         }
 
         private StackLayout MakePointOfSaleStackLayout(PointOfSale pointOfSale)
         {
-            StackLayout MainStack = new StackLayout()
+            StackLayout mainStack = new StackLayout()
             {
                 BackgroundColor = Color.White,
                 Margin = new Thickness(0, 0, 0, 7),
                 ClassId = pointOfSale.ID.ToString(),
             };
-            Grid MainGrid = new Grid();
-            MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
-            MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
+            Grid mainGrid = new Grid();
+            mainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Star });
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5, GridUnitType.Star) });
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(3, GridUnitType.Star) });
 
             StackLayout gridFirstStackChild = new StackLayout() { Padding = new Thickness(20, 0, 0, 0) };
             StackLayout s1 = new StackLayout()
@@ -95,56 +95,56 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
             deleteLayout.Children.Add(deleteIcon);
 
-            Grid TimeTitelGrid = new Grid();
-            TimeTitelGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
-            TimeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-            TimeTitelGrid.Children.Add(new Label() { Text = "Jours", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 0, 0);
-            TimeTitelGrid.Children.Add(new Label() { Text = "Heures", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 1, 0);
-            TimeTitelGrid.Children.Add(deleteLayout, 2, 0);
+            Grid timeTitelGrid = new Grid();
+            timeTitelGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(4, GridUnitType.Star) });
+            timeTitelGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+            timeTitelGrid.Children.Add(new Label() { Text = "Jours", FontSize = 14, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 0, 0);
+            timeTitelGrid.Children.Add(new Label() { Text = "Heures", FontSize = 15, FontAttributes = FontAttributes.Bold, TextColor = Color.Black }, 1, 0);
+            timeTitelGrid.Children.Add(deleteLayout, 2, 0);
 
-            gridSecondStackChild.Children.Add(TimeTitelGrid);
+            gridSecondStackChild.Children.Add(timeTitelGrid);
 
             foreach (WorkDay w in pointOfSale.WorkDays)
             {
-                StackLayout WorkDayStack = new StackLayout();
-                Grid WorkDayGrid = new Grid();
-                WorkDayGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
-                WorkDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
-                StackLayout HoursStack = new StackLayout() { Orientation = StackOrientation.Horizontal };
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.OpenTime), FontSize = 15, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = "-", FontSize = 15, TextColor = Color.Green });
-                HoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.CloseTime), FontSize = 15, TextColor = Color.Green });
+                StackLayout workDayStack = new StackLayout();
+                Grid workDayGrid = new Grid();
+                workDayGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                workDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
+                workDayGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(6, GridUnitType.Star) });
+                StackLayout hoursStack = new StackLayout() { Orientation = StackOrientation.Horizontal };
+                hoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.OpenTime), FontSize = 15, TextColor = Color.Green });
+                hoursStack.Children.Add(new Label() { Text = "-", FontSize = 15, TextColor = Color.Green });
+                hoursStack.Children.Add(new Label() { Text = TimeSpanToTime(w.CloseTime), FontSize = 15, TextColor = Color.Green });
 
-                WorkDayGrid.Children.Add(new Label() { Text = DayNumberToDayName(w.Day), FontSize = 15, TextColor = Color.Black }, 0, 0);
-                WorkDayGrid.Children.Add(HoursStack, 1, 0);
-                WorkDayStack.Children.Add(WorkDayGrid);
-                gridSecondStackChild.Children.Add(WorkDayStack);
+                workDayGrid.Children.Add(new Label() { Text = DayNumberToDayName(w.Day), FontSize = 15, TextColor = Color.Black }, 0, 0);
+                workDayGrid.Children.Add(hoursStack, 1, 0);
+                workDayStack.Children.Add(workDayGrid);
+                gridSecondStackChild.Children.Add(workDayStack);
             }
 
-            MainGrid.Children.Add(gridFirstStackChild, 0, 0);
-            MainGrid.Children.Add(gridSecondStackChild, 1, 0);
+            mainGrid.Children.Add(gridFirstStackChild, 0, 0);
+            mainGrid.Children.Add(gridSecondStackChild, 1, 0);
 
-            MainStack.Children.Add(MainGrid);
-            return MainStack;
+            mainStack.Children.Add(mainGrid);
+            return mainStack;
         }
 
         private async void DeleteTapGesture_Tapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            int ID = Int32.Parse(((((((sender as Image).Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as Grid).Parent as StackLayout).ClassId);
-            PointOfSale pointOfSale = pastryShop.PointOfSales.FirstOrDefault(p => p.ID == ID);
+            int id = Int32.Parse(((((((sender as Image)?.Parent as StackLayout)?.Parent as Grid)?.Parent as StackLayout)?.Parent as Grid)?.Parent as StackLayout)?.ClassId);
+            PointOfSale pointOfSale = _pastryShop.PointOfSales.FirstOrDefault(p => p.ID == id);
             if (pointOfSale == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
+            RestClient<PointOfSale> pointOfSaleRc = new RestClient<PointOfSale>();
             try
             {
-                if (!(await pointOfSaleRC.DeleteAsync(pointOfSale.ID)))
+                if (!(await pointOfSaleRc.DeleteAsync(pointOfSale.ID)))
                 {
                     await PopupNavigation.PopAsync();
                     return;
@@ -162,7 +162,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             
             await PopupNavigation.PopAsync();
-            load();
+            Load();
         }
 
         private string TimeSpanToTime(TimeSpan time)
@@ -170,9 +170,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return time.Hours + "h" + time.Minutes;
         }
 
-        private string DayNumberToDayName(int Day)
+        private string DayNumberToDayName(int day)
         {
-            switch (Day)
+            switch (day)
             {
                 case 1:
                     return "Lun.";
@@ -192,7 +192,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             return null;
         }
 
-        public async void load()
+        public async void Load()
         {
             CoreStackLayout.Children.Clear();
             NoResultsLabel.IsVisible = false;
@@ -200,10 +200,10 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             Loading.IsRunning = true;
             AddBt.IsEnabled = false;
             ContinueBt.IsEnabled = false;
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            PastryShopRestClient pastryShopRc = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                _pastryShop = await pastryShopRc.GetAsyncById(_pastryShop.ID);
             }
             catch (HttpRequestException)
             {
@@ -215,9 +215,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 await Navigation.PopAsync();
                 return;
             }
-            if(pastryShop == null) return;
+            if(_pastryShop == null) return;
             ContinueBt.IsEnabled = true;
-            if (pastryShop == null || pastryShop.PointOfSales.Count == 0)
+            if (_pastryShop == null || _pastryShop.PointOfSales.Count == 0)
             {
                 NoResultsLabel.IsVisible = true;
                 ContinueBt.IsEnabled = false;
@@ -225,7 +225,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             LoadingLayout.IsVisible = false;
             Loading.IsRunning = false;
             AddBt.IsEnabled = true;
-            foreach (PointOfSale p in pastryShop.PointOfSales)
+            foreach (PointOfSale p in _pastryShop.PointOfSales)
             {
                 CoreStackLayout.Children.Add(MakePointOfSaleStackLayout(p));
             }
@@ -234,11 +234,11 @@ namespace Kmandili.Views.PastryShopViews.SignIn
         public async void DeletePointOfSale(Object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            int ID = Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text);
-            RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
+            int id = Int32.Parse((((sender as Image)?.Parent as StackLayout)?.Children[0] as Label)?.Text);
+            RestClient<PointOfSale> pointOfSaleRc = new RestClient<PointOfSale>();
             try
             {
-                if (!(await pointOfSaleRC.DeleteAsync(ID)))
+                if (!(await pointOfSaleRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAsync();
                     return;
@@ -256,33 +256,31 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             
             await PopupNavigation.PopAsync();
-            load();
+            Load();
         }
 
         public async void AddProduct_OnClick(Object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PastryShopPointOfSaleForm(this, pastryShop));
+            await Navigation.PushAsync(new PastryShopPointOfSaleForm(this, _pastryShop));
         }
 
         protected override void OnAppearing()
         {
-            load();
+            Load();
         }
 
         public async void Continue(Object sender, EventArgs e)
         {
-            if (pastryShop.PointOfSales.Count != 0)
+            if (_pastryShop.PointOfSales.Count != 0)
             {
-                //var page = new MainPage();
-                //page.SignInAction(pastryShop.Email, pastryShop.Password);
                 var authorizationRestClient = new AuthorizationRestClient();
                 try
                 {
                     var tokenResponse =
-                    await authorizationRestClient.AuthorizationLoginAsync(pastryShop.Email, pastryShop.Password);
+                    await authorizationRestClient.AuthorizationLoginAsync(_pastryShop.Email, _pastryShop.Password);
                     if (tokenResponse == null) return;
-                    Settings.SetSettings(pastryShop.Email, pastryShop.Password, pastryShop.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
-                    App.Current.MainPage = new NavigationPage(new MainPage());
+                    Settings.SetSettings(_pastryShop.Email, _pastryShop.Password, _pastryShop.ID, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+                    Application.Current.MainPage = new NavigationPage(new MainPage());
                 }
                 catch (HttpRequestException)
                 {
@@ -298,7 +296,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public void SelectedNot(Object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
     }
 }

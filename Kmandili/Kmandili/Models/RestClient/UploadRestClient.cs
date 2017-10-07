@@ -16,7 +16,7 @@ namespace Kmandili.Models.RestClient
             var imageStream = new StreamContent(stream);
             var multi = new MultipartContent();
             multi.Add(imageStream);
-            var response = await client.PostAsync(App.ServerURL + "api/Uploads/" + FileName, multi);
+            var response = await client.PostAsync(App.ServerUrl + "api/Uploads/" + FileName, multi);
             return response.IsSuccessStatusCode;
         }
 
@@ -26,7 +26,7 @@ namespace Kmandili.Models.RestClient
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
-            string URL = App.ServerURL + "api/Uploads/" + fileName;
+            string URL = App.ServerUrl + "api/Uploads/" + fileName;
             var response = await httpClient.DeleteAsync(URL);
             return response.IsSuccessStatusCode;
         }

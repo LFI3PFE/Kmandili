@@ -19,7 +19,7 @@ namespace Kmandili.Models.RestClient
                 new KeyValuePair<string, string>("grant_type", "password")
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, App.ServerURL + "token")
+            var request = new HttpRequestMessage(HttpMethod.Post, App.ServerUrl + "token")
             {
                 Content = new FormUrlEncodedContent(keyValues)
             };

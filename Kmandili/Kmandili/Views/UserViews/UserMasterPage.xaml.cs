@@ -6,21 +6,20 @@ using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.UserViews.OrderViewsAndFilter;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UserMasterPage : ContentPage
+	public partial class UserMasterPage
 	{
-	    private UserMasterDetailPage userMasterDetailPage;
-	    private User user;
+	    private readonly UserMasterDetailPage _userMasterDetailPage;
+	    private User _user;
 		public UserMasterPage (UserMasterDetailPage userMasterDetailPage, User user)
 		{
 			InitializeComponent ();
-		    this.user = user;
-		    this.userMasterDetailPage = userMasterDetailPage;
+		    _user = user;
+		    _userMasterDetailPage = userMasterDetailPage;
 		    UpdateOrderNotificationNumber(user.Orders.ToList());
 		}
 
@@ -31,10 +30,10 @@ namespace Kmandili.Views.UserViews
 
         public async void UpdateOrderNotificationNumber()
         {
-            UserRestClient userRC = new UserRestClient();
+            UserRestClient userRc = new UserRestClient();
             try
             {
-                user = await userRC.GetAsyncById(Settings.Id);
+                _user = await userRc.GetAsyncById(Settings.Id);
             }
             catch (HttpRequestException)
             {
@@ -44,38 +43,36 @@ namespace Kmandili.Views.UserViews
                         "Ok");
                 return;
             }
-            if(user == null) return;
-            int number = user.Orders.Count(o => !o.SeenUser);
-            var x = NotificationsNumber;
+            if(_user == null) return;
+            int number = _user.Orders.Count(o => !o.SeenUser);
             NotificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         public void UpdateOrderNotificationNumber(List<Order> orders)
 	    {
             int number = orders.Count(o => !o.SeenUser);
-            var x = NotificationsNumber;
-            NotificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
+	        NotificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");
         }
 
         private async void ToOrderList(object sender, EventArgs e)
         {
-            userMasterDetailPage.IsPresented = false;
-            if (userMasterDetailPage.Detail.GetType().Name == "UserOrderList") return;
-            await userMasterDetailPage.Detail.Navigation.PushAsync(new UserOrderList());
+            _userMasterDetailPage.IsPresented = false;
+            if (_userMasterDetailPage.Detail.GetType().Name == "UserOrderList") return;
+            await _userMasterDetailPage.Detail.Navigation.PushAsync(new UserOrderList());
         }
 
 	    private async void UpdateUser_OnTapped(object sender, EventArgs e)
 	    {
-            userMasterDetailPage.IsPresented = false;
-            if (userMasterDetailPage.Detail.GetType().Name == "EditUserProfile") return;
-            await userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile(Settings.Id));
+            _userMasterDetailPage.IsPresented = false;
+            if (_userMasterDetailPage.Detail.GetType().Name == "EditUserProfile") return;
+            await _userMasterDetailPage.Detail.Navigation.PushAsync(new EditUserProfile(Settings.Id));
 	    }
 
 	    private async void ToCart(object sender, EventArgs e)
 	    {
-            userMasterDetailPage.IsPresented = false;
-            if (userMasterDetailPage.Detail.GetType().Name == "Cart") return;
-            await userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
+            _userMasterDetailPage.IsPresented = false;
+            if (_userMasterDetailPage.Detail.GetType().Name == "Cart") return;
+            await _userMasterDetailPage.Detail.Navigation.PushAsync(new Cart());
         }
     }
 }

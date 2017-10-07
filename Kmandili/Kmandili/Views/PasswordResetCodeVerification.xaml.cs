@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,26 +10,26 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PasswordResetCodeVerification : PopupPage
+	public partial class PasswordResetCodeVerification
 	{
-	    private string email;
-	    private string code = "";
-	    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+	    private readonly string _email;
+	    private string _code = "";
+	    private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
 		public PasswordResetCodeVerification(string email)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-		    this.email = email;
+		    _email = email;
             InitializeComponent ();
 		    SendCode();
 		}
 
 	    private async void SendCode()
 	    {
-	        EmailRestClient emailRC = new EmailRestClient();
+	        EmailRestClient emailRc = new EmailRestClient();
 	        try
 	        {
-                code = await emailRC.SendPasswordRestCode(email);
+                _code = await emailRc.SendPasswordRestCode(_email);
             }
 	        catch (HttpRequestException)
 	        {
@@ -45,24 +44,23 @@ namespace Kmandili.Views
         {
             try
             {
-                await Task.Delay(TimeSpan.FromMinutes(5), cancellationTokenSource.Token);
+                await Task.Delay(TimeSpan.FromMinutes(5), _cancellationTokenSource.Token);
                 await DisplayAlert("Erreur", "Délai d'attente dépassé!", "Ok");
                 await PopupNavigation.PopAsync();
             }
             catch (TaskCanceledException)
             {
-                return;
             }
         }
 
 	    private async void ComfirmTapped(object sender, EventArgs e)
 	    {
             if (string.IsNullOrEmpty(Code.Text)) return;
-            if (Code.Text.Length == 6 && code == Code.Text)
+            if (Code.Text.Length == 6 && _code == Code.Text)
             {
-                cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Cancel();
                 await PopupNavigation.PopAsync();
-                await PopupNavigation.PushAsync(new PasswordResetPopupPage(email));
+                await PopupNavigation.PushAsync(new PasswordResetPopupPage(_email));
             }
             else
             {

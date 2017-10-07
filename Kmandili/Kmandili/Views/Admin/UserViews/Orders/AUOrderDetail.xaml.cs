@@ -72,7 +72,7 @@ namespace Kmandili.Views.Admin.UserViews.Orders
                 {
                     orderList.load();
                     await DisplayAlert("Succès", "Commande annulée avec succès.", "Ok");
-                    App.updateClientList = true;
+                    App.UpdateClientList = true;
                     await PopupNavigation.PopAllAsync();
                     await Navigation.PopAsync();
                 }

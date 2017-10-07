@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
@@ -9,29 +10,28 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProductDetail : ContentPage
+	public partial class ProductDetail
 	{
-	    private ToolbarItem refreshToolbarItem, editToolbarItem;
-	    private DateTime min;
-	    private DateTime max;
-	    private int year, semester;
-	    private Product product;
+	    private DateTime _min;
+	    private DateTime _max;
+	    private int _year, _semester;
+	    private Product _product;
 
-	    private bool updateParent = false;
-	    private PSProductList productList;
+	    private bool _updateParent;
+	    private readonly PsProductList _productList;
 
-        public ProductDetail (Product product, PSProductList productList)
+        public ProductDetail (Product product, PsProductList productList)
 		{
-			InitializeComponent ();
-            this.product = product;
-            this.productList = productList;
-            refreshToolbarItem = new ToolbarItem()
+		    InitializeComponent ();
+            _product = product;
+            _productList = productList;
+            var refreshToolbarItem = new ToolbarItem()
             {
                 Text = "Rafraîchir",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "refresh.png"
             };
-            editToolbarItem = new ToolbarItem()
+            var editToolbarItem = new ToolbarItem()
             {
                 Text = "Modifier",
                 Order = ToolbarItemOrder.Primary,
@@ -41,16 +41,16 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             editToolbarItem.Clicked += EditToolbarItem_Clicked;
             ToolbarItems.Add(refreshToolbarItem);
             ToolbarItems.Add(editToolbarItem);
-            min = product.PastryShop.JoinDate;
-            max = DateTime.Now;
-            year = max.Year;
-            semester = getSemester(max.Month);
+            _min = product.PastryShop.JoinDate;
+            _max = DateTime.Now;
+            _year = _max.Year;
+            _semester = GetSemester(_max.Month);
             Load(false);
 		}
 
 	    private async void EditToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ProductEditForm(product, this));
+            await Navigation.PushAsync(new ProductEditForm(_product, this));
         }
 
         private void RefreshToolbarItem_Clicked(object sender, EventArgs e)
@@ -65,10 +65,10 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             Loading.IsRunning = true;
             if (reload)
             {
-                var productRC = new RestClient<Product>();
+                var productRc = new RestClient<Product>();
                 try
                 {
-                    product = await productRC.GetAsyncById(product.ID);
+                    _product = await productRc.GetAsyncById(_product.ID);
                 }
                 catch (HttpRequestException)
                 {
@@ -80,7 +80,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                     await Navigation.PopAsync();
                     return;
                 }
-                if (product == null)
+                if (_product == null)
                 {
                     LoadingLayout.IsVisible = false;
                     Loading.IsRunning = false;
@@ -89,17 +89,17 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                     return;
                 }
             }
-            Name.Text = product.Name;
-            Desc.Text = product.Description;
-            Price.Text = product.Price.ToString();
-            SaleUnit.Text = product.SaleUnit.Unit;
-            Category.Text = product.Category.CategoryName;
-            var chartRC = new ChartsRestClient();
+            Name.Text = _product.Name;
+            Desc.Text = _product.Description;
+            Price.Text = _product.Price.ToString(CultureInfo.InvariantCulture);
+            SaleUnit.Text = _product.SaleUnit.Unit;
+            Category.Text = _product.Category.CategoryName;
+            var chartRc = new ChartsRestClient();
             try
             {
                 var htmlWebView = new HtmlWebViewSource()
                 {
-                    Html = await chartRC.GetChartView(App.ServerURL + "api/GetProductChartView/" + product.ID + "/" + year + "/" + semester)
+                    Html = await chartRc.GetChartView(App.ServerUrl + "api/GetProductChartView/" + _product.ID + "/" + _year + "/" + _semester)
                 };
                 ChartWebView.Source = htmlWebView;
             }
@@ -108,7 +108,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                 return;
             }
-            if (max.Year == year && getSemester(max.Month) == semester)
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester)
             {
                 SuivantLabel.TextColor = Color.LightSkyBlue;
             }
@@ -117,7 +117,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 SuivantLabel.TextColor = Color.DodgerBlue;
             }
 
-            if (min.Year == year && getSemester(min.Month) == semester)
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester)
             {
                 PrecedentLabel.TextColor = Color.LightSkyBlue;
             }
@@ -132,31 +132,31 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 
 	    private void PrecedentTapped(object sender, EventArgs e)
 	    {
-            if (min.Year == year && getSemester(min.Month) == semester) return;
-            if (semester == 2)
-                semester--;
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester) return;
+            if (_semester == 2)
+                _semester--;
             else
             {
-                semester = 2;
-                year--;
+                _semester = 2;
+                _year--;
             }
             Load(false);
         }
 
 	    private void SuivantTapped(object sender, EventArgs e)
 	    {
-            if (max.Year == year && getSemester(max.Month) == semester) return;
-            if (semester == 1)
-                semester++;
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester) return;
+            if (_semester == 1)
+                _semester++;
             else
             {
-                semester = 1;
-                year++;
+                _semester = 1;
+                _year++;
             }
             Load(false);
         }
 
-        private int getSemester(int month)
+        private int GetSemester(int month)
         {
             return month <= 6 ? 1 : 2;
         }
@@ -164,14 +164,14 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	    public void Reload()
 	    {
 	        Load(true);
-	        updateParent = true;
+	        _updateParent = true;
 	    }
 
 	    protected override void OnDisappearing()
 	    {
-	        if (updateParent)
+	        if (_updateParent)
 	        {
-	            productList.Reload();
+	            _productList.Reload();
 	        }
 	    }
 	}

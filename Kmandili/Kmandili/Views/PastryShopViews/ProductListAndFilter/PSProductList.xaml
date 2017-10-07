@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Kmandili.Converters"
-             x:Class="Kmandili.Views.PastryShopViews.ProductListAndFilter.PSProductList">
+             x:Class="Kmandili.Views.PastryShopViews.ProductListAndFilter.PsProductList">
 <ContentPage.Resources>
     <ResourceDictionary>
         <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>

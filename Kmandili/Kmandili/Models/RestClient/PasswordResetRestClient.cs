@@ -10,7 +10,7 @@ namespace Kmandili.Models.RestClient
         {
             if (!(await App.CheckConnection())) return false;
             var httpClient = new HttpClient();
-            var result = await httpClient.PutAsync(App.ServerURL + "api/passwords/" + email + "/" + newPassword + "/", null);
+            var result = await httpClient.PutAsync(App.ServerUrl + "api/passwords/" + email + "/" + newPassword + "/", null);
             return result.IsSuccessStatusCode;
         }
     }

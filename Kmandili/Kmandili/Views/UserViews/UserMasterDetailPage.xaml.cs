@@ -46,7 +46,6 @@ namespace Kmandili.Views.UserViews
                 }
             };
             Master = new UserMasterPage(this, user);
-            //Detail = new NavigationPage(tab);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
@@ -59,7 +58,7 @@ namespace Kmandili.Views.UserViews
                     Detail = tab;
                     break;
                 default:
-                    Detail = new NavigationPage(tab); ;
+                    Detail = new NavigationPage(tab);
                     break;
             }
             IsPresentedChanged += UserMasterDetailPage_IsPresentedChanged;

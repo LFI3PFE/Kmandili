@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace Kmandili
 {
-    public partial class MainPage : ContentPage
+    public partial class MainPage
     {
 
         public MainPage()
@@ -23,7 +23,7 @@ namespace Kmandili
             NavigationPage.SetHasNavigationBar(this, false);
         }
 
-        public async Task<bool> valid()
+        public async Task<bool> Valid()
         {
             if (String.IsNullOrEmpty(Email.Text))
             {
@@ -35,7 +35,7 @@ namespace Kmandili
                 await DisplayAlert("Erreur mot de passe", "Mot de passe obligatoir", "OK");
                 return false;
             }
-            if (!App.isValidEmail(Email.Text))
+            if (!App.IsValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur Email", "Adresse email invalide", "OK");
                 return false;
@@ -62,7 +62,7 @@ namespace Kmandili
             await PopupNavigation.PopAllAsync();
         }
 
-        private void isLoading(bool loading)
+        private void IsLoading(bool loading)
         {
             ResetPasswordLabel.IsVisible = !loading;
             Loading.IsRunning = loading;
@@ -75,7 +75,7 @@ namespace Kmandili
 
         public async void SignIn(Object sender, EventArgs e)
         {
-            if (await valid())
+            if (await Valid())
             {
                 SignInAction(Email.Text, Password.Text);
             }
@@ -83,7 +83,7 @@ namespace Kmandili
 
         private async void SignInAction(string email, string password)
         {
-            isLoading(true);
+            IsLoading(true);
             if (Settings.Id < 0 || App.TokenExpired())
             {
                 var authorizationRestClient = new AuthorizationRestClient();
@@ -92,9 +92,9 @@ namespace Kmandili
                     var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
                     if (tokenResponse == null)
                     {
-                        isLoading(false);
+                        IsLoading(false);
                         await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
-                        App.isConnected = false;
+                        App.IsConnected = false;
                         Email.Focus();
                         return;
                     }
@@ -103,26 +103,26 @@ namespace Kmandili
                 catch (HttpRequestException)
                 {
                     await PopupNavigation.PopAllAsync();
-                    isLoading(false);
-                    App.isConnected = false;
+                    IsLoading(false);
+                    App.IsConnected = false;
                     await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                     return;
                 }
             }
-            App.isConnected = true;
+            App.IsConnected = true;
             Email.Text = "";
             Password.Text = "";
             switch (Settings.Type)
             {
                 case "a":
-                    isLoading(false);
-                    var adminRC = new AdminRestClient();
-                    var ad = await adminRC.GetAdmin();
+                    IsLoading(false);
+                    var adminRc = new AdminRestClient();
+                    var ad = await adminRc.GetAdmin();
                     if(ad.UserName != Settings.Email || ad.Password != Settings.Password)
                     {
                         await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
                         Settings.ClearSettings();
-                        isLoading(false);
+                        IsLoading(false);
                         return;
                     }
                     await Navigation.PushAsync(new AdminMasterDetailPage());
@@ -138,7 +138,7 @@ namespace Kmandili
                         {
                             await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
                             Settings.ClearSettings();
-                            isLoading(false);
+                            IsLoading(false);
                             return;
                         }
                     }
@@ -150,18 +150,18 @@ namespace Kmandili
                                 "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                 "Ok");
                         Settings.ClearSettings();
-                        isLoading(false);
+                        IsLoading(false);
                         return;
                     }
-                    isLoading(false);
+                    IsLoading(false);
                     if (u == null)
                     {
                         await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
                         Settings.ClearSettings();
-                        isLoading(false);
+                        IsLoading(false);
                         return;
                     }
-                    App.setMainPage(new UserMasterDetailPage(u));
+                    App.SetMainPage(new UserMasterDetailPage(u));
                     break;
                 case "p":
                     var pastryShopRestClient = new PastryShopRestClient();
@@ -173,7 +173,7 @@ namespace Kmandili
                         {
                             await DisplayAlert("Erreur", "Impossible de se connécter! Ça peut être a cause de mise à jour des coordonnées sur un autre appareil, Merci de resaisir vos coordonnées.", "Ok");
                             Settings.ClearSettings();
-                            isLoading(false);
+                            IsLoading(false);
                             return;
                         }
                     }
@@ -185,18 +185,18 @@ namespace Kmandili
                                 "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                 "Ok");
                         Settings.ClearSettings();
-                        isLoading(false);
+                        IsLoading(false);
                         return;
                     }
-                    isLoading(false);
+                    IsLoading(false);
                     if (p == null)
                     {
                         await DisplayAlert("Erreur", "Impossible de se connecter au serveur.", "Ok");
                         Settings.ClearSettings();
-                        isLoading(false);
+                        IsLoading(false);
                         return;
                     }
-                    App.setMainPage(new PastryShopMasterDetailPage(p));
+                    App.SetMainPage(new PastryShopMasterDetailPage(p));
                     break;
             }
         }
@@ -208,7 +208,7 @@ namespace Kmandili
 
         protected override void OnAppearing()
         {
-            if (Settings.Id > -1 && !App.isConnected)
+            if (Settings.Id > -1 && !App.IsConnected)
             {
                 SignInAction(Settings.Email, Settings.Password);
             }

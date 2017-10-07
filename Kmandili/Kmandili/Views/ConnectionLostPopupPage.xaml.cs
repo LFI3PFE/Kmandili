@@ -1,11 +1,10 @@
-﻿using Rg.Plugins.Popup.Pages;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ConnectionLostPopupPage : PopupPage
+	public partial class ConnectionLostPopupPage
 	{
 		public ConnectionLostPopupPage()
 		{

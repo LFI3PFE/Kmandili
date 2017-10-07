@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,14 +8,14 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PasswordResetPopupPage : PopupPage
+	public partial class PasswordResetPopupPage
 	{
-	    private string email;
+	    private readonly string _email;
 
 		public PasswordResetPopupPage (string email)
 		{
             BackgroundColor = Color.FromHex("#CC000000");
-		    this.email = email;
+		    _email = email;
             InitializeComponent ();
 		}
 
@@ -30,10 +29,10 @@ namespace Kmandili.Views
 	            Password.Focus();
                 return;
 	        }
-            PasswordResetRestClient passwordRC = new PasswordResetRestClient();
+            PasswordResetRestClient passwordRc = new PasswordResetRestClient();
 	        try
 	        {
-                if (!(await passwordRC.PutAsync(email, Password.Text)))
+                if (!(await passwordRc.PutAsync(_email, Password.Text)))
                 {
                     var choice = await
                         DisplayAlert("Erreur", "Une erreur s'est produite lors de la mise à jour du mot de passe!", "Ressayer",

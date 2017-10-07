@@ -182,10 +182,10 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
 
         protected override void OnAppearing()
         {
-            if (App.updatePastryList)
+            if (App.UpdatePastryList)
             {
                 load();
-                App.updatePastryList = false;
+                App.UpdatePastryList = false;
             }
         }
 

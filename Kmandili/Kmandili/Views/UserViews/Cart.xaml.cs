@@ -2,6 +2,7 @@
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using Kmandili.Helpers;
@@ -12,19 +13,19 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class Cart : ContentPage
+	public partial class Cart
 	{
 		public Cart ()
 		{
 			InitializeComponent ();
 
-            updateView();
+            UpdateView();
         }
 
-        private void updateView()
+        private void UpdateView()
         {
             MainLayout.Children.Clear();
-            this.ToolbarItems.Clear();
+            ToolbarItems.Clear();
 
 #pragma warning disable CS0618 // Type or member is obsolete
             ToolbarItem confirmToolbarItem = new ToolbarItem
@@ -42,10 +43,10 @@ namespace Kmandili.Views.UserViews
                 Priority = 1
             };
 #pragma warning restore CS0618 // Type or member is obsolete
-            confirmToolbarItem.Clicked += confirmToolbarItemClicked;
-            clearToolbarItem.Clicked += clearToolbarItemClicked;
-            this.ToolbarItems.Add(confirmToolbarItem);
-            this.ToolbarItems.Add(clearToolbarItem);
+            confirmToolbarItem.Clicked += ConfirmToolbarItemClicked;
+            clearToolbarItem.Clicked += ClearToolbarItemClicked;
+            ToolbarItems.Add(confirmToolbarItem);
+            ToolbarItems.Add(clearToolbarItem);
             //PastryList.ItemsSource = App.Cart;
             MainLayout.Children.Add(MakeCartPastryView());
 
@@ -55,15 +56,15 @@ namespace Kmandili.Views.UserViews
                 CartTotalStackLayout.IsVisible = false;
                 EmptyCartLabel.IsVisible = true;
                 
-                this.ToolbarItems.Remove(confirmToolbarItem);
-                this.ToolbarItems.Remove(clearToolbarItem);
+                ToolbarItems.Remove(confirmToolbarItem);
+                ToolbarItems.Remove(clearToolbarItem);
             }
-            CartTotal.Text = App.Cart.Sum(p => p.Total).ToString();
+            CartTotal.Text = App.Cart.Sum(p => p.Total).ToString(CultureInfo.InvariantCulture);
         }
 
         private StackLayout MakeCartPastryView()
         {
-            StackLayout MainStackLayout = new StackLayout();
+            StackLayout mainStackLayout = new StackLayout();
             foreach(CartPastry cartPastry in App.Cart)
             {
                 StackLayout headerStackLayout = new StackLayout()
@@ -76,8 +77,13 @@ namespace Kmandili.Views.UserViews
 
                 StackLayout deleveryLayout = new StackLayout() { Orientation = StackOrientation.Vertical, HorizontalOptions = LayoutOptions.FillAndExpand, Padding = new Thickness(10, 0, 10, 0) };
                 StackLayout innerDeleveryLayout = new StackLayout() {Orientation = StackOrientation.Horizontal, Spacing = 20};
-                Picker deleveryMethodPicker = new Picker() { ItemsSource = cartPastry.PastryShop.PastryShopDeleveryMethods.ToList(), ClassId = cartPastry.PastryShop.ID.ToString(), HorizontalOptions = LayoutOptions.FillAndExpand};
-                deleveryMethodPicker.SelectedIndex = 0;
+                Picker deleveryMethodPicker = new Picker
+                {
+                    ItemsSource = cartPastry.PastryShop.PastryShopDeleveryMethods.ToList(),
+                    ClassId = cartPastry.PastryShop.ID.ToString(),
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    SelectedIndex = 0
+                };
                 cartPastry.DeleveryMethod = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(0).DeleveryMethod;
                 deleveryMethodPicker.SelectedIndexChanged += DeleveryMethodPicker_SelectedIndexChanged;
 
@@ -88,7 +94,7 @@ namespace Kmandili.Views.UserViews
                     Children =
                     {
                         new Label() { Text = "Delais: ", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold},
-                        new Label() { Text = (deleveryMethodPicker.SelectedItem as PastryShopDeleveryMethod).DeleveryDelay.ToString(), TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center }
+                        new Label() { Text = (deleveryMethodPicker.SelectedItem as PastryShopDeleveryMethod)?.DeleveryDelay.ToString(), TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center }
                     }
                 });
                 
@@ -96,8 +102,15 @@ namespace Kmandili.Views.UserViews
                 deleveryLayout.Children.Add(innerDeleveryLayout);
 
                 StackLayout paymentLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.FillAndExpand, Spacing = 10, Padding = new Thickness(10, 0, 10, 0) };
-                Picker paymentPicker = new Picker() { ItemsSource = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(deleveryMethodPicker.SelectedIndex).PastryDeleveryPayments.ToList(), ClassId = cartPastry.PastryShop.ID.ToString(), HorizontalOptions = LayoutOptions.FillAndExpand };
-                paymentPicker.SelectedIndex = 0;
+                Picker paymentPicker = new Picker
+                {
+                    ItemsSource =
+                        cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(deleveryMethodPicker.SelectedIndex)
+                            .PastryDeleveryPayments.ToList(),
+                    ClassId = cartPastry.PastryShop.ID.ToString(),
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    SelectedIndex = 0
+                };
                 cartPastry.PaymentMethod = cartPastry.PastryShop.PastryShopDeleveryMethods.ElementAt(deleveryMethodPicker.SelectedIndex).PastryDeleveryPayments.ElementAt(0).Payment;
                 paymentPicker.SelectedIndexChanged += PaymentPicker_SelectedIndexChanged;
                 paymentLayout.Children.Add(new Label() { Text = "Payment:", TextColor = Color.Black, FontSize = 20, VerticalTextAlignment = TextAlignment.Center, FontAttributes = FontAttributes.Bold});
@@ -121,7 +134,7 @@ namespace Kmandili.Views.UserViews
                     Orientation = StackOrientation.Horizontal,
                 };
                 footerStackLayout.Children.Add(new Label() { Text = "Total:", TextColor = Color.Gray, FontSize = 25 });
-                footerStackLayout.Children.Add(new Label() { Text = cartPastry.Total.ToString(), TextColor = Color.Gray, FontSize = 25 });
+                footerStackLayout.Children.Add(new Label() { Text = cartPastry.Total.ToString(CultureInfo.InvariantCulture), TextColor = Color.Gray, FontSize = 25 });
                 footerStackLayout.Children.Add(new Label() { Text = "TND", TextColor = Color.Gray, FontSize = 20 });
 
                 StackLayout cellStack = new StackLayout()
@@ -132,38 +145,48 @@ namespace Kmandili.Views.UserViews
                 cellStack.Children.Add(productStackLayout);
                 cellStack.Children.Add(footerStackLayout);
 
-                MainStackLayout.Children.Add(cellStack);
+                mainStackLayout.Children.Add(cellStack);
             }
-            return MainStackLayout;
+            return mainStackLayout;
         }
 
         private void PaymentPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if((sender as Picker).SelectedItem != null)
+            if((sender as Picker)?.SelectedItem != null)
             {
-                App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker).ClassId)).PaymentMethod = ((sender as Picker).SelectedItem as PastryDeleveryPayment).Payment;
+                var cartObject = App.Cart
+                    .FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker)?.ClassId ?? throw new InvalidOperationException()));
+                if (cartObject != null)
+                    cartObject.PaymentMethod = (((Picker) sender).SelectedItem as PastryDeleveryPayment)?.Payment;
             }
         }
 
         private void DeleveryMethodPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker).ClassId)).DeleveryMethod = ((sender as Picker).SelectedItem as PastryShopDeleveryMethod).DeleveryMethod;
-            ((((sender as Picker).Parent as StackLayout).Children[1] as StackLayout).Children[1] as Label).Text =
-                ((sender as Picker).SelectedItem as PastryShopDeleveryMethod).DeleveryDelay.ToString();
-            Picker paymentPicker = ((((((sender as Picker).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[2] as StackLayout).Children[1] as Picker);
-            paymentPicker.ItemsSource = App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker).ClassId)).PastryShop.PastryShopDeleveryMethods.ElementAt((sender as Picker).SelectedIndex).PastryDeleveryPayments.ToList();
-            paymentPicker.SelectedIndex = 0;
+            var cartObject = App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse(((Picker) sender).ClassId));
+            if (cartObject != null)
+                cartObject.DeleveryMethod =
+                    (((Picker) sender).SelectedItem as PastryShopDeleveryMethod)?.DeleveryMethod;
+            var label = ((Label) (((sender as Picker)?.Parent as StackLayout)?.Children[1] as StackLayout)?.Children[1]);
+            if (label != null)
+                label.Text = (((Picker) sender).SelectedItem as PastryShopDeleveryMethod)?.DeleveryDelay.ToString();
+            Picker paymentPicker = ((Picker) (((((sender as Picker)?.Parent as StackLayout)?.Parent as StackLayout)?.Parent as StackLayout)?.Children[2] as StackLayout)?.Children[1]);
+            if (paymentPicker != null)
+            {
+                paymentPicker.ItemsSource = App.Cart.FirstOrDefault(c => c.PastryShop.ID == Int32.Parse((sender as Picker)?.ClassId ?? throw new InvalidOperationException()))?.PastryShop.PastryShopDeleveryMethods.ElementAt(((Picker) sender).SelectedIndex).PastryDeleveryPayments.ToList();
+                paymentPicker.SelectedIndex = 0;
+            }
         }
 
         private StackLayout MakeProductLayout(CartProduct cartProduct)
         {
-            StackLayout MainStackLayout = new StackLayout()
+            StackLayout mainStackLayout = new StackLayout()
             {
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center,
             };
             //******   Cell Layout   *******\\
-            StackLayout CellLayout = new StackLayout()
+            StackLayout cellLayout = new StackLayout()
             {
                 Orientation = StackOrientation.Horizontal,
                 BackgroundColor = Color.White,
@@ -171,12 +194,12 @@ namespace Kmandili.Views.UserViews
             };
 
             //******   Image Layout   *******\\
-            StackLayout ImageStackLayout = new StackLayout()
+            StackLayout imageStackLayout = new StackLayout()
             {
                 Padding = 5,
                 VerticalOptions = LayoutOptions.Center,
             };
-            StackLayout ImagePlaceHolderStackLayout = new StackLayout()
+            StackLayout imagePlaceHolderStackLayout = new StackLayout()
             {
                 BackgroundColor = Color.Gray,
                 HeightRequest = 80,
@@ -184,13 +207,13 @@ namespace Kmandili.Views.UserViews
             };
             Image productImage = new Image()
             {
-                Source = cartProduct.Product.Pic,
+                Source = App.ServerUrl + "Uploads/" + cartProduct.Product.Pic,
                 Aspect = Aspect.AspectFill,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 HeightRequest = 80
             };
-            ImagePlaceHolderStackLayout.Children.Add(productImage);
-            ImageStackLayout.Children.Add(ImagePlaceHolderStackLayout);
+            imagePlaceHolderStackLayout.Children.Add(productImage);
+            imageStackLayout.Children.Add(imagePlaceHolderStackLayout);
             //*************\\
 
             //******   Product Information Layout   *******\\
@@ -209,7 +232,7 @@ namespace Kmandili.Views.UserViews
             StackLayout removeIconStackLayout = new StackLayout() { HorizontalOptions = LayoutOptions.End, Padding = new Thickness(0, 5, 10, 0) };
             Image removeIcon= new Image() { Source = "delete.png", HeightRequest = 22, HorizontalOptions= LayoutOptions.End};
             TapGestureRecognizer removeIconTapGesture = new TapGestureRecognizer();
-            removeIconTapGesture.Tapped += removeFromCart;
+            removeIconTapGesture.Tapped += RemoveFromCart;
             removeIcon.GestureRecognizers.Add(removeIconTapGesture);
             removeIconStackLayout.Children.Add(removeIcon);
 
@@ -220,44 +243,44 @@ namespace Kmandili.Views.UserViews
             //*************\\
 
             //******   ProductInfo Layout   *******\\
-            StackLayout InfoLayout = new StackLayout();
-            StackLayout PriceLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Padding = new Thickness(10, 0, 0, 0) };
-            PriceLayout.Children.Add(new Label() { Text = "Prix:", FontSize = 20, TextColor = Color.Black });
-            PriceLayout.Children.Add(new Label() { Text = cartProduct.Product.Price.ToString(), FontSize = 20, TextColor = Color.Black });
-            PriceLayout.Children.Add(new Label() { Text = "TND", FontSize = 18, TextColor = Color.Gray });
-            PriceLayout.Children.Add(new Label() { Text = "/", FontSize = 20, TextColor = Color.Black });
-            PriceLayout.Children.Add(new Label() { Text = cartProduct.Product.SaleUnit.Unit, FontSize = 20, TextColor = Color.Black });
+            StackLayout infoLayout = new StackLayout();
+            StackLayout priceLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Padding = new Thickness(10, 0, 0, 0) };
+            priceLayout.Children.Add(new Label() { Text = "Prix:", FontSize = 20, TextColor = Color.Black });
+            priceLayout.Children.Add(new Label() { Text = cartProduct.Product.Price.ToString(CultureInfo.InvariantCulture), FontSize = 20, TextColor = Color.Black });
+            priceLayout.Children.Add(new Label() { Text = "TND", FontSize = 18, TextColor = Color.Gray });
+            priceLayout.Children.Add(new Label() { Text = "/", FontSize = 20, TextColor = Color.Black });
+            priceLayout.Children.Add(new Label() { Text = cartProduct.Product.SaleUnit.Unit, FontSize = 20, TextColor = Color.Black });
             //*************\\
             //******   Quantity&Total Layout   *******\\
-            StackLayout QuantityTotalLayout = new StackLayout();
-            StackLayout QuantityLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 5 };
-            QuantityLayout.Children.Add(new Label() { Text = "Quantité:", FontSize = 20, TextColor = Color.Black });
-            QuantityLayout.Children.Add(new Label() { Text = cartProduct.Quantity.ToString(), FontSize = 20, TextColor = Color.Black });
+            StackLayout quantityTotalLayout = new StackLayout();
+            StackLayout quantityLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 5 };
+            quantityLayout.Children.Add(new Label() { Text = "Quantité:", FontSize = 20, TextColor = Color.Black });
+            quantityLayout.Children.Add(new Label() { Text = cartProduct.Quantity.ToString(), FontSize = 20, TextColor = Color.Black });
 
-            StackLayout TotalLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 5 };
-            QuantityLayout.Children.Add(new Label() { Text = "Total:", FontSize = 20, TextColor = Color.Black });
-            QuantityLayout.Children.Add(new Label() { Text = cartProduct.Total.ToString(), FontSize = 20, TextColor = Color.Black });
-            QuantityLayout.Children.Add(new Label() { Text = "TND", FontSize = 18, TextColor = Color.Gray });
+            StackLayout totalLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 5 };
+            quantityLayout.Children.Add(new Label() { Text = "Total:", FontSize = 20, TextColor = Color.Black });
+            quantityLayout.Children.Add(new Label() { Text = cartProduct.Total.ToString(CultureInfo.InvariantCulture), FontSize = 20, TextColor = Color.Black });
+            quantityLayout.Children.Add(new Label() { Text = "TND", FontSize = 18, TextColor = Color.Gray });
 
-            QuantityTotalLayout.Children.Add(QuantityLayout);
-            QuantityTotalLayout.Children.Add(TotalLayout);
+            quantityTotalLayout.Children.Add(quantityLayout);
+            quantityTotalLayout.Children.Add(totalLayout);
             //*************\\
-            InfoLayout.Children.Add(PriceLayout);
-            InfoLayout.Children.Add(QuantityTotalLayout);
+            infoLayout.Children.Add(priceLayout);
+            infoLayout.Children.Add(quantityTotalLayout);
 
             productInformationStackLayout.Children.Add(headerGrid);
-            productInformationStackLayout.Children.Add(InfoLayout);
+            productInformationStackLayout.Children.Add(infoLayout);
 
-            CellLayout.Children.Add(ImageStackLayout);
-            CellLayout.Children.Add(productInformationStackLayout);
+            cellLayout.Children.Add(imageStackLayout);
+            cellLayout.Children.Add(productInformationStackLayout);
             //*************\\
-            MainStackLayout.Children.Add(new Label() { Text = cartProduct.Product.ID.ToString(), IsVisible = false });
-            MainStackLayout.Children.Add(CellLayout);
+            mainStackLayout.Children.Add(new Label() { Text = cartProduct.Product.ID.ToString(), IsVisible = false });
+            mainStackLayout.Children.Add(cellLayout);
             //*************\\
-            return MainStackLayout;
+            return mainStackLayout;
         }
 
-        private async void confirmToolbarItemClicked(object sender, EventArgs e)
+        private async void ConfirmToolbarItemClicked(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
             foreach(CartPastry cartPastry in App.Cart)
@@ -272,10 +295,10 @@ namespace Kmandili.Views.UserViews
                     SeenUser = false,
                     SeenPastryShop = false,
                 };
-                RestClient<Order> orderRC = new RestClient<Order>();
+                RestClient<Order> orderRc = new RestClient<Order>();
                 try
                 {
-                    order = await orderRC.PostAsync(order);
+                    order = await orderRc.PostAsync(order);
                 }
                 catch (HttpRequestException)
                 {
@@ -289,7 +312,7 @@ namespace Kmandili.Views.UserViews
                 }
                 if(order != null)
                 {
-                    RestClient<OrderProduct> orderProductRC = new RestClient<OrderProduct>();
+                    RestClient<OrderProduct> orderProductRc = new RestClient<OrderProduct>();
                     foreach (CartProduct cartProduct in cartPastry.CartProducts)
                     {
                         OrderProduct orderProduct = new OrderProduct()
@@ -300,7 +323,7 @@ namespace Kmandili.Views.UserViews
                         };
                         try
                         {
-                            orderProduct = await orderProductRC.PostAsync(orderProduct);
+                            orderProduct = await orderProductRc.PostAsync(orderProduct);
                         }
                         catch (HttpRequestException)
                         {
@@ -319,10 +342,10 @@ namespace Kmandili.Views.UserViews
                             return;
                         }
                     }
-                    EmailRestClient emailRC = new EmailRestClient();
+                    EmailRestClient emailRc = new EmailRestClient();
                     try
                     {
-                        await emailRC.SendOrderEmail(order.ID);
+                        await emailRc.SendOrderEmail(order.ID);
                     }
                     catch (HttpRequestException)
                     {
@@ -340,25 +363,19 @@ namespace Kmandili.Views.UserViews
             await DisplayAlert("Succès", "Votre Commande a été passée avec succès.\nUn email vous a été envoyé avec plus d'informations.", "Ok");
             await PopupNavigation.PopAsync();
             App.Cart.Clear();
-            updateView();
+            UpdateView();
         }
 
-        private void clearToolbarItemClicked(object sender, EventArgs e)
+        private void ClearToolbarItemClicked(object sender, EventArgs e)
         {
             App.Cart.Clear();
-            updateView();
+            UpdateView();
         }
 
-        private void SelectedNot(Object sender, ItemTappedEventArgs e)
-        {
-            ListView listView = sender as ListView;
-            listView.SelectedItem = null;
-        }
-
-        private void removeFromCart(object sender, EventArgs e)
+	    private void RemoveFromCart(object sender, EventArgs e)
         {
             Image image = (Image)sender;
-            int id = Int32.Parse(((((((image.Parent as StackLayout).Parent as Grid).Parent as StackLayout).Parent as StackLayout).Parent as StackLayout).Children[0] as Label).Text);
+            int id = Int32.Parse(((((((image.Parent as StackLayout)?.Parent as Grid)?.Parent as StackLayout)?.Parent as StackLayout)?.Parent as StackLayout)?.Children[0] as Label)?.Text ?? throw new InvalidOperationException());
             foreach(CartPastry cartPastry in App.Cart)
             {
                 foreach(CartProduct cartProduct in cartPastry.CartProducts)
@@ -383,9 +400,9 @@ namespace Kmandili.Views.UserViews
                     }
                 }
             }
-            done:;
+            done:
             InitializeComponent();
-            updateView();
+            UpdateView();
         }
     }
 }

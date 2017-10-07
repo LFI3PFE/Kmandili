@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,27 +9,26 @@ using Kmandili.Models.RestClient;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Rg.Plugins.Popup.Services;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ProductEditForm : ContentPage
+	public partial class ProductEditForm
 	{
-	    private Product product;
-	    private List<SaleUnit> saleUnits;
-	    private List<Category> categories;
+	    private Product _product;
+	    private List<SaleUnit> _saleUnits;
+	    private List<Category> _categories;
         private MediaFile _mediaFilePic;
-	    private ProductDetail productDetail;
+	    private readonly ProductDetail _productDetail;
 
-	    private bool updateParent = false;
+	    private bool _updateParent;
 
         public ProductEditForm (Product product, ProductDetail productDetail)
 		{
 			InitializeComponent ();
-		    this.product = product;
-            this.productDetail = productDetail;
+		    _product = product;
+            _productDetail = productDetail;
             Load(false);
 		}
 
@@ -37,10 +37,10 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	        await PopupNavigation.PushAsync(new LoadingPopupPage());
 	        if (reload)
 	        {
-	            var productRC = new RestClient<Product>();
+	            var productRc = new RestClient<Product>();
 	            try
 	            {
-                    this.product = await productRC.GetAsyncById(product.ID);
+                    _product = await productRc.GetAsyncById(_product.ID);
                 }
 	            catch (HttpRequestException)
 	            {
@@ -52,19 +52,19 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                     await Navigation.PopAsync();
                     return;
 	            }
-	            if (this.product == null)
+	            if (_product == null)
 	            {
 	                await DisplayAlert("Erreur", "Erreur lors de la récupération des données.", "Ok");
 	                await PopupNavigation.PopAsync();
 	                return;
 	            }
 	        }
-	        var saleUnitRC = new RestClient<SaleUnit>();
-	        var categorieRC = new RestClient<Category>();
+	        var saleUnitRc = new RestClient<SaleUnit>();
+	        var categorieRc = new RestClient<Category>();
 	        try
 	        {
-                saleUnits = await saleUnitRC.GetAsync();
-                categories = await categorieRC.GetAsync();
+                _saleUnits = await saleUnitRc.GetAsync();
+                _categories = await categorieRc.GetAsync();
             }
 	        catch (HttpRequestException)
 	        {
@@ -76,24 +76,24 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 await Navigation.PopAsync();
                 return;
 	        }
-            if (saleUnits == null)
+            if (_saleUnits == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            if (categories == null)
+            if (_categories == null)
             {
                 await PopupNavigation.PopAsync();
                 return;
             }
-            ProductName.Text = product.Name;
-	        Price.Text = product.Price.ToString();
-	        PicPreview.Source = product.Pic;
-            ProductDescription.Text = product.Description;
-	        PickerUnit.ItemsSource = saleUnits;
-	        PickerUnit.SelectedIndex = saleUnits.IndexOf(saleUnits.FirstOrDefault(s => s.ID == product.SaleUnit_FK));
-	        CategoryPicker.ItemsSource = categories;
-	        CategoryPicker.SelectedIndex = categories.IndexOf(categories.FirstOrDefault(s => s.ID == product.Category_FK));
+            ProductName.Text = _product.Name;
+	        Price.Text = _product.Price.ToString(CultureInfo.InvariantCulture);
+	        PicPreview.Source = _product.Pic;
+            ProductDescription.Text = _product.Description;
+	        PickerUnit.ItemsSource = _saleUnits;
+	        PickerUnit.SelectedIndex = _saleUnits.IndexOf(_saleUnits.FirstOrDefault(s => s.ID == _product.SaleUnit_FK));
+	        CategoryPicker.ItemsSource = _categories;
+	        CategoryPicker.SelectedIndex = _categories.IndexOf(_categories.FirstOrDefault(s => s.ID == _product.Category_FK));
 	        await PopupNavigation.PopAsync();
 	    }
 
@@ -112,10 +112,10 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
         private async void NextButton_OnClick(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            var picSrc = product.Pic;
+            var picSrc = _product.Pic;
             if (_mediaFilePic != null)
             {
-                if (!(await Delete(product.Pic)))
+                if (!(await Delete(_product.Pic)))
                 {
                     await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur lors de la mise à jour du produit.", "Ok");
@@ -131,19 +131,19 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
             }
             Product newProduct = new Product()
             {
-                ID = product.ID,
+                ID = _product.ID,
                 Name = ProductName.Text,
                 Description = ProductDescription.Text,
-                SaleUnit_FK = (PickerUnit.SelectedItem as SaleUnit).ID,
-                Category_FK = (CategoryPicker.SelectedItem as Category).ID,
-                PastryShop_FK = product.PastryShop_FK,
+                SaleUnit_FK = ((SaleUnit) PickerUnit.SelectedItem).ID,
+                Category_FK = ((Category) CategoryPicker.SelectedItem).ID,
+                PastryShop_FK = _product.PastryShop_FK,
                 Pic = picSrc,
                 Price = double.Parse(Price.Text),
             };
-            var productRC = new RestClient<Product>();
+            var productRc = new RestClient<Product>();
             try
             {
-                if (!(await productRC.PutAsync(product.ID, newProduct)))
+                if (!(await productRc.PutAsync(_product.ID, newProduct)))
                 {
                     await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur lors de la mise à jour du produit.", "Ok");
@@ -161,15 +161,15 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 return;
             }
             await PopupNavigation.PopAsync();
-            updateParent = true;
+            _updateParent = true;
             await Navigation.PopAsync();
         }
 
 	    protected override void OnDisappearing()
 	    {
-	        if (updateParent)
+	        if (_updateParent)
 	        {
-	            productDetail.Reload();
+	            _productDetail.Reload();
 	        }
 	    }
 
@@ -182,7 +182,7 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
                 var res = await new UploadRestClient().Upload(stream, fileName);
                 if (res)
                 {
-                    return App.ServerURL + "Uploads/" + fileName + ".jpg";
+                    return App.ServerUrl + "Uploads/" + fileName + ".jpg";
                 }
                 return null;
             }
@@ -194,14 +194,14 @@ namespace Kmandili.Views.PastryShopViews.ProductListAndFilter
 	        }
         }
 
-        private async Task<bool> Delete(string picURL)
+        private async Task<bool> Delete(string picUrl)
         {
-            string fileName = picURL.Substring(App.ServerURL.Count() + 8, (picURL.Length - (App.ServerURL.Count() + 8)));
+            string fileName = picUrl.Substring(App.ServerUrl.Length + 8, (picUrl.Length - (App.ServerUrl.Length + 8)));
             fileName = fileName.Substring(0, (fileName.Length - 4));
-            UploadRestClient uploadRC = new UploadRestClient();
+            UploadRestClient uploadRc = new UploadRestClient();
             try
             {
-                return (await uploadRC.Delete(fileName));
+                return (await uploadRc.Delete(fileName));
             }
             catch (HttpRequestException)
             {

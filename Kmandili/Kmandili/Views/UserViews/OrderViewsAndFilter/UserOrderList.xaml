@@ -67,9 +67,6 @@
                                                         <Label Text="/" FontSize="15" TextColor="Black"/>
                                                         <Label Text="{Binding Date.Year}" FontSize="15" TextColor="Black"/>
                                                     </StackLayout>
-                                                    <!--<Label Text="TND" FontSize="18" TextColor="Gray"/>
-                                                    <Label Text="/" FontSize="20" TextColor="Black"/>
-                                                    <Label Text="{Binding SaleUnit.Unit}" FontSize="20" TextColor="Black"/>-->
                                                 </StackLayout>
                                             </StackLayout>
                                             <StackLayout Orientation="Horizontal" Spacing="10">

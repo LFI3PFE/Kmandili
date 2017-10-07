@@ -9,22 +9,19 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.PastryShopViews.EditProfile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditDeleveryMethods : ContentPage
+	public partial class EditDeleveryMethods
 	{
-	    //private PastryShopMasterDetailPage pastryShopMasterDetailPage;
-	    private EditProfileInfo editProfileInfo;
-        private PastryShop pastryShop;
-	    private ToolbarItem addToolbarItem;
-	    private bool reloadParent = false;
-	    private int ID;
+	    private readonly EditProfileInfo _editProfileInfo;
+        private PastryShop _pastryShop;
+	    private bool _reloadParent;
+	    private readonly int _id;
 
-		public EditDeleveryMethods (EditProfileInfo editProfileInfo, int ID)
+		public EditDeleveryMethods (EditProfileInfo editProfileInfo, int id)
 		{
-		    this.editProfileInfo = editProfileInfo;
-		    this.ID = ID;
-            //this.pastryShopMasterDetailPage = pastryShopMasterDetailPage;
+		    _editProfileInfo = editProfileInfo;
+		    _id = id;
             InitializeComponent ();
-            addToolbarItem = new ToolbarItem()
+            var addToolbarItem = new ToolbarItem()
             {
                 Text = "Ajouter",
                 Order = ToolbarItemOrder.Primary,
@@ -32,22 +29,22 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             };
             addToolbarItem.Clicked += AddToolbarItem_Clicked;
 		    ToolbarItems.Add(addToolbarItem);
-            Load(reloadParent);
+            Load(_reloadParent);
 		}
 
         private async void AddToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new PEditAddDeleveryMethodForm(this, pastryShop));
+            await PopupNavigation.PushAsync(new PEditAddDeleveryMethodForm(this, _pastryShop));
         }
 
         public async void Load(bool reloadParentval)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            this.reloadParent = reloadParentval;
-	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            _reloadParent = reloadParentval;
+	        PastryShopRestClient pastryShopRc = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(ID);
+                _pastryShop = await pastryShopRc.GetAsyncById(_id);
             }
             catch (HttpRequestException)
             {
@@ -59,13 +56,13 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 await Navigation.PopAsync();
                 return;
             }
-            if (pastryShop == null)
+            if (_pastryShop == null)
             {
                 await PopupNavigation.PopAllAsync();
                 return;
             }
             ContentLayout.Children.Clear();
-	        foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)
+	        foreach (var pastryShopDeleveryMethod in _pastryShop.PastryShopDeleveryMethods)
 	        {
 	            ContentLayout.Children.Add(MakeDeleveryMethodLayout(pastryShopDeleveryMethod));
 	        }
@@ -157,17 +154,17 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
         private async void RemoveGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            if (pastryShop.PastryShopDeleveryMethods.Count == 1)
+            if (_pastryShop.PastryShopDeleveryMethods.Count == 1)
             {
                 await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Il faut avoir au moins une methode de livraison!", "Ok");
                 return;
             }
-            int ID = Int32.Parse((sender as StackLayout).ClassId);
-            RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
+            int id = Int32.Parse((sender as StackLayout)?.ClassId);
+            RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRc = new RestClient<PastryShopDeleveryMethod>();
             try
             {
-                if (!(await pastryShopDeleverMethodRC.DeleteAsync(ID)))
+                if (!(await pastryShopDeleverMethodRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAsync();
                     return;
@@ -189,10 +186,9 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
 	    protected override void OnDisappearing()
 	    {
-	        if (reloadParent)
+	        if (_reloadParent)
 	        {
-                //pastryShopMasterDetailPage.ReloadPastryShop();
-                editProfileInfo.load();
+                _editProfileInfo.Load();
             }
 	    }
 	}
