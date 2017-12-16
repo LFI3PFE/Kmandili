@@ -6,7 +6,7 @@
     <StackLayout>
       <StackLayout HeightRequest="250">
         <RelativeLayout>
-          <RelativeLayout HeightRequest="370" x:Name="headerRelativeLayout" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=0}">
+          <RelativeLayout HeightRequest="370" x:Name="HeaderRelativeLayout" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=0}">
             <Button BackgroundColor="#3b4552" HeightRequest="155" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"/>
             <Image x:Name="Cover" HeightRequest="155" Aspect="AspectFill" HorizontalOptions="FillAndExpand" RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"/>
             <StackLayout BackgroundColor="#3b4552" HeightRequest="90" WidthRequest="137" RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent,Property=Width, Factor=.5, Constant = -160}" RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Factor=0, Property=Y, Constant=130}">
@@ -25,7 +25,8 @@
       </StackLayout>
       <StackLayout Padding="0,0,0,0">
         <StackLayout HorizontalOptions="FillAndExpand" Padding="10,0,0,20" Spacing="5">
-          <Label x:Name="Desc" FontSize="18" TextColor="Black" LineBreakMode="WordWrap" XAlign="Center"/>
+          <Label x:Name="Desc" FontSize="18" TextColor="Black" LineBreakMode="WordWrap" XAlign="Center">
+          </Label>
         </StackLayout>
         <StackLayout Orientation="Horizontal" Padding="10,0,0,0" Spacing="5">
           <Grid>

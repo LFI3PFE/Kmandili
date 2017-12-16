@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Kmandili.Converters"
-             x:Class="Kmandili.Views.Admin.PSViews.Orders.APOrderDetail">
+             x:Class="Kmandili.Views.Admin.PSViews.Orders.ApOrderDetail">
 <ContentPage.Resources>
     <ResourceDictionary>
         <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
@@ -34,7 +34,6 @@
         <StackLayout Orientation="Horizontal" Spacing="10">
           <Label Text="Status:" VerticalTextAlignment="Center" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
           <Label x:Name="Status" FontSize="20" TextColor="Black"/>
-          <!--<Picker x:Name="Status" HorizontalOptions="FillAndExpand" TextColor="Black"/>-->
         </StackLayout>
         <StackLayout Orientation="Horizontal" Spacing="30">
           <Label Text="Total:" FontSize="25" TextColor="Black" FontAttributes="Bold"/>

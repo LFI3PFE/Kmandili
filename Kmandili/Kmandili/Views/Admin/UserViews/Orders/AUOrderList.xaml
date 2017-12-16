@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Kmandili.Converters"
-             x:Class="Kmandili.Views.Admin.UserViews.Orders.AUOrderList">
+             x:Class="Kmandili.Views.Admin.UserViews.Orders.AuOrderList">
 <ContentPage.Resources>
     <ResourceDictionary>
         <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>
@@ -65,9 +65,6 @@
                             <Label Text="/" FontSize="15" TextColor="Black"/>
                             <Label Text="{Binding Date.Year}" FontSize="15" TextColor="Black"/>
                           </StackLayout>
-                          <!--<Label Text="TND" FontSize="18" TextColor="Gray"/>
-                                                    <Label Text="/" FontSize="20" TextColor="Black"/>
-                                                    <Label Text="{Binding SaleUnit.Unit}" FontSize="20" TextColor="Black"/>-->
                         </StackLayout>
                       </StackLayout>
                       <StackLayout Orientation="Horizontal" Spacing="10">

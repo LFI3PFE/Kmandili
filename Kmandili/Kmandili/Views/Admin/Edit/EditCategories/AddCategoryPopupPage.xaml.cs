@@ -2,21 +2,20 @@
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit.EditCategories
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AddCategoryPopupPage : PopupPage
+	public partial class AddCategoryPopupPage
 	{
-	    private CategoriesList categoriesList;
+	    private readonly CategoriesList _categoriesList;
 
 		public AddCategoryPopupPage (CategoriesList categoriesList)
 		{
 			InitializeComponent ();
-		    this.categoriesList = categoriesList;
+		    _categoriesList = categoriesList;
 		}
 
 	    private async void ComfirmTapped(object sender, EventArgs e)
@@ -27,11 +26,11 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
 	            {
 	                CategoryName = CategoryName.Text
 	            };
-	            var categoryRC = new RestClient<Category>();
+	            var categoryRc = new RestClient<Category>();
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (await categoryRC.PostAsync(category) == null)
+                    if (await categoryRc.PostAsync(category) == null)
                     {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -40,7 +39,7 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
                             "Ok");
                         return;
                     }
-                    categoriesList.Load();
+                    _categoriesList.Load();
                 }
                 catch (HttpRequestException)
                 {

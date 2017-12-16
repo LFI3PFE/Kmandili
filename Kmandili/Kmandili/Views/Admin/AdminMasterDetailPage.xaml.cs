@@ -6,8 +6,8 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AdminMasterDetailPage : MasterDetailPage
-    {
+	public partial class AdminMasterDetailPage
+	{
         private class MyTabbedPage : TabbedPage
         {
             protected override bool OnBackButtonPressed()
@@ -39,7 +39,6 @@ namespace Kmandili.Views.Admin
             };
 #pragma warning restore CS0618 // Type or member is obsolete
             Master = new AdminMasterPage(this);
-            //Detail = new NavigationPage(tab);
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
@@ -52,21 +51,14 @@ namespace Kmandili.Views.Admin
                     Detail = tab;
                     break;
                 default:
-                    Detail = new NavigationPage(tab); ;
+                    Detail = new NavigationPage(tab);
                     break;
             }
-            //IsPresentedChanged += UserMasterDetailPage_IsPresentedChanged;
         }
 
 	    protected override bool OnBackButtonPressed()
 	    {
 	        return true;
 	    }
-
-	    //private void UserMasterDetailPage_IsPresentedChanged(object sender, EventArgs e)
-        //{
-        //    if (IsPresented)
-        //        (Master as AdminMasterPage).UpdateOrderNotificationNumber();
-        //}
     }
 }

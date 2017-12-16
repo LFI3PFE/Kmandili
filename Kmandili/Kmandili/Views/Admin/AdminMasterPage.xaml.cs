@@ -10,14 +10,14 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AdminMasterPage : ContentPage
+	public partial class AdminMasterPage
 	{
-	    private AdminMasterDetailPage adminMasterDetailPage;
+	    private readonly AdminMasterDetailPage _adminMasterDetailPage;
 
 		public AdminMasterPage (AdminMasterDetailPage adminMasterDetailPage)
 		{
 			InitializeComponent ();
-		    this.adminMasterDetailPage = adminMasterDetailPage;
+		    _adminMasterDetailPage = adminMasterDetailPage;
 		}
 
 	    private void Logout(object sender, EventArgs e)
@@ -27,7 +27,7 @@ namespace Kmandili.Views.Admin
 
 	    private async void ToChart(object sender, EventArgs e)
 	    {
-            adminMasterDetailPage.IsPresented = false;
+            _adminMasterDetailPage.IsPresented = false;
             var newUsersChart = new NewUserChart()
             {
                 Icon = "",
@@ -51,13 +51,13 @@ namespace Kmandili.Views.Admin
 
 	    private async void ManageCategories_OnTapped(object sender, EventArgs e)
 	    {
-	        adminMasterDetailPage.IsPresented = false;
+	        _adminMasterDetailPage.IsPresented = false;
 	        await Navigation.PushAsync(new CategoriesList());
 	    }
 
 	    private async void ManageDelevery_OnTapped(object sender, EventArgs e)
 	    {
-	        adminMasterDetailPage.IsPresented = false;
+	        _adminMasterDetailPage.IsPresented = false;
 	        var tabbedPage = new TabbedPage()
 	        {
                 Children =
@@ -77,7 +77,7 @@ namespace Kmandili.Views.Admin
 
 	    private async void UpdateAdmin_OnTapped(object sender, EventArgs e)
 	    {
-	        adminMasterDetailPage.IsPresented = false;
+	        _adminMasterDetailPage.IsPresented = false;
 	        await Navigation.PushAsync(new EditAdmin());
 	    }
 

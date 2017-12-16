@@ -148,7 +148,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             OrderRestClient orderRc = new OrderRestClient();
             try
             {
-                _orders = await orderRc.GetAsyncByPastryShopID(id);
+                _orders = await orderRc.GetAsyncByPastryShopId(id);
             }
             catch (HttpRequestException)
             {

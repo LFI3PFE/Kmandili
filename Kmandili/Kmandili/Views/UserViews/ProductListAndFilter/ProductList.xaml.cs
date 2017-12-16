@@ -197,7 +197,7 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                         Product = product,
                         Quantity = 1
                     };
-                    cartProduct.updateTotal();
+                    cartProduct.UpdateTotal();
 
                     cartPastry.CartProducts.Add(cartProduct);
                     App.Cart.Add(cartPastry);
@@ -211,13 +211,13 @@ namespace Kmandili.Views.UserViews.ProductListAndFilter
                             Product = product,
                             Quantity = 1
                         };
-                        cartProduct.updateTotal();
+                        cartProduct.UpdateTotal();
                         App.Cart.ElementAt(index).CartProducts.Add(cartProduct);
                     }
                     else
                     {
                         cartP.Quantity++;
-                        cartP.updateTotal();
+                        cartP.UpdateTotal();
                     }
                 }
                 await DisplayAlert("Succée", "Produit Ajouté au chariot", "OK");

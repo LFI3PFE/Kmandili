@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
@@ -12,45 +11,45 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AddDeleveryPopupPage : PopupPage
+	public partial class AddDeleveryPopupPage
 	{
-        private DeleveryList deleveryList;
-        private List<DeleveryPaymentsViewModel> deleveryPaymentsViewModels = new List<DeleveryPaymentsViewModel>();
+        private readonly DeleveryList _deleveryList;
+        private readonly List<DeleveryPaymentsViewModel> _deleveryPaymentsViewModels = new List<DeleveryPaymentsViewModel>();
 
         private class DeleveryPaymentsViewModel
         {
-            public Models.Payment payment { get; set; }
-            public bool exist { get; set; }
+            public Models.Payment Payment { get; set; }
+            public bool Exist { get; set; }
         }
 
         public AddDeleveryPopupPage(DeleveryList deleveryList)
         {
             InitializeComponent();
             List.SeparatorVisibility = SeparatorVisibility.None;
-            this.deleveryList = deleveryList;
+            _deleveryList = deleveryList;
             Load();
         }
 
         private async void Load()
         {
-            var paymentRC = new RestClient<Models.Payment>();
+            var paymentRc = new RestClient<Models.Payment>();
             try
             {
-                var payments = await paymentRC.GetAsync();
-                deleveryPaymentsViewModels.Clear();
+                var payments = await paymentRc.GetAsync();
+                _deleveryPaymentsViewModels.Clear();
                 foreach (var payment in payments)
                 {
                     payment.Orders.Clear();
                     payment.PastryDeleveryPayments.Clear();
                     payment.DeleveryMethods.Clear();
-                    deleveryPaymentsViewModels.Add(new DeleveryPaymentsViewModel()
+                    _deleveryPaymentsViewModels.Add(new DeleveryPaymentsViewModel()
                     {
-                        payment = payment,
-                        exist = false
+                        Payment = payment,
+                        Exist = false
                     });
                 }
-                List.HeightRequest = deleveryPaymentsViewModels.Count * 40;
-                List.ItemsSource = deleveryPaymentsViewModels;
+                List.HeightRequest = _deleveryPaymentsViewModels.Count * 40;
+                List.ItemsSource = _deleveryPaymentsViewModels;
             }
             catch (HttpRequestException)
             {
@@ -59,7 +58,6 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                return;
             }
         }
 
@@ -70,7 +68,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                 await DisplayAlert("Erreur", "Un nom doit être fournit pour la nouvelle méthode de livraison", "Ok");
                 return;
             }
-            if (deleveryPaymentsViewModels.All(dpvm => !dpvm.exist))
+            if (_deleveryPaymentsViewModels.All(dpvm => !dpvm.Exist))
             {
                 await DisplayAlert("Erruer", "Au moins une méthode de paiement doit être séléctionner.", "Ok");
                 return;
@@ -82,15 +80,15 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                 {
                     DeleveryType = DeleveryName.Text,
                 };
-                foreach (var deleveryPaymentsViewModel in deleveryPaymentsViewModels)
+                foreach (var deleveryPaymentsViewModel in _deleveryPaymentsViewModels)
                 {
-                    if (deleveryPaymentsViewModel.exist)
+                    if (deleveryPaymentsViewModel.Exist)
                     {
-                        newDelevery.Payments.Add(deleveryPaymentsViewModel.payment);
+                        newDelevery.Payments.Add(deleveryPaymentsViewModel.Payment);
                     }
                 }
-                var deleveryRC = new DeleveryMethodRestClient();
-                if (await deleveryRC.PostAsync(newDelevery) == null)
+                var deleveryRc = new DeleveryMethodRestClient();
+                if (await deleveryRc.PostAsync(newDelevery) == null)
                 {
                     await PopupNavigation.PopAllAsync();
                     await
@@ -110,7 +108,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                 return;
             }
             await PopupNavigation.PopAllAsync();
-            deleveryList.Load();
+            _deleveryList.Load();
         }
 
         private async void DismissTapped(object sender, EventArgs e)

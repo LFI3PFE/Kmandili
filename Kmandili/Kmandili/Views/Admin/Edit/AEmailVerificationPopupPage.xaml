@@ -16,7 +16,6 @@
   EasingOut="SinIn"
   HasBackgroundAnimation="True"/>
   </pages:PopupPage.Animation>
-  <!--x:Name="LoadingLayout"-->
   <StackLayout Padding="0,20,0,0" VerticalOptions="Center" BackgroundColor="White">
     <StackLayout Margin="40,20,40,20">
       <Label VerticalOptions="Center" HorizontalOptions="Center" TextColor="Black" FontSize="20"  VerticalTextAlignment="Center"

@@ -9,14 +9,13 @@ namespace Kmandili.Models.RestClient
     class UploadRestClient
     {
 
-        public async Task<bool> Upload(Stream stream, string FileName)
+        public async Task<bool> Upload(Stream stream, string fileName)
         {
             if (!(await App.CheckConnection())) return false;
             HttpClient client = new HttpClient();
             var imageStream = new StreamContent(stream);
-            var multi = new MultipartContent();
-            multi.Add(imageStream);
-            var response = await client.PostAsync(App.ServerUrl + "api/Uploads/" + FileName, multi);
+            var multi = new MultipartContent {imageStream};
+            var response = await client.PostAsync(App.ServerUrl + "api/Uploads/" + fileName, multi);
             return response.IsSuccessStatusCode;
         }
 
@@ -26,8 +25,8 @@ namespace Kmandili.Models.RestClient
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
 
-            string URL = App.ServerUrl + "api/Uploads/" + fileName;
-            var response = await httpClient.DeleteAsync(URL);
+            string url = App.ServerUrl + "api/Uploads/" + fileName;
+            var response = await httpClient.DeleteAsync(url);
             return response.IsSuccessStatusCode;
         }
     }

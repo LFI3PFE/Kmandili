@@ -10,12 +10,11 @@ namespace Kmandili.Models.RestClient
 {
     class RestClient<T>
     {
-        //private const string WebServiceUrl = "http://192.168.1.5:300/api/addresses/";
-        private string controllerName;
         protected string WebServiceUrl;
 
         public RestClient()
         {
+            string controllerName;
             if(typeof(T).Name == "Address")
             {
                 controllerName = "Addresses";

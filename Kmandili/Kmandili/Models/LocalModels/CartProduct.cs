@@ -6,7 +6,7 @@
         public int Quantity { get; set; }
         public double Total { get; set; }
 
-        public void updateTotal()
+        public void UpdateTotal()
         {
             Total = Quantity * Product.Price;
         }

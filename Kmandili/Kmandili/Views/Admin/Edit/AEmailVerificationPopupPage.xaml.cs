@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,16 +8,16 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Edit
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AEmailVerificationPopupPage : PopupPage
+	public partial class AEmailVerificationPopupPage
 	{
-        private string email;
-        private EditAdmin editAdmin;
-        private string code = "";
+        private readonly string _email;
+        private readonly EditAdmin _editAdmin;
+        private string _code = "";
 
         public AEmailVerificationPopupPage(EditAdmin editAdmin, string email)
         {
-            this.email = email;
-            this.editAdmin = editAdmin;
+            _email = email;
+            _editAdmin = editAdmin;
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
@@ -30,10 +29,10 @@ namespace Kmandili.Views.Admin.Edit
             Code.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            EmailRestClient emailRC = new EmailRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                code = await emailRC.SendEmailVerification(email);
+                _code = await emailRc.SendEmailVerification(_email);
             }
             catch (HttpRequestException)
             {
@@ -49,9 +48,9 @@ namespace Kmandili.Views.Admin.Edit
         private async void ComfirmTapped(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Code.Text)) return;
-            if (Code.Text.Length == 6 && code == Code.Text)
+            if (Code.Text.Length == 6 && _code == Code.Text)
             {
-                editAdmin.EmailVerified();
+                _editAdmin.EmailVerified();
                 await PopupNavigation.PopAllAsync();
             }
             else

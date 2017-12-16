@@ -55,7 +55,6 @@
                               <Label Text="{Binding Orders.Count}" FontSize="20" TextColor="Black"/>
                             </StackLayout>
                           </StackLayout>
-                          <!--<Label Text="{Binding Ratings.Count, StringFormat='({0:F0} avis)'}" FontSize="15" TextColor="Black"/>-->
                         </StackLayout>
                       </StackLayout>
                     </StackLayout>

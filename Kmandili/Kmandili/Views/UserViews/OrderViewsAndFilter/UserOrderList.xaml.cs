@@ -148,7 +148,7 @@ namespace Kmandili.Views.UserViews.OrderViewsAndFilter
             OrderRestClient orderRc = new OrderRestClient();
             try
             {
-                _orders = await orderRc.GetAsyncByUserID(Settings.Id);
+                _orders = await orderRc.GetAsyncByUserId(Settings.Id);
             }
             catch (Exception)
             {

@@ -10,15 +10,13 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class DeleveryList : ContentPage
+	public partial class DeleveryList
 	{
-	    private ToolbarItem addToolbarItem;
-
-		public DeleveryList ()
+	    public DeleveryList ()
 		{
-			InitializeComponent ();
+		    InitializeComponent ();
             List.SeparatorVisibility = SeparatorVisibility.None;
-            addToolbarItem = new ToolbarItem()
+            var addToolbarItem = new ToolbarItem()
             {
                 Icon = "plus.png",
                 Text = "Ajouter",
@@ -69,10 +67,10 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 	    {
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette méthode de livraison?", "Oui", "Annuler");
             if (!choix) return;
-            var id = (Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text));
+            var id = (Int32.Parse(((Label) ((StackLayout) ((Image) sender).Parent).Children[0]).Text));
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            var deleveryRC = new DeleveryMethodRestClient();
-            var cat = await deleveryRC.GetAsyncById(id);
+            var deleveryRc = new DeleveryMethodRestClient();
+            var cat = await deleveryRc.GetAsyncById(id);
             if (cat.Orders.Any() ||
                 cat.PastryShopDeleveryMethods.Any())
             {
@@ -85,7 +83,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
             }
             try
             {
-                if (!(await deleveryRC.DeleteAsync(id)))
+                if (!(await deleveryRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAllAsync();
                     await

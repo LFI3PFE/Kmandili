@@ -10,7 +10,7 @@ namespace Kmandili.Models.RestClient
 {
     class OrderRestClient : RestClient<Order>
     {
-        public async Task<List<Order>> GetAsyncByUserID(int id)
+        public async Task<List<Order>> GetAsyncByUserId(int id)
         {
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();
@@ -35,7 +35,7 @@ namespace Kmandili.Models.RestClient
             }
         }
 
-        public async Task<List<Order>> GetAsyncByPastryShopID(int id)
+        public async Task<List<Order>> GetAsyncByPastryShopId(int id)
         {
             if (!(await App.CheckConnection()) || (App.TokenExpired())) return null;
             var httpClient = new HttpClient();

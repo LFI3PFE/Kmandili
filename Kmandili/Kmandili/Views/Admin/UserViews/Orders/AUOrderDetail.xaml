@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Kmandili.Converters"
-             x:Class="Kmandili.Views.Admin.UserViews.Orders.AUOrderDetail">
+             x:Class="Kmandili.Views.Admin.UserViews.Orders.AuOrderDetail">
 <ContentPage.Resources>
     <ResourceDictionary>
         <local:ImageNameToUriConverter x:Key="ImageNameToUriConverter"></local:ImageNameToUriConverter>

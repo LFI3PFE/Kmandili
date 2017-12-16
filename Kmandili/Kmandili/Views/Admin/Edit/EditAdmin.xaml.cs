@@ -3,15 +3,14 @@ using System.Net.Http;
 using Kmandili.Helpers;
 using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
-using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditAdmin : ContentPage
+	public partial class EditAdmin
 	{
-	    private Models.LocalModels.Admin admin;
+	    private Models.LocalModels.Admin _admin;
 
 		public EditAdmin ()
 		{
@@ -24,10 +23,10 @@ namespace Kmandili.Views.Admin.Edit
 	        try
 	        {
 	            await PopupNavigation.PushAsync(new LoadingPopupPage());
-	            var adminRC = new AdminRestClient();
-                admin = await adminRC.GetAdmin();
-	            Email.Text = admin.UserName;
-	            Password.Text = admin.Password;
+	            var adminRc = new AdminRestClient();
+                _admin = await adminRc.GetAdmin();
+	            Email.Text = _admin.UserName;
+	            Password.Text = _admin.Password;
 	        }
             catch (HttpRequestException)
             {
@@ -40,7 +39,7 @@ namespace Kmandili.Views.Admin.Edit
 
 	    private async void Update(object sender, EventArgs e)
 	    {
-	        if ((admin.UserName == Email.Text.ToLower()) && (admin.Password == Password.Text)) return;
+	        if ((_admin.UserName == Email.Text.ToLower()) && (_admin.Password == Password.Text)) return;
 	        if (!App.IsValidEmail(Email.Text.ToLower()))
 	        {
 	            await DisplayAlert("Erreur", "Email invalide.", "Ok");
@@ -59,13 +58,11 @@ namespace Kmandili.Views.Admin.Edit
                 }
                 await PopupNavigation.PopAllAsync();
                 await PopupNavigation.PushAsync(new AEmailVerificationPopupPage(this, Email.Text.ToLower()));
-                //EmailVerified();
             }
             catch (HttpRequestException)
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
-                return;
             }
 	    }
 
@@ -74,8 +71,8 @@ namespace Kmandili.Views.Admin.Edit
             try
             {
                 await PopupNavigation.PushAsync(new LoadingPopupPage());
-                var adminRC = new AdminRestClient();
-                if (!(await adminRC.UpdateAdmin(Email.Text.ToLower(), Password.Text)))
+                var adminRc = new AdminRestClient();
+                if (!(await adminRc.UpdateAdmin(Email.Text.ToLower(), Password.Text)))
                 {
                     await PopupNavigation.PopAllAsync();
                     await
@@ -92,7 +89,6 @@ namespace Kmandili.Views.Admin.Edit
             {
                 await PopupNavigation.PopAllAsync();
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
-                return;
             }
         }
 

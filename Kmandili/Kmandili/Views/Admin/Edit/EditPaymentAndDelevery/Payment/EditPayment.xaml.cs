@@ -1,40 +1,39 @@
 ﻿using System;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditPayment : PopupPage
+	public partial class EditPayment
 	{
-        private PaymentList paymentList;
-        private Models.Payment paymentMethod;
+        private readonly PaymentList _paymentList;
+        private readonly Models.Payment _paymentMethod;
 
         public EditPayment(Models.Payment paymentMethod, PaymentList paymentList)
         {
             InitializeComponent();
-            this.paymentMethod = paymentMethod;
-            this.paymentList = paymentList;
+            _paymentMethod = paymentMethod;
+            _paymentList = paymentList;
             PaymentName.Text = paymentMethod.PaymentMethod;
         }
 
         private async void ComfirmTapped(object sender, EventArgs e)
         {
-            if (PaymentName.Text != paymentMethod.PaymentMethod)
+            if (PaymentName.Text != _paymentMethod.PaymentMethod)
             {
                 var newPayement = new Models.Payment()
                 {
-                    ID = paymentMethod.ID,
+                    ID = _paymentMethod.ID,
                     PaymentMethod = PaymentName.Text,
                 };
-                var paymentRC = new RestClient<Models.Payment>();
+                var paymentRc = new RestClient<Models.Payment>();
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (!(await paymentRC.PutAsync(newPayement.ID, newPayement)))
+                    if (!(await paymentRc.PutAsync(newPayement.ID, newPayement)))
                     {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -43,7 +42,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
                             "Ok");
                         return;
                     }
-                    paymentList.Load();
+                    _paymentList.Load();
                 }
                 catch (HttpRequestException)
                 {

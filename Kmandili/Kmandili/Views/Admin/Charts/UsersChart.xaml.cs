@@ -7,17 +7,16 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Charts
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class UsersChart : ContentPage
+	public partial class UsersChart
 	{
-        private ToolbarItem refreshToolbarItem;
-        private int year;
-        private int semester;
-        private DateTime max, min;
+	    private int _year;
+        private int _semester;
+        private DateTime _max, _min;
 
         public UsersChart()
         {
             InitializeComponent();
-            refreshToolbarItem = new ToolbarItem()
+            var refreshToolbarItem = new ToolbarItem()
             {
                 Text = "Rafraîchir",
                 Order = ToolbarItemOrder.Primary,
@@ -25,35 +24,35 @@ namespace Kmandili.Views.Admin.Charts
             };
             refreshToolbarItem.Clicked += RefreshToolbarItem_Clicked;
             ToolbarItems.Add(refreshToolbarItem);
-            min = new DateTime(2017, 1, 1);
-            max = DateTime.Now;
-            year = max.Year;
-            semester = getSemester(max.Month);
+            _min = new DateTime(2017, 1, 1);
+            _max = DateTime.Now;
+            _year = _max.Year;
+            _semester = GetSemester(_max.Month);
             Load();
         }
 
         private void PrecedentTapped(object sender, EventArgs e)
         {
-            if (min.Year == year && getSemester(min.Month) == semester) return;
-            if (semester == 2)
-                semester--;
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester) return;
+            if (_semester == 2)
+                _semester--;
             else
             {
-                semester = 2;
-                year--;
+                _semester = 2;
+                _year--;
             }
             Load();
         }
 
         private void SuivantTapped(object sender, EventArgs e)
         {
-            if (max.Year == year && getSemester(max.Month) == semester) return;
-            if (semester == 1)
-                semester++;
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester) return;
+            if (_semester == 1)
+                _semester++;
             else
             {
-                semester = 1;
-                year++;
+                _semester = 1;
+                _year++;
             }
             Load();
         }
@@ -68,12 +67,12 @@ namespace Kmandili.Views.Admin.Charts
             BodyLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            var chartRC = new ChartsRestClient();
+            var chartRc = new ChartsRestClient();
             try
             {
                 var htmlWebView = new HtmlWebViewSource()
                 {
-                    Html = await chartRC.GetChartView(App.ServerUrl + "api/GetUsersChartView/ " + year + "/" + semester)
+                    Html = await chartRc.GetChartView(App.ServerUrl + "api/GetUsersChartView/ " + _year + "/" + _semester)
                 };
                 Browser.Source = htmlWebView;
             }
@@ -82,7 +81,7 @@ namespace Kmandili.Views.Admin.Charts
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                 return;
             }
-            if (max.Year == year && getSemester(max.Month) == semester)
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester)
             {
                 SuivantLabel.TextColor = Color.LightSkyBlue;
             }
@@ -91,7 +90,7 @@ namespace Kmandili.Views.Admin.Charts
                 SuivantLabel.TextColor = Color.DodgerBlue;
             }
 
-            if (min.Year == year && getSemester(min.Month) == semester)
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester)
             {
                 PrecedentLabel.TextColor = Color.LightSkyBlue;
             }
@@ -104,7 +103,7 @@ namespace Kmandili.Views.Admin.Charts
             BodyLayout.IsVisible = true;
         }
 
-        private int getSemester(int month)
+        private int GetSemester(int month)
         {
             return month <= 6 ? 1 : 2;
         }

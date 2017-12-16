@@ -16,34 +16,29 @@ using Kmandili.Views.Admin.PSViews.PastryShopListAndFilter;
 namespace Kmandili.Views.Admin.PSViews.PSProfile
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class APastryShopProfile : ContentPage
+	public partial class APastryShopProfile
 	{
-        private ToolbarItem ProductList;
-        private ToolbarItem pointOfSaleList;
-	    private ToolbarItem editToolbarItem;
-        private PastryShop pastryShop;
-	    private ToolbarItem orderToolbarItem;
-	    private ToolbarItem chartsToolbarItem;
+	    private PastryShop _pastryShop;
 
-	    private bool hasNavigatedToEdit = false;
-	    private bool updateParent = false;
+	    private bool _hasNavigatedToEdit;
+	    private bool _updateParent;
 
-	    private APastryShopList pastryShopList;
+	    private readonly APastryShopList _pastryShopList;
 
         public APastryShopProfile(PastryShop pastryShop, APastryShopList pastryShopList)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
-            this.pastryShopList = pastryShopList;
-            ProductList = new ToolbarItem
+            _pastryShop = pastryShop;
+            _pastryShopList = pastryShopList;
+            var productList = new ToolbarItem
             {
                 Text = "Produits",
                 Order = ToolbarItemOrder.Secondary,
                 Priority = 0
             };
-            ProductList.Clicked += ProductListOnClick;
+            productList.Clicked += ProductListOnClick;
 
-            orderToolbarItem = new ToolbarItem()
+            var orderToolbarItem = new ToolbarItem()
             {
                 Icon = "tbOrders.png",
                 Text = "Commandes",
@@ -51,21 +46,21 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             };
             orderToolbarItem.Clicked += OrderToolbarItem_Clicked;
 
-            pointOfSaleList = new ToolbarItem()
+            var pointOfSaleList = new ToolbarItem()
             {
                 Text = "Points de vente",
                 Order = ToolbarItemOrder.Secondary
             };
             pointOfSaleList.Clicked += PointOfSaleList_Clicked;
 
-            chartsToolbarItem = new ToolbarItem()
+            var chartsToolbarItem = new ToolbarItem()
             {
                 Text = "Graphiques",
                 Order = ToolbarItemOrder.Secondary
             };
             chartsToolbarItem.Clicked += ChartsToolbarItem_Clicked;
 
-            editToolbarItem = new ToolbarItem()
+            var editToolbarItem = new ToolbarItem()
             {
                 Text = "Modifier",
                 Order = ToolbarItemOrder.Primary,
@@ -73,7 +68,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
             };
             editToolbarItem.Clicked += EditToolbarItem_Clicked;
 
-            ToolbarItems.Add(ProductList);
+            ToolbarItems.Add(productList);
             ToolbarItems.Add(editToolbarItem);
             ToolbarItems.Add(pointOfSaleList);
             ToolbarItems.Add(orderToolbarItem);
@@ -83,12 +78,12 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
 
         private async void ChartsToolbarItem_Clicked(object sender, EventArgs e)
         {
-            var ordersChart = new OrdersChart(pastryShop)
+            var ordersChart = new OrdersChart(_pastryShop)
             {
                 Title = "Commandes"
             };
 
-            var incomsChart = new AEarningsChart(pastryShop)
+            var incomsChart = new AEarningsChart(_pastryShop)
             {
                 Title = "Revenus"
             };
@@ -105,46 +100,46 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
 
         private async void OrderToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new APOrderList(pastryShop.ID));
+            await Navigation.PushAsync(new ApOrderList(_pastryShop.ID));
         }
 
         private async void EditToolbarItem_Clicked(object sender, EventArgs e)
         {
-            hasNavigatedToEdit = true;
-            await Navigation.PushAsync(new EditProfileInfo(pastryShop.ID, false));
+            _hasNavigatedToEdit = true;
+            await Navigation.PushAsync(new EditProfileInfo(_pastryShop.ID, false));
         }
 
 	    protected override void OnAppearing()
 	    {
-	        if (hasNavigatedToEdit)
+	        if (_hasNavigatedToEdit)
 	        {
 	            Reload();
-	            hasNavigatedToEdit = false;
-	            updateParent = true;
+	            _hasNavigatedToEdit = false;
+	            _updateParent = true;
 	        }
 	    }
 
 	    protected override void OnDisappearing()
 	    {
-	        if (updateParent)
+	        if (_updateParent)
 	        {
-	            pastryShopList.load();
-	            updateParent = false;
+	            _pastryShopList.Load();
+	            _updateParent = false;
 	        }
 	    }
 
         private async void PointOfSaleList_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new PointOfSalesList(pastryShop));
+            await Navigation.PushAsync(new PointOfSalesList(_pastryShop));
         }
 
         public async void Reload()
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
+            PastryShopRestClient pastryShopRc = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                _pastryShop = await pastryShopRc.GetAsyncById(_pastryShop.ID);
             }
             catch (HttpRequestException)
             {
@@ -157,23 +152,23 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
                 return;
             }
             await PopupNavigation.PopAllAsync();
-            if (pastryShop == null) return;
+            if (_pastryShop == null) return;
             Load();
         }
 
         private void Load()
         {
-            Rating.Text = pastryShop.Ratings.Sum(r => r.Value).ToString();
-            NumberOfReviews.Text = "(" + pastryShop.Ratings.Count + " avis)";
-            Cover.Source = App.ServerUrl + "Uploads/" + pastryShop.CoverPic;
-            ProfilImage.Source = App.ServerUrl + "Uploads/" + pastryShop.ProfilePic;
-            PastryName.Text = pastryShop.Name;
-            Address.Text = pastryShop.Address.ToString();
-            Desc.Text = pastryShop.LongDesc;
-            Email.Text = pastryShop.Email;
-            PriceRange.Text = pastryShop.PriceRange.MinPriceRange + "-" + pastryShop.PriceRange.MaxPriceRange;
+            Rating.Text = _pastryShop.Ratings.Sum(r => r.Value).ToString();
+            NumberOfReviews.Text = "(" + _pastryShop.Ratings.Count + " avis)";
+            Cover.Source = App.ServerUrl + "Uploads/" + _pastryShop.CoverPic;
+            ProfilImage.Source = App.ServerUrl + "Uploads/" + _pastryShop.ProfilePic;
+            PastryName.Text = _pastryShop.Name;
+            Address.Text = _pastryShop.Address.ToString();
+            Desc.Text = _pastryShop.LongDesc;
+            Email.Text = _pastryShop.Email;
+            PriceRange.Text = _pastryShop.PriceRange.MinPriceRange + "-" + _pastryShop.PriceRange.MaxPriceRange;
             PhoneNumbersLayout.Children.Clear();
-            foreach (PhoneNumber phone in pastryShop.PhoneNumbers)
+            foreach (PhoneNumber phone in _pastryShop.PhoneNumbers)
             {
                 Grid grid = new Grid()
                 {
@@ -189,13 +184,13 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
                 PhoneNumbersLayout.Children.Add(grid);
             }
             CategoriesLayout.Children.Clear();
-            foreach (var category in pastryShop.Categories)
+            foreach (var category in _pastryShop.Categories)
             {
                 CategoriesLayout.Children.Add(new Label() { Text = category.CategoryName, TextColor = Color.Black, FontSize = 18 });
             }
             DeleveryMethodsLayout.Children.Clear();
             float height = 0;
-            foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)
+            foreach (var pastryShopDeleveryMethod in _pastryShop.PastryShopDeleveryMethods)
             {
                 height += 50;
                 StackLayout paymentLayout = new StackLayout();
@@ -273,10 +268,10 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
         public async void ProductListOnClick(Object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            var pastryShopRC = new PastryShopRestClient();
+            var pastryShopRc = new PastryShopRestClient();
             try
             {
-                pastryShop = await pastryShopRC.GetAsyncById(pastryShop.ID);
+                _pastryShop = await pastryShopRc.GetAsyncById(_pastryShop.ID);
             }
             catch (HttpRequestException)
             {
@@ -289,7 +284,7 @@ namespace Kmandili.Views.Admin.PSViews.PSProfile
                 return;
             }
             await PopupNavigation.PopAllAsync();
-            await Navigation.PushAsync(new PsProductList(pastryShop));
+            await Navigation.PushAsync(new PsProductList(_pastryShop));
         }
     }
 }

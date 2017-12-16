@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
 using Kmandili.Models;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,26 +11,26 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class APastryFilterPopupPage : PopupPage
+	public partial class APastryFilterPopupPage
 	{
-        private List<Category> selectedCategories;
-        private List<Category> categories;
-        private APastryShopList pastryShopList;
+        private readonly List<Category> _selectedCategories;
+        private List<Category> _categories;
+        private readonly APastryShopList _pastryShopList;
         public APastryFilterPopupPage(APastryShopList pastryShopList, List<Category> selectedCategories)
         {
             BackgroundColor = Color.FromHex("#CC000000");
-            this.selectedCategories = selectedCategories;
-            this.pastryShopList = pastryShopList;
+            _selectedCategories = selectedCategories;
+            _pastryShopList = pastryShopList;
             InitializeComponent();
             Load();
         }
 
         private async void Load()
         {
-            RestClient<Category> categorieRC = new RestClient<Category>();
+            RestClient<Category> categorieRc = new RestClient<Category>();
             try
             {
-                categories = await categorieRC.GetAsync();
+                _categories = await categorieRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -42,8 +41,8 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
                         "Ok");
                 return;
             }
-            if (categories == null) return;
-            this.Content = MakeContent();
+            if (_categories == null) return;
+            Content = MakeContent();
         }
 
         private StackLayout MakeContent()
@@ -66,13 +65,13 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             innerLayout.Children.Add(new Label() { Text = "Les catégories:", FontSize = 20, TextColor = Color.Black, FontAttributes = FontAttributes.Bold });
 
             StackLayout categoriesLayout = new StackLayout() { Spacing = 5 };
-            foreach (var category in categories)
+            foreach (var category in _categories)
             {
                 StackLayout categoryLayout = new StackLayout() { Orientation = StackOrientation.Horizontal, Spacing = 20, Padding = new Thickness(20, 0, 0, 0) };
                 Switch categorySwitch = new Switch
                 {
                     ClassId = category.ID.ToString(),
-                    IsToggled = selectedCategories.Any(sc => sc.CategoryName == category.CategoryName),
+                    IsToggled = _selectedCategories.Any(sc => sc.CategoryName == category.CategoryName),
                 };
                 categorySwitch.Toggled += CategorySwitch_Toggled;
                 categoryLayout.Children.Add(categorySwitch);
@@ -99,19 +98,19 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
         private void CategorySwitch_Toggled(object sender, ToggledEventArgs e)
         {
             var categorySwitch = sender as Switch;
-            if (categorySwitch.IsToggled)
+            if (categorySwitch != null && categorySwitch.IsToggled)
             {
-                selectedCategories.Add(categories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
+                _selectedCategories.Add(_categories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
             }
             else
             {
-                selectedCategories.Remove(selectedCategories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
+                _selectedCategories.Remove(_selectedCategories.FirstOrDefault(c => c.ID == Int32.Parse(categorySwitch.ClassId)));
             }
         }
 
         protected override void OnDisappearing()
         {
-            pastryShopList.AplyFilters();
+            _pastryShopList.AplyFilters();
         }
     }
 }

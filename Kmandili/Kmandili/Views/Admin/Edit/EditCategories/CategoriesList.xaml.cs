@@ -10,15 +10,13 @@ using Rg.Plugins.Popup.Services;
 namespace Kmandili.Views.Admin.Edit.EditCategories
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class CategoriesList : ContentPage
+	public partial class CategoriesList
 	{
-	    private ToolbarItem addToolbarItem;
-
-		public CategoriesList()
+	    public CategoriesList()
 		{
-			InitializeComponent ();
+		    InitializeComponent ();
             List.SeparatorVisibility = SeparatorVisibility.None;
-            addToolbarItem = new ToolbarItem()
+            var addToolbarItem = new ToolbarItem()
             {
                 Icon = "plus.png",
                 Text = "Ajouter",
@@ -70,10 +68,10 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
 	    {
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette catégorie?", "Oui", "Annuler");
             if (!choix) return;
-            var id = (Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text));
+            var id = (Int32.Parse(((Label) ((StackLayout) ((Image) sender).Parent).Children[0]).Text));
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            var categoryRC = new RestClient<Category>();
-            var cat = await categoryRC.GetAsyncById(id);
+            var categoryRc = new RestClient<Category>();
+            var cat = await categoryRc.GetAsyncById(id);
             if (cat.PastryShops.Any() ||
                 cat.Products.Any())
             {
@@ -86,7 +84,7 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
             }
             try
             {
-                if (!(await categoryRC.DeleteAsync(id)))
+                if (!(await categoryRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAllAsync();
                     await

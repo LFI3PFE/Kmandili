@@ -14,18 +14,18 @@ using Kmandili.Views.Admin.PSViews.PSProfile;
 namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class APastryShopList : ContentPage
+	public partial class APastryShopList
 	{
-        private PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-        private List<PastryShop> pastryShops;
-        private ObservableCollection<PastryShop> displayedPastryShops = new ObservableCollection<PastryShop>();
-        private List<Category> selectedCategories = new List<Category>();
-        private SortType selectedSortType = new SortType();
+        private readonly PastryShopRestClient _pastryShopRc = new PastryShopRestClient();
+        private List<PastryShop> _pastryShops;
+        private readonly ObservableCollection<PastryShop> _displayedPastryShops = new ObservableCollection<PastryShop>();
+        private readonly List<Category> _selectedCategories = new List<Category>();
+        private readonly SortType _selectedSortType = new SortType();
 
-        private ToolbarItem searchToolbarItem;
-        private ToolbarItem endSearchToolbarItem;
-        private ToolbarItem filterToolbarItem;
-        private ToolbarItem sortToolbarItem;
+        private readonly ToolbarItem _searchToolbarItem;
+        private readonly ToolbarItem _endSearchToolbarItem;
+        private readonly ToolbarItem _filterToolbarItem;
+        private readonly ToolbarItem _sortToolbarItem;
 
 
         public APastryShopList()
@@ -33,87 +33,87 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             InitializeComponent();
             BodyLayout.TranslateTo(0, -50);
             List.SeparatorVisibility = SeparatorVisibility.None;
-            displayedPastryShops.CollectionChanged += DisplayedPastryShops_CollectionChanged;
-            List.ItemsSource = displayedPastryShops;
+            _displayedPastryShops.CollectionChanged += DisplayedPastryShops_CollectionChanged;
+            List.ItemsSource = _displayedPastryShops;
 
-            filterToolbarItem = new ToolbarItem()
+            _filterToolbarItem = new ToolbarItem()
             {
                 Text = "Filtrer",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "filter.png"
             };
-            filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
+            _filterToolbarItem.Clicked += FilterToolbarItem_Clicked;
 
-            searchToolbarItem = new ToolbarItem()
+            _searchToolbarItem = new ToolbarItem()
             {
                 Text = "Chercher",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "search.png"
             };
-            searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
+            _searchToolbarItem.Clicked += SearchToolbarItem_Clicked;
 
-            endSearchToolbarItem = new ToolbarItem()
+            _endSearchToolbarItem = new ToolbarItem()
             {
                 Text = "Terminer",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "close.png"
             };
-            endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
+            _endSearchToolbarItem.Clicked += EndSearchToolbarItem_Clicked;
 
-            sortToolbarItem = new ToolbarItem()
+            _sortToolbarItem = new ToolbarItem()
             {
                 Text = "Trier",
                 Order = ToolbarItemOrder.Primary,
                 Icon = "sort.png"
             };
-            sortToolbarItem.Clicked += SortToolbarItem_Clicked;
+            _sortToolbarItem.Clicked += SortToolbarItem_Clicked;
 
-            ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(filterToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
-            load();
+            ToolbarItems.Add(_searchToolbarItem);
+            ToolbarItems.Add(_filterToolbarItem);
+            ToolbarItems.Add(_sortToolbarItem);
+            Load();
         }
 
         private async void SortToolbarItem_Clicked(object sender, EventArgs e)
         {
-            string Alph = "";
-            string Rev = "";
-            if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
+            string alph;
+            string rev;
+            if (_selectedSortType.SortTypeIndex == 0 && _selectedSortType.IsAsc)
             {
-                Alph = "Alphabet Descendant";
+                alph = "Alphabet Descendant";
             }
             else
             {
-                Alph = "Alphabet Ascendant";
+                alph = "Alphabet Ascendant";
             }
-            if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
+            if (_selectedSortType.SortTypeIndex == 1 && _selectedSortType.IsAsc)
             {
-                Rev = "Avis Descendant";
+                rev = "Avis Descendant";
             }
             else
             {
-                Rev = "Avis Ascendant";
+                rev = "Avis Ascendant";
             }
-            var choice = await DisplayActionSheet("Trier Par", "Annuler", null, Alph, Rev);
+            var choice = await DisplayActionSheet("Trier Par", "Annuler", null, alph, rev);
             if (choice == "Alphabet Descendant")
             {
-                selectedSortType.SortTypeIndex = 0;
-                selectedSortType.IsAsc = false;
+                _selectedSortType.SortTypeIndex = 0;
+                _selectedSortType.IsAsc = false;
             }
             else if (choice == "Alphabet Ascendant")
             {
-                selectedSortType.SortTypeIndex = 0;
-                selectedSortType.IsAsc = true;
+                _selectedSortType.SortTypeIndex = 0;
+                _selectedSortType.IsAsc = true;
             }
             else if (choice == "Avis Descendant")
             {
-                selectedSortType.SortTypeIndex = 1;
-                selectedSortType.IsAsc = false;
+                _selectedSortType.SortTypeIndex = 1;
+                _selectedSortType.IsAsc = false;
             }
             else if (choice == "Avis Ascendant")
             {
-                selectedSortType.SortTypeIndex = 1;
-                selectedSortType.IsAsc = true;
+                _selectedSortType.SortTypeIndex = 1;
+                _selectedSortType.IsAsc = true;
             }
             else
             {
@@ -124,7 +124,7 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
 
         private void DisplayedPastryShops_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (displayedPastryShops == null || displayedPastryShops.Count == 0)
+            if (_displayedPastryShops == null || _displayedPastryShops.Count == 0)
             {
                 EmptyLabel.IsVisible = true;
                 ListLayout.IsVisible = false;
@@ -132,7 +132,7 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             else
             {
                 EmptyLabel.IsVisible = false;
-                BodyLayout.HeightRequest = (double)(displayedPastryShops.Count * 110);
+                BodyLayout.HeightRequest = _displayedPastryShops.Count * 110;
                 ListLayout.IsVisible = true;
             }
         }
@@ -140,18 +140,18 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
         private async void SelectedNot(Object sender, ItemTappedEventArgs e)
         {
             PastryShop p = (PastryShop)e.Item;
-            (sender as ListView).SelectedItem = null;
-            await App.Current.MainPage.Navigation.PushAsync(new APastryShopProfile(p, this));
+            ((ListView) sender).SelectedItem = null;
+            await Application.Current.MainPage.Navigation.PushAsync(new APastryShopProfile(p, this));
         }
 
-        public async void load()
+        public async void Load()
         {
             ListLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             try
             {
-                pastryShops = await pastryShopRC.GetAsync();
+                _pastryShops = await _pastryShopRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -162,7 +162,7 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
                         "Ok");
                 return;
             }
-            if (pastryShops == null || pastryShops.Count == 0)
+            if (_pastryShops == null || _pastryShops.Count == 0)
             {
                 Loading.IsRunning = false;
                 LoadingLayout.IsVisible = false;
@@ -170,11 +170,11 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
                 ListLayout.IsVisible = false;
                 return;
             }
-            pastryShops = pastryShops.OrderBy(p => p.Name).ToList();
-            displayedPastryShops.Clear();
-            pastryShops.ForEach(p => displayedPastryShops.Add(p));
-            selectedSortType.SortTypeIndex = 0;
-            selectedSortType.IsAsc = true;
+            _pastryShops = _pastryShops.OrderBy(p => p.Name).ToList();
+            _displayedPastryShops.Clear();
+            _pastryShops.ForEach(p => _displayedPastryShops.Add(p));
+            _selectedSortType.SortTypeIndex = 0;
+            _selectedSortType.IsAsc = true;
             Loading.IsRunning = false;
             LoadingLayout.IsVisible = false;
             ListLayout.IsVisible = true;
@@ -184,14 +184,14 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
         {
             if (App.UpdatePastryList)
             {
-                load();
+                Load();
                 App.UpdatePastryList = false;
             }
         }
 
         private async void FilterToolbarItem_Clicked(object sender, EventArgs e)
         {
-            await PopupNavigation.PushAsync(new APastryFilterPopupPage(this, selectedCategories));
+            await PopupNavigation.PushAsync(new APastryFilterPopupPage(this, _selectedCategories));
         }
 
         private void EndSearchToolbarItem_Clicked(object sender, EventArgs e)
@@ -204,18 +204,18 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             SearchBar.Text = "";
             SearchBar.Unfocus();
             ToolbarItems.Clear();
-            ToolbarItems.Add(searchToolbarItem);
-            ToolbarItems.Add(filterToolbarItem);
-            ToolbarItems.Add(sortToolbarItem);
+            ToolbarItems.Add(_searchToolbarItem);
+            ToolbarItems.Add(_filterToolbarItem);
+            ToolbarItems.Add(_sortToolbarItem);
             await BodyLayout.TranslateTo(0, -50);
         }
 
         private void SearchToolbarItem_Clicked(object sender, EventArgs e)
         {
-            if (pastryShops.Count != 0)
+            if (_pastryShops.Count != 0)
             {
-                this.ToolbarItems.Clear();
-                ToolbarItems.Add(endSearchToolbarItem);
+                ToolbarItems.Clear();
+                ToolbarItems.Add(_endSearchToolbarItem);
                 BodyLayout.TranslateTo(0, 0);
                 SearchBar.Focus();
             }
@@ -228,23 +228,23 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
 
         public void AplyFilters()
         {
-            if (pastryShops == null || displayedPastryShops == null) return;
+            if (_pastryShops == null || _displayedPastryShops == null) return;
 
             var res =
-                pastryShops.Where(
+                _pastryShops.Where(
                     p =>
                         (string.IsNullOrEmpty(SearchBar.Text) || p.Name.ToLower().StartsWith(SearchBar.Text.ToLower())) &&
-                        (selectedCategories.Count == 0 ||
-                         p.Categories.Any(c => selectedCategories.Any(sc => sc.CategoryName == c.CategoryName)))).ToList();
-            if (selectedSortType.SortTypeIndex == 0 && selectedSortType.IsAsc)
+                        (_selectedCategories.Count == 0 ||
+                         p.Categories.Any(c => _selectedCategories.Any(sc => sc.CategoryName == c.CategoryName)))).ToList();
+            if (_selectedSortType.SortTypeIndex == 0 && _selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Name).ToList();
             }
-            else if (selectedSortType.SortTypeIndex == 0 && !selectedSortType.IsAsc)
+            else if (_selectedSortType.SortTypeIndex == 0 && !_selectedSortType.IsAsc)
             {
                 res = res.OrderByDescending(p => p.Name).ToList();
             }
-            else if (selectedSortType.SortTypeIndex == 1 && selectedSortType.IsAsc)
+            else if (_selectedSortType.SortTypeIndex == 1 && _selectedSortType.IsAsc)
             {
                 res = res.OrderBy(p => p.Ratings.Sum(r => r.Value)).ToList();
             }
@@ -252,8 +252,8 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             {
                 res = res.OrderByDescending(p => p.Ratings.Sum(r => r.Value)).ToList();
             }
-            displayedPastryShops.Clear();
-            res.ForEach(p => displayedPastryShops.Add(p));
+            _displayedPastryShops.Clear();
+            res.ForEach(p => _displayedPastryShops.Add(p));
         }
 
         protected override void OnDisappearing()
@@ -295,10 +295,10 @@ namespace Kmandili.Views.Admin.PSViews.PastryShopListAndFilter
             if (!choix) return;
             try
             {
-                if (await pastryShopRC.DeleteAsync(pastryShop.ID))
+                if (await _pastryShopRc.DeleteAsync(pastryShop.ID))
                 {
                     await PopupNavigation.PopAllAsync();
-                    load();
+                    Load();
                     return;
                 }
             }

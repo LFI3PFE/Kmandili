@@ -4,51 +4,50 @@ using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditDeleveryMethod : PopupPage
+	public partial class EditDeleveryMethod
 	{
-        private DeleveryList deleveryList;
-        private DeleveryMethod deleveryMethod;
-	    private List<DeleveryPaymentsViewModel> deleveryPaymentsViewModels = new List<DeleveryPaymentsViewModel>();
+        private readonly DeleveryList _deleveryList;
+        private readonly DeleveryMethod _deleveryMethod;
+	    private readonly List<DeleveryPaymentsViewModel> _deleveryPaymentsViewModels = new List<DeleveryPaymentsViewModel>();
 
         private class DeleveryPaymentsViewModel
         {
-            public Models.Payment payment { get; set; }
-            public bool exist { get; set; }
+            public Models.Payment Payment { get; set; }
+            public bool Exist { get; set; }
         }
 
         public EditDeleveryMethod(DeleveryMethod deleveryMethod, DeleveryList deleveryList)
         {
             InitializeComponent();
-            this.deleveryMethod = deleveryMethod;
-            this.deleveryList = deleveryList;
+            _deleveryMethod = deleveryMethod;
+            _deleveryList = deleveryList;
             DeleveryName.Text = deleveryMethod.DeleveryType;
             Load();
         }
 
 	    private async void Load()
 	    {
-	        var paymentRC = new RestClient<Models.Payment>();
+	        var paymentRc = new RestClient<Models.Payment>();
             try
             {
-                var payments = await paymentRC.GetAsync();
-                deleveryPaymentsViewModels.Clear();
+                var payments = await paymentRc.GetAsync();
+                _deleveryPaymentsViewModels.Clear();
                 foreach (var payment in payments)
                 {
-                    deleveryPaymentsViewModels.Add(new DeleveryPaymentsViewModel()
+                    _deleveryPaymentsViewModels.Add(new DeleveryPaymentsViewModel()
                     {
-                        payment = payment,
-                        exist = deleveryMethod.Payments.Any(p => p.ID == payment.ID)
+                        Payment = payment,
+                        Exist = _deleveryMethod.Payments.Any(p => p.ID == payment.ID)
                     });
                 }
-                List.HeightRequest = deleveryPaymentsViewModels.Count * 40;
-                List.ItemsSource = deleveryPaymentsViewModels;
+                List.HeightRequest = _deleveryPaymentsViewModels.Count * 40;
+                List.ItemsSource = _deleveryPaymentsViewModels;
             }
             catch (HttpRequestException)
             {
@@ -57,24 +56,23 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                return;
             }
         }
 
         private async void ComfirmTapped(object sender, EventArgs e)
         {
-            if (DeleveryName.Text != deleveryMethod.DeleveryType)
+            if (DeleveryName.Text != _deleveryMethod.DeleveryType)
             {
                 var newDelevery = new DeleveryMethod()
                 {
-                    ID = deleveryMethod.ID,
+                    ID = _deleveryMethod.ID,
                     DeleveryType = DeleveryName.Text,
                 };
-                var deleveryRC = new RestClient<DeleveryMethod>();
+                var deleveryRc = new RestClient<DeleveryMethod>();
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (!(await deleveryRC.PutAsync(newDelevery.ID, newDelevery)))
+                    if (!(await deleveryRc.PutAsync(newDelevery.ID, newDelevery)))
                     {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -95,7 +93,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                     return;
                 }
             }
-            if (deleveryPaymentsViewModels.All(dpv => !dpv.exist))
+            if (_deleveryPaymentsViewModels.All(dpv => !dpv.Exist))
             {
                 await
                     DisplayAlert("Erreur",
@@ -103,25 +101,25 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
             }
             else
             {
-                foreach (var deleveryPaymentsViewModel in deleveryPaymentsViewModels)
+                foreach (var deleveryPaymentsViewModel in _deleveryPaymentsViewModels)
                 {
-                    if (deleveryMethod.Payments.All(dp => deleveryPaymentsViewModel.payment.ID != dp.ID) &&
-                        deleveryPaymentsViewModel.exist)
+                    if (_deleveryMethod.Payments.All(dp => deleveryPaymentsViewModel.Payment.ID != dp.ID) &&
+                        deleveryPaymentsViewModel.Exist)
                     {
-                        deleveryMethod.Payments.Add(deleveryPaymentsViewModel.payment);
+                        _deleveryMethod.Payments.Add(deleveryPaymentsViewModel.Payment);
                     }
-                    else if(deleveryMethod.Payments.Any(dp => deleveryPaymentsViewModel.payment.ID == dp.ID) &&
-                        !deleveryPaymentsViewModel.exist)
+                    else if(_deleveryMethod.Payments.Any(dp => deleveryPaymentsViewModel.Payment.ID == dp.ID) &&
+                        !deleveryPaymentsViewModel.Exist)
                     {
-                        deleveryMethod.Payments.Remove(
-                            deleveryMethod.Payments.FirstOrDefault(p => p.ID == deleveryPaymentsViewModel.payment.ID));
+                        _deleveryMethod.Payments.Remove(
+                            _deleveryMethod.Payments.FirstOrDefault(p => p.ID == deleveryPaymentsViewModel.Payment.ID));
                     }
                 }
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    var deleveryRC = new DeleveryMethodRestClient();
-                    foreach (var payment in deleveryMethod.Payments)
+                    var deleveryRc = new DeleveryMethodRestClient();
+                    foreach (var payment in _deleveryMethod.Payments)
                     {
                         payment.Orders.Clear();
                         payment.PastryDeleveryPayments.Clear();
@@ -129,11 +127,11 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                     }
                     var newDelevery = new DeleveryMethod()
                     {
-                        ID = deleveryMethod.ID,
-                        DeleveryType = deleveryMethod.DeleveryType,
-                        Payments = deleveryMethod.Payments
+                        ID = _deleveryMethod.ID,
+                        DeleveryType = _deleveryMethod.DeleveryType,
+                        Payments = _deleveryMethod.Payments
                     };
-                    if (!(await deleveryRC.PutAsyncPayments(newDelevery.ID, newDelevery)))
+                    if (!(await deleveryRc.PutAsyncPayments(newDelevery.ID, newDelevery)))
                     {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -153,7 +151,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Delevery
                     return;
                 }
             }
-            deleveryList.Load();
+            _deleveryList.Load();
             await PopupNavigation.PopAllAsync();
         }
 

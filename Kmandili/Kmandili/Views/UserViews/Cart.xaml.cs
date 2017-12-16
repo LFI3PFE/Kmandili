@@ -394,7 +394,7 @@ namespace Kmandili.Views.UserViews
                         }else
                         {
                             cartProduct.Quantity--;
-                            cartProduct.updateTotal();
+                            cartProduct.UpdateTotal();
                             goto done;
                         }
                     }

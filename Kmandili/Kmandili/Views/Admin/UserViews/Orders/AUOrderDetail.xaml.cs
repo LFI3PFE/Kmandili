@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
@@ -10,13 +11,13 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.UserViews.Orders
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AUOrderDetail : ContentPage
+	public partial class AuOrderDetail
 	{
-        private Order order;
-	    private AUOrderList orderList;
-        private bool updateParent = false;
+        private readonly Order _order;
+	    private readonly AuOrderList _orderList;
+        private readonly bool _updateParent = false;
 
-        public AUOrderDetail(AUOrderList orderList, Order order)
+        public AuOrderDetail(AuOrderList orderList, Order order)
         {
             InitializeComponent();
             if (order.Status.StatusName != "Reçue" && order.Status.StatusName != "Livrée" && order.Status.StatusName != "Refusée")
@@ -29,30 +30,30 @@ namespace Kmandili.Views.Admin.UserViews.Orders
                 canceToolbarItem.Clicked += CanceToolbarItem_Clicked;
                 ToolbarItems.Add(canceToolbarItem);
             }
-            this.order = order;
-            this.orderList = orderList;
-            updateView();
+            _order = order;
+            _orderList = orderList;
+            UpdateView();
         }
 
-        private void updateView()
+        private void UpdateView()
         {
-            ProductsList.ItemsSource = order.OrderProducts;
-            ProductListViewLayout.HeightRequest = order.OrderProducts.Count * 100;
-            OrderID.Text = order.ID.ToString();
-            PastryShopName.Text = order.PastryShop.Name;
-            Date.Text = order.Date.ToString("d");
-            Delevery.Text = order.DeleveryMethod.DeleveryType;
-            Payment.Text = order.Payment.PaymentMethod;
-            Status.Text = order.Status.StatusName;
-            Total.Text = order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString();
+            ProductsList.ItemsSource = _order.OrderProducts;
+            ProductListViewLayout.HeightRequest = _order.OrderProducts.Count * 100;
+            OrderID.Text = _order.ID.ToString();
+            PastryShopName.Text = _order.PastryShop.Name;
+            Date.Text = _order.Date.ToString("d");
+            Delevery.Text = _order.DeleveryMethod.DeleveryType;
+            Payment.Text = _order.Payment.PaymentMethod;
+            Status.Text = _order.Status.StatusName;
+            Total.Text = _order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString(CultureInfo.InvariantCulture);
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            if (updateParent)
+            if (_updateParent)
             {
-                orderList.load();
+                _orderList.Load();
             }
         }
 
@@ -63,14 +64,14 @@ namespace Kmandili.Views.Admin.UserViews.Orders
                 "Etes-vous sur de vouloir annuler cette commande?",
                 "Confirmer", "Annuler");
             if (!choix) return;
-            OrderRestClient orderRC = new OrderRestClient();
-            EmailRestClient emailRC = new EmailRestClient();
+            OrderRestClient orderRc = new OrderRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                if (!await emailRC.SendCancelOrderEmail(order.ID)) return;
-                if (await orderRC.DeleteAsync(order.ID))
+                if (!await emailRc.SendCancelOrderEmail(_order.ID)) return;
+                if (await orderRc.DeleteAsync(_order.ID))
                 {
-                    orderList.load();
+                    _orderList.Load();
                     await DisplayAlert("Succès", "Commande annulée avec succès.", "Ok");
                     App.UpdateClientList = true;
                     await PopupNavigation.PopAllAsync();
@@ -85,13 +86,12 @@ namespace Kmandili.Views.Admin.UserViews.Orders
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
                 await Navigation.PopAsync();
-                return;
             }
         }
 
         private void SelectedNot(object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
     }
 }

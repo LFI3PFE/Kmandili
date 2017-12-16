@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AddPaymentPopupPage : PopupPage
+	public partial class AddPaymentPopupPage
 	{
-        private PaymentList paymentList;
+        private readonly PaymentList _paymentList;
 
         public AddPaymentPopupPage(PaymentList paymentList)
         {
             InitializeComponent();
-            this.paymentList = paymentList;
+            _paymentList = paymentList;
         }
 
         private async void ComfirmTapped(object sender, EventArgs e)
@@ -26,11 +25,11 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
                 {
                     PaymentMethod = MethodName.Text
                 };
-                var paymentRC = new RestClient<Models.Payment>();
+                var paymentRc = new RestClient<Models.Payment>();
                 try
                 {
                     await PopupNavigation.PushAsync(new LoadingPopupPage());
-                    if (await paymentRC.PostAsync(payment) == null)
+                    if (await paymentRc.PostAsync(payment) == null)
                     {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -39,7 +38,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
                             "Ok");
                         return;
                     }
-                    paymentList.Load();
+                    _paymentList.Load();
                 }
                 catch (HttpRequestException)
                 {

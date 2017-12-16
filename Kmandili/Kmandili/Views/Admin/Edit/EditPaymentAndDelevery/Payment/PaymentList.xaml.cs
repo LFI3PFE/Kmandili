@@ -9,15 +9,13 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PaymentList : ContentPage
+	public partial class PaymentList
 	{
-	    private ToolbarItem addToolbarItem;
-
-		public PaymentList ()
+	    public PaymentList ()
 		{
-			InitializeComponent ();
+		    InitializeComponent ();
             List.SeparatorVisibility = SeparatorVisibility.None;
-            addToolbarItem = new ToolbarItem()
+            var addToolbarItem = new ToolbarItem()
             {
                 Icon = "plus.png",
                 Text = "Ajouter",
@@ -68,10 +66,10 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
 	    {
             var choix = await DisplayAlert("Confirmation", "Etes vous sure de vouloire supprimer cette méthode de paiement?", "Oui", "Annuler");
             if (!choix) return;
-            var id = (Int32.Parse((((sender as Image).Parent as StackLayout).Children[0] as Label).Text));
+            var id = (Int32.Parse(((Label) ((StackLayout) ((Image) sender).Parent).Children[0]).Text));
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            var paymentRC = new RestClient<Models.Payment>();
-            var cat = await paymentRC.GetAsyncById(id);
+            var paymentRc = new RestClient<Models.Payment>();
+            var cat = await paymentRc.GetAsyncById(id);
             if (cat.Orders.Any() ||
                 cat.PastryDeleveryPayments.Any())
             {
@@ -84,7 +82,7 @@ namespace Kmandili.Views.Admin.Edit.EditPaymentAndDelevery.Payment
             }
             try
             {
-                if (!(await paymentRC.DeleteAsync(id)))
+                if (!(await paymentRc.DeleteAsync(id)))
                 {
                     await PopupNavigation.PopAllAsync();
                     await

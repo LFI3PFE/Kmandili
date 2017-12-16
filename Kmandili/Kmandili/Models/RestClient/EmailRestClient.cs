@@ -14,8 +14,8 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
-            string WebServiceUrl = App.ServerUrl + "api/SendPasswordRestCode/" + email + "/";
-            var result = await httpClient.PostAsync(WebServiceUrl, null);
+            string webServiceUrl = App.ServerUrl + "api/SendPasswordRestCode/" + email + "/";
+            var result = await httpClient.PostAsync(webServiceUrl, null);
             var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
             return taskModels;
         }
@@ -25,8 +25,8 @@ namespace Kmandili.Models.RestClient
             if (!(await App.CheckConnection())) return null;
             var httpClient = new HttpClient();
 
-            string WebServiceUrl = App.ServerUrl + "api/sendEmailVerificationCode/" + email + "/";
-            var result = await httpClient.PostAsync(WebServiceUrl, null);
+            string webServiceUrl = App.ServerUrl + "api/sendEmailVerificationCode/" + email + "/";
+            var result = await httpClient.PostAsync(webServiceUrl, null);
             var taskModels = JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
             return taskModels;
         }

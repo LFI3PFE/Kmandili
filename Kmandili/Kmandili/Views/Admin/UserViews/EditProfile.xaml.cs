@@ -14,43 +14,43 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditProfile : ContentPage
+	public partial class EditProfile
 	{
-        private ObservableCollection<StackLayout> PhoneNumberStackLayouts = new ObservableCollection<StackLayout>();
-        private RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
-        private List<PhoneNumberType> phoneNumberTypes;
-        private User user;
-        private List<PhoneNumber> removedPhoneNumbers = new List<PhoneNumber>();
-	    private UsersList usersList;
+        private readonly ObservableCollection<StackLayout> _phoneNumberStackLayouts = new ObservableCollection<StackLayout>();
+        private readonly RestClient<PhoneNumberType> _phoneNumberTypeRc = new RestClient<PhoneNumberType>();
+        private List<PhoneNumberType> _phoneNumberTypes;
+        private User _user;
+        private readonly List<PhoneNumber> _removedPhoneNumbers = new List<PhoneNumber>();
+	    private readonly UsersList _usersList;
 
         public EditProfile(int id, UsersList usersList)
         {
             InitializeComponent();
-            this.usersList = usersList;
-            PhoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
-            load(id);
+            _usersList = usersList;
+            _phoneNumberStackLayouts.CollectionChanged += PhoneNumberStackLayouts_CollectionChanged;
+            Load(id);
         }
 
         private void PhoneNumberStackLayouts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             PhoneNumbersLayout.Children.Clear();
-            foreach (StackLayout s in PhoneNumberStackLayouts)
+            foreach (StackLayout s in _phoneNumberStackLayouts)
             {
                 s.Children[2].IsVisible = false;
                 s.Children[3].IsVisible = true;
-                s.ClassId = PhoneNumberStackLayouts.IndexOf(s).ToString();
+                s.ClassId = _phoneNumberStackLayouts.IndexOf(s).ToString();
                 PhoneNumbersLayout.Children.Add(s);
             }
-            PhoneNumberStackLayouts.Last().Children[2].IsVisible = true;
-            PhoneNumberStackLayouts.Last().Children[3].IsVisible = false;
+            _phoneNumberStackLayouts.Last().Children[2].IsVisible = true;
+            _phoneNumberStackLayouts.Last().Children[3].IsVisible = false;
         }
 
-        private async void load(int id)
+        private async void Load(int id)
         {
             UserRestClient userRestClient = new UserRestClient();
             try
             {
-                user = await userRestClient.GetAsyncById(id);
+                _user = await userRestClient.GetAsyncById(id);
             }
             catch (HttpRequestException)
             {
@@ -62,25 +62,25 @@ namespace Kmandili.Views.Admin.UserViews
                 await Navigation.PopAsync();
                 return;
             }
-            if (user == null)
+            if (_user == null)
             {
                 await PopupNavigation.PopAllAsync();
                 return;
             }
-            Name.Text = user.Name;
-            LastName.Text = user.LastName;
-            Email.Text = user.Email;
-            Password.Text = user.Password;
-            Address.ClassId = user.Address_FK.ToString();
-            Number.Text = user.Address.Number.ToString();
-            Street.Text = user.Address.Street;
-            City.Text = user.Address.City;
-            ZipCode.Text = user.Address.ZipCode.ToString();
-            State.Text = user.Address.State;
-            Country.Text = user.Address.Country;
+            Name.Text = _user.Name;
+            LastName.Text = _user.LastName;
+            Email.Text = _user.Email;
+            Password.Text = _user.Password;
+            Address.ClassId = _user.Address_FK.ToString();
+            Number.Text = _user.Address.Number.ToString();
+            Street.Text = _user.Address.Street;
+            City.Text = _user.Address.City;
+            ZipCode.Text = _user.Address.ZipCode.ToString();
+            State.Text = _user.Address.State;
+            Country.Text = _user.Address.Country;
             try
             {
-                phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
+                _phoneNumberTypes = await _phoneNumberTypeRc.GetAsync();
             }
             catch (HttpRequestException)
             {
@@ -92,18 +92,18 @@ namespace Kmandili.Views.Admin.UserViews
                 await Navigation.PopAsync();
                 return;
             }
-            if (phoneNumberTypes == null)
+            if (_phoneNumberTypes == null)
             {
                 await PopupNavigation.PopAllAsync();
                 return;
             }
-            foreach (var phoneNumber in user.PhoneNumbers)
+            foreach (var phoneNumber in _user.PhoneNumbers)
             {
                 StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(phoneNumber);
-                PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+                _phoneNumberStackLayouts.Add(phoneNumberStackLayout);
             }
             StackLayout lastPhoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
-            PhoneNumberStackLayouts.Add(lastPhoneNumberStackLayout);
+            _phoneNumberStackLayouts.Add(lastPhoneNumberStackLayout);
             await PopupNavigation.PopAllAsync();
         }
 
@@ -118,14 +118,14 @@ namespace Kmandili.Views.Admin.UserViews
                 WidthRequest = 150,
                 FontSize = 25,
                 Keyboard = Keyboard.Telephone,
-                ClassId = phoneNumber != null ? phoneNumber?.ID.ToString() : "",
+                ClassId = phoneNumber?.ID.ToString() ?? ""
             };
 
             Picker typePicker = new Picker()
             {
                 WidthRequest = 90,
-                ItemsSource = phoneNumberTypes,
-                SelectedIndex = phoneNumber != null ? phoneNumberTypes.IndexOf(phoneNumberTypes.FirstOrDefault(t => t.ID == phoneNumber.PhoneNumberType_FK)) : 0,
+                ItemsSource = _phoneNumberTypes,
+                SelectedIndex = phoneNumber != null ? _phoneNumberTypes.IndexOf(_phoneNumberTypes.FirstOrDefault(t => t.ID == phoneNumber.PhoneNumberType_FK)) : 0,
             };
             Image addIcon = new Image()
             {
@@ -139,13 +139,13 @@ namespace Kmandili.Views.Admin.UserViews
                 WidthRequest = 20,
                 IsVisible = phoneNumber != null
             };
-            TapGestureRecognizer addPhoneNumberGR = new TapGestureRecognizer();
-            addPhoneNumberGR.Tapped += AddPhoneNumber_Tapped;
-            addIcon.GestureRecognizers.Add(addPhoneNumberGR);
+            TapGestureRecognizer addPhoneNumberGr = new TapGestureRecognizer();
+            addPhoneNumberGr.Tapped += AddPhoneNumber_Tapped;
+            addIcon.GestureRecognizers.Add(addPhoneNumberGr);
 
-            TapGestureRecognizer removePhoneNumberGR = new TapGestureRecognizer();
-            removePhoneNumberGR.Tapped += RemovePhoneNumberGR_Tapped;
-            removeIcon.GestureRecognizers.Add(removePhoneNumberGR);
+            TapGestureRecognizer removePhoneNumberGr = new TapGestureRecognizer();
+            removePhoneNumberGr.Tapped += RemovePhoneNumberGR_Tapped;
+            removeIcon.GestureRecognizers.Add(removePhoneNumberGr);
 
             StackLayout phoneNumberStackLayout = new StackLayout()
             {
@@ -161,73 +161,72 @@ namespace Kmandili.Views.Admin.UserViews
 
         private void RemovePhoneNumberGR_Tapped(object sender, EventArgs e)
         {
-            int index = Int32.Parse(((sender as Image).Parent as StackLayout).ClassId);
-            PhoneNumberStackLayouts.RemoveAt(index);
-            string removedClassId = (((sender as Image).Parent as StackLayout).Children[0] as Entry).ClassId;
-            int removedID = removedClassId == "" ? -1 : Int32.Parse(removedClassId);
-            var phoneNumber = user.PhoneNumbers.FirstOrDefault(p => p.ID == removedID);
+            int index = Int32.Parse(((StackLayout) ((Image) sender).Parent).ClassId);
+            _phoneNumberStackLayouts.RemoveAt(index);
+            string removedClassId = ((Entry) ((StackLayout) ((Image) sender).Parent).Children[0]).ClassId;
+            int removedId = removedClassId == "" ? -1 : Int32.Parse(removedClassId);
+            var phoneNumber = _user.PhoneNumbers.FirstOrDefault(p => p.ID == removedId);
             if (phoneNumber != null)
             {
-                removedPhoneNumbers.Add(phoneNumber);
+                _removedPhoneNumbers.Add(phoneNumber);
             }
         }
 
         private void AddPhoneNumber_Tapped(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty((((sender as Image).Parent as StackLayout).Children[0] as Entry).Text)) return;
-            (PhoneNumberStackLayouts.Last().Children[2] as Image).IsVisible = false;
-            (PhoneNumberStackLayouts.Last().Children[3] as Image).IsVisible = true;
+            if (string.IsNullOrEmpty(((Entry) ((StackLayout) ((Image) sender).Parent).Children[0]).Text)) return;
+            ((Image) _phoneNumberStackLayouts.Last().Children[2]).IsVisible = false;
+            ((Image) _phoneNumberStackLayouts.Last().Children[3]).IsVisible = true;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
-            PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            _phoneNumberStackLayouts.Add(phoneNumberStackLayout);
         }
 
-        private async Task<bool> validAddress()
+        private async Task<bool> ValidAddress()
         {
-            int x;
-            if (Number.Text == null || Number.Text == "")
+            if (string.IsNullOrEmpty(Number.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Numero est obligateur!", "Ok");
                 return false;
             }
-            else if (!int.TryParse(Number.Text, out x))
+            if (!int.TryParse(Number.Text, out _))
             {
                 await DisplayAlert("Erreur", "Le champ Numéro De Bâtiment ne doit contenir que des Chiffres!", "Ok");
                 Number.Text = "";
                 return false;
             }
-            else if (Street.Text == null || Street.Text == "")
+            if (string.IsNullOrEmpty(Street.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Rue est obligateur!", "Ok");
                 return false;
             }
-            else if (City.Text == null || City.Text == "")
+            if (string.IsNullOrEmpty(City.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Ville est obligateur!", "Ok");
                 return false;
             }
-            else if (ZipCode.Text == null || ZipCode.Text == "")
+            if (string.IsNullOrEmpty(ZipCode.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Co. Postal est obligateur!", "Ok");
                 return false;
             }
-            else if (ZipCode.Text.Length != 4)
+            if (ZipCode.Text.Length != 4)
             {
                 await DisplayAlert("Erreur", "Le champ Co. Postal doit contenir exactement 4 Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
-            else if (!int.TryParse(ZipCode.Text, out x))
+            if (!int.TryParse(ZipCode.Text, out _))
             {
                 await DisplayAlert("Erreur", "Le champ Co. Postal ne doit contenir que des Chiffres!", "Ok");
                 ZipCode.Text = "";
                 return false;
             }
-            else if (State.Text == null || State.Text == "")
+            if (string.IsNullOrEmpty(State.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Gouvernorat est obligateur!", "Ok");
                 return false;
             }
-            else if (Country.Text == null || Country.Text == "")
+            if (string.IsNullOrEmpty(Country.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Pays est obligateur!", "Ok");
                 return false;
@@ -235,30 +234,26 @@ namespace Kmandili.Views.Admin.UserViews
             return true;
         }
 
-        private async Task<bool> validPhoneNumber()
+        private async Task<bool> ValidPhoneNumber()
         {
-            int x;
-            bool exist = false;
-            foreach (StackLayout s in PhoneNumberStackLayouts)
+            var exist = false;
+            foreach (StackLayout s in _phoneNumberStackLayouts)
             {
-                string phoneNumber = (s.Children[0] as Entry).Text;
-                if (phoneNumber != null && phoneNumber != "")
+                string phoneNumber = ((Entry) s.Children[0]).Text;
+                if (!string.IsNullOrEmpty(phoneNumber))
                 {
-                    if (!int.TryParse(phoneNumber, out x))
+                    if (!int.TryParse(phoneNumber, out _))
                     {
-                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
-                        (s.Children[0] as Entry).Text = "";
+                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (_phoneNumberStackLayouts.IndexOf(s) + 1) + " ne doit contenir que des chiffres!", "Ok");
+                        ((Entry) s.Children[0]).Text = "";
                         return false;
                     }
-                    else if (phoneNumber.Length != 8)
+                    if (phoneNumber.Length != 8)
                     {
-                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (PhoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
+                        await DisplayAlert("Erreur", "Le champ Numero de Telephone N°" + (_phoneNumberStackLayouts.IndexOf(s) + 1) + " doit contenir exactement 8 chiffres!", "Ok");
                         return false;
                     }
-                    else
-                    {
-                        exist = true;
-                    }
+                    exist = true;
                 }
             }
             if (!exist)
@@ -268,39 +263,39 @@ namespace Kmandili.Views.Admin.UserViews
             return exist;
         }
 
-        private async Task<bool> valid()
+        private async Task<bool> Valid()
         {
-            if (Name.Text == null || Name.Text == "")
+            if (string.IsNullOrEmpty(Name.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Nom est obligateur!", "Ok");
                 return false;
             }
-            else if (LastName.Text == null || LastName.Text == "")
+            if (string.IsNullOrEmpty(LastName.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Prenom est obligateur!", "Ok");
                 return false;
             }
-            else if (Email.Text == null || Email.Text == "")
+            if (string.IsNullOrEmpty(Email.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Email est obligateur!", "Ok");
                 return false;
             }
-            else if (!App.IsValidEmail(Email.Text))
+            if (!App.IsValidEmail(Email.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Email est invalide!", "Ok");
                 Email.Text = "";
                 return false;
             }
-            else if (Password.Text == null || Password.Text == "")
+            if (string.IsNullOrEmpty(Password.Text))
             {
                 await DisplayAlert("Erreur", "Le champ Password est obligateur!", "Ok");
                 return false;
             }
-            else if (!(await validAddress()))
+            if (!(await ValidAddress()))
             {
                 return false;
             }
-            else if (!(await validPhoneNumber()))
+            if (!(await ValidPhoneNumber()))
             {
                 return false;
             }
@@ -311,8 +306,8 @@ namespace Kmandili.Views.Admin.UserViews
         public async void EmailVerified()
         {
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            UserRestClient userRC = new UserRestClient();
-            RestClient<Address> addressRC = new RestClient<Address>();
+            UserRestClient userRc = new UserRestClient();
+            RestClient<Address> addressRc = new RestClient<Address>();
             Address address = new Address()
             {
                 ID = Int32.Parse(Address.ClassId),
@@ -325,7 +320,7 @@ namespace Kmandili.Views.Admin.UserViews
             };
             try
             {
-                if (!(await addressRC.PutAsync(address.ID, address))) return;
+                if (!(await addressRc.PutAsync(address.ID, address))) return;
             }
             catch (HttpRequestException)
             {
@@ -334,14 +329,14 @@ namespace Kmandili.Views.Admin.UserViews
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                usersList.load();
+                _usersList.Load();
                 await Navigation.PopAsync();
                 return;
             }
 
             User user = new User()
             {
-                ID = this.user.ID,
+                ID = _user.ID,
                 Name = Name.Text.ToLower(),
                 LastName = LastName.Text.ToLower(),
                 Email = Email.Text.ToLower(),
@@ -350,7 +345,7 @@ namespace Kmandili.Views.Admin.UserViews
             };
             try
             {
-                if (!(await userRC.PutAsync(user.ID, user))) return;
+                if (!(await userRc.PutAsync(user.ID, user))) return;
             }
             catch (HttpRequestException)
             {
@@ -359,14 +354,14 @@ namespace Kmandili.Views.Admin.UserViews
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                usersList.load();
+                _usersList.Load();
                 await Navigation.PopAsync();
                 return;
             }
             RestClient<PhoneNumber> phoneNumberRestClient = new RestClient<PhoneNumber>();
             try
             {
-                foreach (var removedPhoneNumber in removedPhoneNumbers)
+                foreach (var removedPhoneNumber in _removedPhoneNumbers)
                 {
                     if (!(await phoneNumberRestClient.DeleteAsync(removedPhoneNumber.ID))) return;
                 }
@@ -378,25 +373,28 @@ namespace Kmandili.Views.Admin.UserViews
                     DisplayAlert("Erreur",
                         "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                         "Ok");
-                usersList.load();
+                _usersList.Load();
                 await Navigation.PopAsync();
                 return;
             }
 
-            foreach (var phoneNumberStackLayout in PhoneNumberStackLayouts)
+            foreach (var phoneNumberStackLayout in _phoneNumberStackLayouts)
             {
                 Entry phoneNumberEntry = (phoneNumberStackLayout.Children[0] as Entry);
-                if (phoneNumberEntry.Text != "")
+                if (phoneNumberEntry?.Text != "")
                 {
                     PhoneNumber p = new PhoneNumber()
                     {
-                        Number = phoneNumberEntry.Text,
-                        PhoneNumberType_FK = (phoneNumberTypes.ElementAt((phoneNumberStackLayout.Children[1] as Picker).SelectedIndex)).ID,
+                        Number = phoneNumberEntry?.Text,
+                        PhoneNumberType_FK = (_phoneNumberTypes.ElementAt(((Picker) phoneNumberStackLayout.Children[1]).SelectedIndex)).ID,
                     };
-                    if (phoneNumberEntry.ClassId != "")
+                    if (phoneNumberEntry?.ClassId != "")
                     {
-                        int phoneNumberID = Int32.Parse(phoneNumberEntry.ClassId);
-                        p.ID = phoneNumberID;
+                        if (phoneNumberEntry != null)
+                        {
+                            var phoneNumberId = Int32.Parse(phoneNumberEntry.ClassId);
+                            p.ID = phoneNumberId;
+                        }
                         try
                         {
                             if (!(await phoneNumberRestClient.PutAsync(p.ID, p))) return;
@@ -408,7 +406,7 @@ namespace Kmandili.Views.Admin.UserViews
                                 DisplayAlert("Erreur",
                                     "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                     "Ok");
-                            usersList.load();
+                            _usersList.Load();
                             await Navigation.PopAsync();
                             return;
                         }
@@ -427,7 +425,7 @@ namespace Kmandili.Views.Admin.UserViews
                                 DisplayAlert("Erreur",
                                     "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.",
                                     "Ok");
-                            usersList.load();
+                            _usersList.Load();
                             await Navigation.PopAsync();
                             return;
                         }
@@ -436,15 +434,15 @@ namespace Kmandili.Views.Admin.UserViews
             }
             await DisplayAlert("Succées", "Informations mise à jour!", "Ok");
             await PopupNavigation.PopAllAsync();
-            usersList.load();
+            _usersList.Load();
             await Navigation.PopAsync();
         }
 
         public async void UpdateBt_Clicked(object sender, EventArgs e)
         {
-            if (await valid())
+            if (await Valid())
             {
-                if (user.Email != Email.Text.ToLower())
+                if (_user.Email != Email.Text.ToLower())
                 {
                     try
                     {
@@ -454,7 +452,7 @@ namespace Kmandili.Views.Admin.UserViews
                             Email.Text = "";
                             return;
                         }
-                        await PopupNavigation.PushAsync(new AUEmailVerificationPopupPage(this, Email.Text.ToLower()));
+                        await PopupNavigation.PushAsync(new AuEmailVerificationPopupPage(this, Email.Text.ToLower()));
                     }
                     catch (Exception)
                     {

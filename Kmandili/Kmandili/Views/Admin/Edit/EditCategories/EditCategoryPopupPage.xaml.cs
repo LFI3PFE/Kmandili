@@ -2,40 +2,39 @@
 using System.Net.Http;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
 
 namespace Kmandili.Views.Admin.Edit.EditCategories
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class EditCategoryPopupPage : PopupPage
+	public partial class EditCategoryPopupPage
 	{
-	    private CategoriesList categoriesList;
-	    private Category category;
+	    private readonly CategoriesList _categoriesList;
+	    private readonly Category _category;
 
 		public EditCategoryPopupPage (Category category, CategoriesList categoriesList)
 		{
 			InitializeComponent ();
-		    this.category = category;
-		    this.categoriesList = categoriesList;
+		    _category = category;
+		    _categoriesList = categoriesList;
 		    CategoryName.Text = category.CategoryName;
 		}
 
 	    private async void ComfirmTapped(object sender, EventArgs e)
 	    {
-	        if (CategoryName.Text != category.CategoryName)
+	        if (CategoryName.Text != _category.CategoryName)
 	        {
 	            var newCategory = new Category()
 	            {
-	                ID = category.ID,
+	                ID = _category.ID,
 	                CategoryName = CategoryName.Text,
 	            };
-	            var categoryRC = new RestClient<Category>();
+	            var categoryRc = new RestClient<Category>();
 	            try
 	            {
 	                await PopupNavigation.PushAsync(new LoadingPopupPage());
-	                if (!(await categoryRC.PutAsync(newCategory.ID, newCategory)))
+	                if (!(await categoryRc.PutAsync(newCategory.ID, newCategory)))
 	                {
                         await PopupNavigation.PopAllAsync();
                         await
@@ -44,7 +43,7 @@ namespace Kmandili.Views.Admin.Edit.EditCategories
                             "Ok");
                         return;
                     }
-                    categoriesList.Load();
+                    _categoriesList.Load();
                 }
                 catch (HttpRequestException)
                 {

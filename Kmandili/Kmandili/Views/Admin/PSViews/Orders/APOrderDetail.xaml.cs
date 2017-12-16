@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using Kmandili.Models;
@@ -11,19 +12,18 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.PSViews.Orders
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class APOrderDetail : ContentPage
+	public partial class ApOrderDetail
 	{
-        private APOrderList orderList;
-        private Order order;
-        private bool updateParent = false;
-        private List<Status> status;
-        private ToolbarItem cancelToolbarItem;
-        public APOrderDetail(APOrderList orderList, Order order)
+        private readonly ApOrderList _orderList;
+        private readonly Order _order;
+	    private bool _updateParent = false;
+
+	    public ApOrderDetail(ApOrderList orderList, Order order)
         {
             InitializeComponent();
             if (order.Status.StatusName != "Reçue" && order.Status.StatusName != "Livrée" && order.Status.StatusName != "Refusée")
             {
-                cancelToolbarItem = new ToolbarItem()
+                var cancelToolbarItem = new ToolbarItem()
                 {
                     Icon = "close.png",
                     Text = "Annuler",
@@ -32,8 +32,8 @@ namespace Kmandili.Views.Admin.PSViews.Orders
                 cancelToolbarItem.Clicked += CancelToolbarItem_Clicked;
                 ToolbarItems.Add(cancelToolbarItem);
             }
-            this.order = order;
-            this.orderList = orderList;
+            _order = order;
+            _orderList = orderList;
             ProductsList.ItemsSource = order.OrderProducts;
             ProductListViewLayout.HeightRequest = order.OrderProducts.Count * 100;
             OrderID.Text = order.ID.ToString();
@@ -42,7 +42,7 @@ namespace Kmandili.Views.Admin.PSViews.Orders
             Delevery.Text = order.DeleveryMethod.DeleveryType;
             Payment.Text = order.Payment.PaymentMethod;
             Status.Text = order.Status.StatusName;
-            Total.Text = order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString();
+            Total.Text = order.OrderProducts.Sum(op => op.Quantity * op.Product.Price).ToString(CultureInfo.InvariantCulture);
         }
 
         private async void CancelToolbarItem_Clicked(object sender, EventArgs e)
@@ -52,14 +52,14 @@ namespace Kmandili.Views.Admin.PSViews.Orders
                 "Confirmer", "Annuler");
             if (!choix) return;
             await PopupNavigation.PushAsync(new LoadingPopupPage());
-            OrderRestClient orderRC = new OrderRestClient();
-            EmailRestClient emailRC = new EmailRestClient();
+            OrderRestClient orderRc = new OrderRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                if (!await emailRC.SendCanelOrderEmailByAdmin(order.ID)) return;
-                if (await orderRC.DeleteAsync(order.ID))
+                if (!await emailRc.SendCanelOrderEmailByAdmin(_order.ID)) return;
+                if (await orderRc.DeleteAsync(_order.ID))
                 {
-                    orderList.load(order.PastryShop_FK);
+                    _orderList.Load(_order.PastryShop_FK);
                     await DisplayAlert("Succès", "Commande annuler.", "Ok");
                     await PopupNavigation.PopAsync();
                     await Navigation.PopAsync();
@@ -79,15 +79,15 @@ namespace Kmandili.Views.Admin.PSViews.Orders
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            if (updateParent)
+            if (_updateParent)
             {
-                orderList.load(order.PastryShop_FK);
+                _orderList.Load(_order.PastryShop_FK);
             }
         }
 
         private void SelectedNot(object sender, EventArgs e)
         {
-            (sender as ListView).SelectedItem = null;
+            ((ListView) sender).SelectedItem = null;
         }
     }
 }

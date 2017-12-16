@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using Kmandili.Models.RestClient;
-using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,16 +8,16 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.UserViews
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AUEmailVerificationPopupPage : PopupPage
-    {
-        private string email;
-        private EditProfile editUserProfile;
-        private string code = "";
+	public partial class AuEmailVerificationPopupPage
+	{
+        private readonly string _email;
+        private readonly EditProfile _editUserProfile;
+        private string _code = "";
 
-        public AUEmailVerificationPopupPage(EditProfile editUserProfile, string email)
+        public AuEmailVerificationPopupPage(EditProfile editUserProfile, string email)
         {
-            this.email = email;
-            this.editUserProfile = editUserProfile;
+            _email = email;
+            _editUserProfile = editUserProfile;
             BackgroundColor = Color.FromHex("#CC000000");
             CloseWhenBackgroundIsClicked = false;
             InitializeComponent();
@@ -27,10 +26,10 @@ namespace Kmandili.Views.Admin.UserViews
 
         private async void SendEmail()
         {
-            EmailRestClient emailRC = new EmailRestClient();
+            EmailRestClient emailRc = new EmailRestClient();
             try
             {
-                code = await emailRC.SendEmailVerification(email);
+                _code = await emailRc.SendEmailVerification(_email);
             }
             catch (HttpRequestException)
             {
@@ -42,9 +41,9 @@ namespace Kmandili.Views.Admin.UserViews
         private async void ComfirmTapped(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(Code.Text)) return;
-            if (Code.Text.Length == 6 && code == Code.Text)
+            if (Code.Text.Length == 6 && _code == Code.Text)
             {
-                editUserProfile.EmailVerified();
+                _editUserProfile.EmailVerified();
                 await PopupNavigation.PopAsync();
             }
             else

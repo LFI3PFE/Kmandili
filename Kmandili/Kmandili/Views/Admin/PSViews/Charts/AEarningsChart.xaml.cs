@@ -8,19 +8,18 @@ using Xamarin.Forms.Xaml;
 namespace Kmandili.Views.Admin.PSViews.Charts
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AEarningsChart : ContentPage
+	public partial class AEarningsChart
 	{
-        private ToolbarItem refreshToolbarItem;
-        private int year;
-        private int semester;
-        private DateTime max, min;
-        private PastryShop pastryShop;
+	    private int _year;
+        private int _semester;
+        private DateTime _max, _min;
+        private readonly PastryShop _pastryShop;
 
         public AEarningsChart(PastryShop pastryShop)
         {
             InitializeComponent();
-            this.pastryShop = pastryShop;
-            refreshToolbarItem = new ToolbarItem()
+            _pastryShop = pastryShop;
+            var refreshToolbarItem = new ToolbarItem()
             {
                 Text = "Rafraîchir",
                 Order = ToolbarItemOrder.Primary,
@@ -28,35 +27,35 @@ namespace Kmandili.Views.Admin.PSViews.Charts
             };
             refreshToolbarItem.Clicked += RefreshToolbarItem_Clicked;
             ToolbarItems.Add(refreshToolbarItem);
-            min = pastryShop.JoinDate;
-            max = DateTime.Now;
-            year = max.Year;
-            semester = getSemester(max.Month);
+            _min = pastryShop.JoinDate;
+            _max = DateTime.Now;
+            _year = _max.Year;
+            _semester = GetSemester(_max.Month);
             Load();
         }
 
         private void PrecedentTapped(object sender, EventArgs e)
         {
-            if (min.Year == year && getSemester(min.Month) == semester) return;
-            if (semester == 2)
-                semester--;
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester) return;
+            if (_semester == 2)
+                _semester--;
             else
             {
-                semester = 2;
-                year--;
+                _semester = 2;
+                _year--;
             }
             Load();
         }
 
         private void SuivantTapped(object sender, EventArgs e)
         {
-            if (max.Year == year && getSemester(max.Month) == semester) return;
-            if (semester == 1)
-                semester++;
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester) return;
+            if (_semester == 1)
+                _semester++;
             else
             {
-                semester = 1;
-                year++;
+                _semester = 1;
+                _year++;
             }
             Load();
         }
@@ -71,12 +70,12 @@ namespace Kmandili.Views.Admin.PSViews.Charts
             BodyLayout.IsVisible = false;
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
-            var chartRC = new ChartsRestClient();
+            var chartRc = new ChartsRestClient();
             try
             {
                 var htmlWebView = new HtmlWebViewSource()
                 {
-                    Html = await chartRC.GetChartView(App.ServerUrl + "api/GetIncomsChartView/" + pastryShop.ID + "/" + year + "/" + semester)
+                    Html = await chartRc.GetChartView(App.ServerUrl + "api/GetIncomsChartView/" + _pastryShop.ID + "/" + _year + "/" + _semester)
                 };
                 Browser.Source = htmlWebView;
             }
@@ -85,7 +84,7 @@ namespace Kmandili.Views.Admin.PSViews.Charts
                 await DisplayAlert("Erreur", "Une erreur s'est produite lors de la communication avec le serveur, veuillez réessayer plus tard.", "Ok");
                 return;
             }
-            if (max.Year == year && getSemester(max.Month) == semester)
+            if (_max.Year == _year && GetSemester(_max.Month) == _semester)
             {
                 SuivantLabel.TextColor = Color.LightSkyBlue;
             }
@@ -94,7 +93,7 @@ namespace Kmandili.Views.Admin.PSViews.Charts
                 SuivantLabel.TextColor = Color.DodgerBlue;
             }
 
-            if (min.Year == year && getSemester(min.Month) == semester)
+            if (_min.Year == _year && GetSemester(_min.Month) == _semester)
             {
                 PrecedentLabel.TextColor = Color.LightSkyBlue;
             }
@@ -107,7 +106,7 @@ namespace Kmandili.Views.Admin.PSViews.Charts
             BodyLayout.IsVisible = true;
         }
 
-        private int getSemester(int month)
+        private int GetSemester(int month)
         {
             return month <= 6 ? 1 : 2;
         }
