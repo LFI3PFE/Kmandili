@@ -1,6 +1,6 @@
 # Kmandili
 This App was created as a graduation project for obtaining the "Basic Computer License" (Licence Fondamentale en Informatique) diploma from "Faculty of Science of Tunis" (FST).  
-This application along with the web service named "KmandiliWebService" was able to get the diploma with an excellent average grade of 18/20 the 04/10/2017.  
+This application along with the web service named "[KmandiliWebService](https://github.com/LFI3PFE/KmandiliWebService)" was able to get the diploma with an excellent average grade of 18/20 the 04/10/2017.  
 Seif Abdennadher, the owner of thes repo, is the only author of thes app, and the only owner.
 
 ******************************************************************************************************************************************
