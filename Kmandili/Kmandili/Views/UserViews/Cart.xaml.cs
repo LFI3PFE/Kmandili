@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -266,7 +267,7 @@ namespace Kmandili.Views.UserViews
             {
                 Order order = new Order()
                 {
-                    User_FK = App.Connected.Id,
+                    User_FK = Settings.Id,
                     PastryShop_FK = cartPastry.PastryShop.ID,
                     DeleveryMethod_FK = cartPastry.DeleveryMethod.ID,
                     PaymentMethod_FK = cartPastry.PaymentMethod.ID,

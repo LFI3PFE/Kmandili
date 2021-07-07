@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Kmandili.Helpers;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -88,7 +88,7 @@ namespace Kmandili.Views.UserViews
             if (reload)
             {
                 PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-                pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
+                pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
                 if (pastryShop == null) return;
             }
             Rating.Text = pastryShop.Rating.ToString();

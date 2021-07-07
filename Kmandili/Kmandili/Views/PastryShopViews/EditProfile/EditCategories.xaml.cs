@@ -48,8 +48,8 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             var categoryLayout = new StackLayout();
             Grid categoryGrid = new Grid();
             categoryGrid.RowDefinitions.Add(new RowDefinition() {Height = GridLength.Auto});
-	        categoryGrid.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(3, GridUnitType.Star)});
-            categoryGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+	        categoryGrid.ColumnDefinitions.Add(new ColumnDefinition() {Width = new GridLength(4, GridUnitType.Star)});
+            categoryGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(2, GridUnitType.Star) });
             Switch categorySwitch = new Switch()
             {
                 ClassId = category.ID.ToString(),
@@ -115,8 +115,16 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
                 return;
 	        }
 	        await PopupNavigation.PushAsync(new LoadingPopupPage());
-            pastryShop.Categories.ToList().ForEach(c => c.PastryShops.Clear());
-            newSelectedCategories.ForEach(c => c.PastryShops.Clear());
+	        foreach (var category in pastryShop.Categories)
+	        {
+                category.PastryShops.Clear();
+                category.Products.Clear();
+            }
+	        foreach (var newSelectedCategory in newSelectedCategories)
+	        {
+	            newSelectedCategory.PastryShops.Clear();
+                newSelectedCategory.Products.Clear();
+            }
             PastryShop p = new PastryShop()
 	        {
                 ID = pastryShop.ID,
@@ -138,10 +146,10 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             var pastryShopRC = new PastryShopRestClient();
 	        if (await pastryShopRC.PutAsyncCategories(p.ID, p))
 	        {
-	            await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
+                await PopupNavigation.PopAllAsync();
+                await DisplayAlert("Succées", "Liste de catégories mise à jours!", "Ok");
 	            editProfileInfo.UpdateParent = true;
                 editProfileInfo.load();
-	            await PopupNavigation.PopAsync();
 	        }
 	    }
     }

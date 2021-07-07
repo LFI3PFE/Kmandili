@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
@@ -41,18 +42,24 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         public async void Load(bool reloadParentval)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             this.reloadParent = reloadParentval;
 	        PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-	        pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
-            if (pastryShop == null) return;
+	        pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+            if (pastryShop == null)
+            {
+                await PopupNavigation.PopAllAsync();
+                return;
+            }
             ContentLayout.Children.Clear();
 	        foreach (var pastryShopDeleveryMethod in pastryShop.PastryShopDeleveryMethods)
 	        {
 	            ContentLayout.Children.Add(MakeDeleveryMethodLayout(pastryShopDeleveryMethod));
 	        }
-	    }
+            await PopupNavigation.PopAllAsync(); 
+        }
 
-	    private StackLayout MakeDeleveryMethodLayout(PastryShopDeleveryMethod pastryShopDeleveryMethod)
+        private StackLayout MakeDeleveryMethodLayout(PastryShopDeleveryMethod pastryShopDeleveryMethod)
 	    {
             StackLayout mainLayout = new StackLayout() {BackgroundColor = Color.White};
 	        StackLayout innerLayout = new StackLayout() {Padding = new Thickness(20,20,0,20)};
@@ -136,14 +143,21 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         private async void RemoveGestureRecognizer_Tapped(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (pastryShop.PastryShopDeleveryMethods.Count == 1)
             {
+                await PopupNavigation.PopAsync();
                 await DisplayAlert("Erreur", "Il faut avoir au moins une methode de livraison!", "Ok");
                 return;
             }
             int ID = Int32.Parse((sender as StackLayout).ClassId);
             RestClient<PastryShopDeleveryMethod> pastryShopDeleverMethodRC = new RestClient<PastryShopDeleveryMethod>();
-            if(!(await pastryShopDeleverMethodRC.DeleteAsync(ID))) return;
+            if (!(await pastryShopDeleverMethodRC.DeleteAsync(ID)))
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
+            await PopupNavigation.PopAsync();
             Load(true);
         }
 

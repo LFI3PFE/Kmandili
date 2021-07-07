@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Kmandili.Views.PastryShopViews.ProductListAndFilter;
-
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -43,6 +43,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void Load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             RestClient<SaleUnit> saleUnitRC = new RestClient<SaleUnit>();
             saleUnits = await saleUnitRC.GetAsync();
             if (saleUnits == null) return;
@@ -54,6 +55,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             if (categories == null) return;
             CategoryPicker.ItemsSource = categories;
             CategoryPicker.SelectedIndex = 0;
+            await PopupNavigation.PopAsync();
         }
 
         public async Task<bool> ValidForm()
@@ -86,6 +88,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         public async void NextButton_OnClick(Object seneder, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (await ValidForm())
             {
                 RestClient<Product> productRC = new RestClient<Product>();
@@ -103,6 +106,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 product = await productRC.PostAsync(product);
                 if (product == null)
                 {
+                    await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur dans l'ajout du produit!", "Ok");
                     return;
                 }
@@ -116,6 +120,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     {
                         ProductsList.load(true);
                     }
+                    await PopupNavigation.PopAsync();
                     await Navigation.PopAsync();
                 }
             }

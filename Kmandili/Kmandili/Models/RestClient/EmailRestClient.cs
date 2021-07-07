@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Plugin.Connectivity;
 
 namespace Kmandili.Models.RestClient
@@ -20,6 +21,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<string> SendPasswordRestCode(string email)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/SendPasswordRestCode/" + email + "/";
@@ -30,6 +32,7 @@ namespace Kmandili.Models.RestClient
 
         public async Task<string> SendEmailVerification(string email)
         {
+            if (!(await CheckConnection())) return null;
             var httpClient = new HttpClient();
 
             string WebServiceUrl = App.ServerURL + "api/sendEmailVerificationCode/" + email + "/";
@@ -40,8 +43,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> SendOrderEmail(int id)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.GetAsync(App.ServerURL + "api/sendOrderEmail/" + id);
 
             return result.IsSuccessStatusCode;
@@ -49,8 +53,9 @@ namespace Kmandili.Models.RestClient
 
         public async Task<bool> SendCancelOrderEmail(int id)
         {
-            if (!(await CheckConnection())) return false;
+            if (!(await CheckConnection()) || (App.TokenExpired())) return false;
             var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Settings.Token);
             var result = await httpClient.GetAsync(App.ServerURL + "/api/sendCanelOrderEmail/" + id);
 
             return result.IsSuccessStatusCode;

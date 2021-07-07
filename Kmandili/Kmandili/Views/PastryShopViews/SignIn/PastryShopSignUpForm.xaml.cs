@@ -41,6 +41,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             priceRanges = await priceRangeTypeRC.GetAsync();
             if (phoneNumberTypes == null || priceRanges == null) return;
@@ -48,6 +49,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             PriceRange.SelectedIndex = 0;
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout()

@@ -7,7 +7,9 @@ using Kmandili.Views.UserViews;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Views;
+using Newtonsoft.Json;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
@@ -76,107 +78,53 @@ namespace Kmandili
             }
         }
 
-        public async void SignInAction(string email, string password)
+        private async void SignInAction(string email, string password)
         {
             isLoading(true);
-            UserRestClient userRC = new UserRestClient();
-            PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            User u;
-            try
+            if (Settings.Id < 0 || App.TokenExpired())
             {
-                u = await userRC.GetAsyncByEmailAndPass(email, password);
-            }
-            catch (ConnectionLostException e)
-            {
-                isLoading(false);
-                return;
-            }
-            if (u != null)
-            {
-                Connected connected = new Connected();
-                connected.type = typeof(User).Name;
-                connected.Id = u.ID;
-                connected.Email = u.Email;
-                connected.Password = u.Password;
-
-                App.Connected = connected;
-                isLoading(false);
-                Email.Text = "";
-                Password.Text = "";
-                //App.Current.MainPage = new UserMasterDetailPage(u);
-                //switch (Device.RuntimePlatform)
-                //{
-                //    case Device.iOS:
-                //        App.Current.MainPage = new UserMasterDetailPage(u);
-                //        break;
-                //    case Device.Android:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //    case Device.WinPhone:
-                //    case Device.Windows:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //    default:
-                //        App.Current.MainPage = new NavigationPage(new UserMasterDetailPage(u));
-                //        break;
-                //}
-                App.setMainPage(new UserMasterDetailPage(u));
-            }
-            else
-            {
-                PastryShop p;
-                try
-                {
-                    p = await pastryShopRC.GetAsyncByEmailAndPass(email, password);
-                }
-                catch (ConnectionLostException e)
-                {
-                    isLoading(false);
-                    return;
-                }
-                if (p != null)
-                {
-                    Connected connected = new Connected();
-                    connected.type = typeof(PastryShop).Name;
-                    connected.Id = p.ID;
-                    connected.Email = p.Email;
-                    connected.Password = p.Password;
-
-                    App.Connected = connected;
-                    isLoading(false);
-                    Email.Text = "";
-                    Password.Text = "";
-                    //App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                    //switch (Device.RuntimePlatform)
-                    //{
-                    //    case Device.iOS:
-                    //        App.Current.MainPage = new PastryShopMasterDetailPage(p);
-                    //        break;
-                    //    case Device.Android:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //    case Device.WinPhone:
-                    //    case Device.Windows:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //    default:
-                    //        App.Current.MainPage = new NavigationPage(new PastryShopMasterDetailPage(p));
-                    //        break;
-                    //}
-                    App.setMainPage(new PastryShopMasterDetailPage(p));
-                }
-                else
+                var authorizationRestClient = new AuthorizationRestClient();
+                var tokenResponse = await authorizationRestClient.AuthorizationLoginAsync(email, password);
+                if (tokenResponse == null)
                 {
                     isLoading(false);
                     await DisplayAlert("Erreur", "Utilisateur inexistant", "OK");
                     Email.Focus();
+                    return;
                 }
+                Settings.SetSettings(email, password, tokenResponse.UserId, tokenResponse.access_token, tokenResponse.Type, tokenResponse.expires);
+            }
+            Email.Text = "";
+            Password.Text = "";
+            switch (Settings.Type)
+            {
+                case "u":
+                    var userRestClient = new UserRestClient();
+                    var u = await userRestClient.GetAsyncById(Settings.Id);
+                    isLoading(false);
+                    App.setMainPage(new UserMasterDetailPage(u));
+                    break;
+                case "p":
+                    var pastryShopRestClient = new PastryShopRestClient();
+                    var p = await pastryShopRestClient.GetAsyncById(Settings.Id);
+                    isLoading(false);
+                    App.setMainPage(new PastryShopMasterDetailPage(p));
+                    break;
             }
         }
 
         private async void RestPasswordTapped(object sender, EventArgs e)
         {
             await PopupNavigation.PushAsync(new PasswordResetEmailPopupPage());
+        }
+
+        protected override void OnAppearing()
+        {
+            if (Settings.Id > -1)
+            {
+                SignInAction(Settings.Email, Settings.Password);
+                //App.Cart = Settings.Cart;
+            }
         }
     }
 }

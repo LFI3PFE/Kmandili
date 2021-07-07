@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -41,18 +41,28 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             CreationDate.MaximumDate = DateTime.Now.Date;
             RestClient<Parking> parkingRC = new RestClient<Parking>();
             parkings = await parkingRC.GetAsync();
-            if (parkings == null) return;
+            if (parkings == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             ParkingPicker.ItemsSource = parkings;
             ParkingPicker.SelectedIndex = 0;
 
             RestClient<PhoneNumberType> phoneNumberTypeRC = new RestClient<PhoneNumberType>();
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-            if(phoneNumberTypes == null) return;
+            if (phoneNumberTypes == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout();
             PhoneNumberStackLayouts.Add(phoneNumberStackLayout);
+            await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout()
@@ -232,6 +242,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (await validAddress() && await validPhoneNumber())
             {
                 RestClient<PointOfSale> pointOfSaleRC = new RestClient<PointOfSale>();
@@ -299,17 +310,20 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                     pointOfSale = await pointOfSaleRC.PostAsync(pointOfSale);
                     if (pointOfSale == null)
                     {
+                        await PopupNavigation.PopAsync();
                         await DisplayAlert("Erreur", "Erreur dans l'ajout du point de vente!", "Ok");
                         return;
                     }
                     else
                     {
                         //pastryShopEnteringPointOfSales.load();
+                        await PopupNavigation.PopAsync();
                         await Navigation.PopAsync();
                     }
                 }
                 else
                 {
+                    await PopupNavigation.PopAsync();
                     await DisplayAlert("Erreur", "Erreur dans l'ajout de l'address!", "Ok");
                 }
             }

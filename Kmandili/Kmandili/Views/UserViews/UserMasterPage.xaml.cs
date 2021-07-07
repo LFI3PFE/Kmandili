@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.UserViews.OrderViewsAndFilter;
@@ -22,7 +23,6 @@ namespace Kmandili.Views.UserViews
 			InitializeComponent ();
 		    this.user = user;
 		    this.userMasterDetailPage = userMasterDetailPage;
-		    var x = user.Orders.Count(o => !o.SeenUser);
 		    UpdateOrderNotificationNumber(user.Orders.ToList());
 		}
 
@@ -34,7 +34,7 @@ namespace Kmandili.Views.UserViews
         public async void UpdateOrderNotificationNumber()
         {
             UserRestClient userRC = new UserRestClient();
-            user = await userRC.GetAsyncById(App.Connected.Id);
+            user = await userRC.GetAsyncById(Settings.Id);
             if(user == null) return;
             int number = user.Orders.Count(o => !o.SeenUser);
             NorificationsNumber.Source = "_" + (number != 0 ? (number > 9 ? "9plus.png" : number + ".png") : "");

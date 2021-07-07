@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -59,6 +59,7 @@ namespace Kmandili.Views.PastryShopViews.SignIn
 
         private async void NextButton_OnClick(Object sender, EventArgs e)
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             if (_mediaFileProfil == null)
             {
                 await DisplayAlert("Erreur", "Il faut selectionner une photo de profile!", "OK");
@@ -74,28 +75,9 @@ namespace Kmandili.Views.PastryShopViews.SignIn
                 pastryShop.ProfilePic = await Upload(_mediaFileProfil);
                 pastryShop.CoverPic = await Upload(_mediaFileCover);
 
+                await PopupNavigation.PopAsync();
                 await Navigation.PushAsync(new PastryShopThirdStep(pastryShop));
             }
-
-            //RestClient<Address> addressRC = new RestClient<Address>();
-            //Address address = await addressRC.PostAsync(pastryShop.Address);
-            //if(address != null)
-            //{
-            //    pastryShop.Address = null;
-            //    pastryShop.Address_FK = address.ID;
-            //    PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            //    PastryShop p = await pastryShopRC.PostAsync(pastryShop);
-            //    if(p == null)
-            //    {
-            //        await DisplayAlert("Erreur", "Erreur lors de l'enregistrement des informations!", "Ok");
-            //        return;
-            //    }
-            //    await Navigation.PushModalAsync(new PastryShopThirdStep());
-            //}else
-            //{
-            //    await DisplayAlert("Erreur", "Erreur lors de l'enregistrement des informations!", "Ok");
-            //    return;
-            //}
         }
 
         private async Task<string> Upload(MediaFile upfile)
@@ -109,19 +91,5 @@ namespace Kmandili.Views.PastryShopViews.SignIn
             }
             return null;
         }
-
-        //protected override void OnAppearing()
-        //{
-        //    toGallery = false;
-        //    base.OnAppearing();
-        //}
-
-        //protected override void OnDisappearing()
-        //{
-        //    if (!toGallery)
-        //    {
-        //        Navigation.PopModalAsync();
-        //    }
-        //}
     }
 }

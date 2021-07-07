@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Kmandili.Helpers;
 using Kmandili.Views;
 using Plugin.Connectivity;
 using Rg.Plugins.Popup.Services;
@@ -15,7 +16,7 @@ namespace Kmandili
 	{
         //public static string ServerURL = "http://192.168.1.5:300/";
         public static string ServerURL = "http://seifiisexpress.sytes.net:300/";
-        public static Connected Connected = null;
+        //public static Connected Connected = null;
         public static List<CartPastry> Cart = new List<CartPastry>();
         public static bool galleryIsOpent = false;
         public App ()
@@ -26,7 +27,23 @@ namespace Kmandili
             CrossConnectivity.Current.ConnectivityChanged += Current_ConnectivityChanged;
 		}
 
-	    public static void setMainPage(MasterDetailPage newMainPage)
+        public static bool TokenExpired()
+        {
+            if (string.IsNullOrEmpty(Settings.ExpireDate)) return false;
+            var expireDate = DateTime.ParseExact(Settings.ExpireDate,
+                    System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.RFC1123Pattern,
+                    System.Globalization.CultureInfo.CurrentCulture);
+            var b = expireDate < DateTime.Now;
+            string s = App.Current.MainPage.GetType().Name;
+            string ss = (App.Current.MainPage as NavigationPage).CurrentPage.GetType().Name;
+            if (b && ((App.Current.MainPage.GetType().Name != "NavigationPage") || ((App.Current.MainPage as NavigationPage).CurrentPage.GetType().Name != "MainPage")))
+            {
+                App.Current.MainPage = new NavigationPage(new MainPage());
+            }
+            return b;
+        }
+
+        public static void setMainPage(MasterDetailPage newMainPage)
 	    {
             switch (Device.RuntimePlatform)
             {
@@ -59,7 +76,8 @@ namespace Kmandili
 
         public async static void Logout()
         {
-            Connected = null;
+            Settings.ClearSettings();
+            //Connected = null;
             Cart.Clear();
             galleryIsOpent = false;
             Current.MainPage = new NavigationPage(new MainPage());
@@ -88,8 +106,8 @@ namespace Kmandili
 
 		protected override void OnSleep ()
 		{
-			// Handle when your app sleeps
-		}
+            // Handle when your app sleeps
+        }
 
 		protected override void OnResume ()
 		{

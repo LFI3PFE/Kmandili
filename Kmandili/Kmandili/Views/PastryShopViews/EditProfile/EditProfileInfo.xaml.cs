@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Kmandili.Views.PastryShopViews.SignIn;
@@ -154,12 +155,21 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
 
         public async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             PastryShopRestClient pastryShopRC = new PastryShopRestClient();
-            pastryShop = await pastryShopRC.GetAsyncById(App.Connected.Id);
-            if (pastryShop == null) return;
+            pastryShop = await pastryShopRC.GetAsyncById(Settings.Id);
+            if (pastryShop == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
             priceRanges = await priceRangeTypeRC.GetAsync();
-            if (phoneNumberTypes == null || priceRanges == null) return;
+            if (phoneNumberTypes == null || priceRanges == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             PriceRange.ItemsSource = priceRanges;
 
             Name.Text = pastryShop.Name;
@@ -184,6 +194,7 @@ namespace Kmandili.Views.PastryShopViews.EditProfile
             }
             StackLayout lastPhoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
             PhoneNumberStackLayouts.Add(lastPhoneNumberStackLayout);
+            await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout(PhoneNumber phoneNumber)

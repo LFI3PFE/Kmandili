@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.LocalModels;
 using Kmandili.Models.RestClient;
@@ -145,7 +146,7 @@ namespace Kmandili.Views.PastryShopViews.OrderViewsAndFilter
             LoadingLayout.IsVisible = true;
             Loading.IsRunning = true;
             OrderRestClient orderRC = new OrderRestClient();
-            orders = await orderRC.GetAsyncByPastryShopID(App.Connected.Id);
+            orders = await orderRC.GetAsyncByPastryShopID(Settings.Id);
             if (orders == null) return;
             orders = orders.OrderBy(p => p.SeenPastryShop).ToList();
             displayedOrders.Clear();

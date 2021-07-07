@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kmandili.Helpers;
 using Kmandili.Models;
 using Kmandili.Models.RestClient;
 using Rg.Plugins.Popup.Services;
@@ -44,9 +45,14 @@ namespace Kmandili.Views.UserViews
 
         private async void load()
         {
+            await PopupNavigation.PushAsync(new LoadingPopupPage());
             UserRestClient userRestClient = new UserRestClient();
-            user = await userRestClient.GetAsyncById(App.Connected.Id);
-            if (user == null) return;
+            user = await userRestClient.GetAsyncById(Settings.Id);
+            if (user == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             Name.Text = user.Name;
             LastName.Text = user.LastName;
             Email.Text = user.Email;
@@ -59,7 +65,11 @@ namespace Kmandili.Views.UserViews
             State.Text = user.Address.State;
             Country.Text = user.Address.Country;
             phoneNumberTypes = await phoneNumberTypeRC.GetAsync();
-            if(phoneNumberTypes == null) return;
+            if (phoneNumberTypes == null)
+            {
+                await PopupNavigation.PopAsync();
+                return;
+            }
             foreach (var phoneNumber in user.PhoneNumbers)
             {
                 StackLayout phoneNumberStackLayout = CreatePhoneNumberStackLayout(phoneNumber);
@@ -67,6 +77,7 @@ namespace Kmandili.Views.UserViews
             }
             StackLayout lastPhoneNumberStackLayout = CreatePhoneNumberStackLayout(null);
             PhoneNumberStackLayouts.Add(lastPhoneNumberStackLayout);
+            await PopupNavigation.PopAsync();
         }
 
         private StackLayout CreatePhoneNumberStackLayout(PhoneNumber phoneNumber)
